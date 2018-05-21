@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ListView } from 'react-native';
+import { Text, View, ListView, ScrollView } from 'react-native';
 import { FormLabel, FormInput, SearchBar, Icon, List, ListItem } from 'react-native-elements';
 import Clients from '../data/test-clients.json';
 
@@ -30,14 +30,14 @@ export default class SelectClient extends React.Component {
   }      
 
   renderRow = (rowData, sectionID) => (
-      <ListItem 
-        roundAvatar       
-        key={sectionID}
-        title={rowData.name}
-        subtitle={rowData.mail}   
-        onPress={() => this.onPress(rowData)}
-      />
-    )
+    <ListItem 
+      roundAvatar       
+      key={sectionID}
+      title={rowData.name}
+      subtitle={rowData.mail}   
+      onPress={() => this.onPress(rowData)}
+    />
+  )
 
   onPress = (client) => {         
     this.props.navigation.navigate('Products', { client: client });
@@ -45,17 +45,14 @@ export default class SelectClient extends React.Component {
 
   render() {    
     return (
-      <View>                
-        <SearchBar onChangeText={ (text) => this.search(text) } 
-          placeholder='Escriba nombre, local o e-mail del cliente' 
-        />        
-        <List>
-          <ListView
-            dataSource={this.state.dataSource}
-            renderRow={this.renderRow}
-          />
-        </List>
-      </View>
+      <ScrollView keyboardShouldPersistTaps="handled">                      
+        <SearchBar placeholder='Escriba nombre, local o e-mail del cliente' 
+          onChangeText={ (text) => this.search(text) } 
+        />                
+        <ListView keyboardShouldPersistTaps="handled"  
+          dataSource={this.state.dataSource} renderRow={this.renderRow} 
+        />             
+      </ScrollView>
     );
   }
 }      

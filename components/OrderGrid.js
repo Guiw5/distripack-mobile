@@ -2,37 +2,29 @@ import React from 'react';
 import { View, Text, TextInput, ListView } from 'react-native';
 import { FormInput, FormLabel } from 'react-native-elements';
 
-
 export default class OrderGrid extends React.Component {
   constructor(props) {
     super(props);
-  //   var rows = this.props.rows.foreach(item => {
-  //     var row = [];
-  //     row.push();
-  //     row.push( <FormInput keyboardType="numeric" placeholder='Cantidad' placeholderTextColor={'black'} 
-  //                         onChangeText={(cant) => {item.cant = cant}}>
-  //                 {item.cant > 1? this.state.cant: ''} 
-  //               </FormInput>);
-  //   }); 
-  //   row.push()   
-  }
+  }  
 
   renderRow(item) {
     console.log('orderGridItem',item);
+    var cant = 1;
     return (    
-    <Row>
-      <Cell>{item.alias? item.alias : item.descripcion}</Cell>      
-      <EditableCell value={item.cantidad} keyboardType="numeric" />
-      <Cell>${item.precio * item.cantidad}</Cell>
-    </Row>
+      <View>
+        <Text>{item.alias? item.alias : item.descripcion}</Text>      
+        <FormInput value={cant} onChange={this.setState({cant})} placeholder="Cantidad" keyboardType="numeric" />
+        <Text>${item.precio * cant}</Text>
+      </View>
     )
   }
 
   render() {
-    // const { container, quantityStyle, aliasStyle, totalStyle } = styles;
+    const { params } = this.props.navigation.state;
+    console.log('params-OrderGrid', params);
     return (    
       <View>
-        <DataTable dataSource={this.props.rows} renderRow={this.renderRow}/>        
+        <ListView dataSource={this.props.rows} renderRow={this.renderRow}/>        
       </View>     
     );
   };

@@ -6,23 +6,22 @@ import OrderScreen from './screens/OrderScreen';
 import ProductScreen from './screens/ProductScreen';
 
 const SimpleApp = StackNavigator({
-  Clients: { 
+  Client: { 
     screen: ClientScreen, 
     navigationOptions: {
-      title: 'Cliente',
+      title: 'Seleccione Cliente',
       headerStyle: {paddingTop:25}
     } 
   },
   Products: { 
     screen: ProductScreen,
     navigationOptions: {
-      title: 'Productos',
+      title: 'Seleccione Productos',
       headerStyle: {paddingTop:25}
     }
   },
-  Orders: { screen: OrderScreen,
-    navigationOptions: {
-      title: 'Pedidos',
+  Order: { screen: OrderScreen,
+    navigationOptions: {      
       headerStyle: {paddingTop:25}
     }
   }  
@@ -35,7 +34,7 @@ export default class App extends React.Component {
 }
 
 const styles = StyleSheet.create({
-   simpleApp: {
+   SimpleApp: {
     paddingTop: 100
   }
  });
