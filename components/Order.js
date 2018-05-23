@@ -2,10 +2,16 @@ import React from 'react';
 import { View, Text, TextInput, ListView } from 'react-native';
 import { FormInput, FormLabel } from 'react-native-elements';
 
-export default class OrderGrid extends React.Component {
+export default class Order extends React.Component {
   constructor(props) {
     super(props);
-  }  
+    const { params } = this.props.navigation.state;
+    
+    let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    this.state = {      
+      dataSource: ds.cloneWithRows([params.products])
+    };
+  }    
 
   renderRow(item) {
     console.log('orderGridItem',item);
@@ -19,13 +25,13 @@ export default class OrderGrid extends React.Component {
     )
   }
 
-  render() {
-    const { params } = this.props.navigation.state;
-    console.log('params-OrderGrid', params);
+  render() {    
     return (    
-      <View>
-        <ListView dataSource={this.props.rows} renderRow={this.renderRow}/>        
-      </View>     
+      <ScrollView keyboardShouldPersistTaps="handled">
+        <ListView keyboardShouldPersistTaps="handled" 
+          dataSource={this.state.dataSource} 
+          renderRow={this.renderRow}/>        
+      </ScrollView>     
     );
   };
 }

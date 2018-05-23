@@ -2,7 +2,6 @@ import React from 'react';
 import { Text, View, ListView, TextInput, StyleSheet, ScrollView } from 'react-native';
 import { FormLabel, FormInput, SearchBar, Icon, List, ListItem } from 'react-native-elements';
 import Products from '../data/test-products.json';
-import OrderGrid from './OrderGrid';
 
 export default class SelectProducts extends React.Component {
   constructor(props) {
@@ -10,27 +9,11 @@ export default class SelectProducts extends React.Component {
     console.log(props);
     let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}); 
     this.state = {           
-      dataSource: ds.cloneWithRows([]),
-      rows: ds.cloneWithRows([]),
-      isLoading: true,
-      list: []
+      dataSource: ds.cloneWithRows([])             
     };
 
-    this.renderRow = this.renderRow.bind(this);
-    //this.addListItem = this.addListItem.bind(this);
+    this.renderRow = this.renderRow.bind(this);    
   }
-
- // addListItem = (item) => {    
-  //   item['cant'] = 1;
-  //   let list = this.state.list;    
-  //   list.push(item);
-  //   let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});    
-  //   this.setState({
-  //     list: list,
-  //     rows: ds.cloneWithRows(list),
-  //     dataSource: ds.cloneWithRows([])
-  //   });
-  // }  
   
   search = text => {  
     if(!text) {
@@ -45,8 +28,7 @@ export default class SelectProducts extends React.Component {
     );
 
     let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});    
-    this.setState({ 
-      isLoading: false, 
+    this.setState({       
       dataSource : ds.cloneWithRows(results)             
     });       
     
@@ -61,20 +43,17 @@ export default class SelectProducts extends React.Component {
     />
   )
 
-  onPress = (product) => {  
-    console.log('onpress-selectProduct', product);
-    const { params } = this.props.navigation.state;
-    console.log('params-selectProduct', params);
-    this.props.navigation.navigate('Order', { client : this.props.client, product: product });
+  onPress = (product) => {      
+    const { params } = this.props.navigation.state;    
+    this.props.navigation.navigate('Details', { product: product });
   }  
 
-  render() {             
-    console.log(this.state.rows);
+  render() {                 
     return (
       <ScrollView keyboardShouldPersistTaps="handled">                
         <SearchBar autoFocus placeholder='Escriba nombre, o alias del producto' 
           onChangeText={ (text) => this.search(text) }           
-        />                
+        />                      
         <ListView keyboardShouldPersistTaps="handled"
           dataSource={this.state.dataSource}
           renderRow={this.renderRow}

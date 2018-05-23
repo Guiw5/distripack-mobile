@@ -8,23 +8,27 @@ export default class SelectClient extends React.Component {
     super(props);   
     let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}); 
     this.state = {           
-      dataSource: ds.cloneWithRows([]),
-      isLoading: true         
+      dataSource: ds.cloneWithRows([])            
     };
 
     this.renderRow = this.renderRow.bind(this);    
     this.onPress = this.onPress.bind(this);
   }
  
-  search = text => {            
+  search = text => {  
+    if(!text) {
+      let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}); 
+      this.setState({ dataSource : ds.cloneWithRows([]) }); 
+      return;
+    }
+              
     let results = Clients.filter(client =>
       client.name.toLowerCase().includes(text.toLowerCase()) ||
       client.mail.toLowerCase().includes(text.toLowerCase())      
     ); 
 
     let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    this.setState({ 
-      isLoading: false, 
+    this.setState({       
       dataSource : ds.cloneWithRows(results)                 
     });        
   }      
