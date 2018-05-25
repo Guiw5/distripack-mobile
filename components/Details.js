@@ -1,22 +1,34 @@
 import React from 'react';
-import { StyleSheet, View, Text, TextInput } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
+import { Input } from 'react-native-elements';
 
 export default class Details extends React.Component {   
   constructor(props) {
     super(props);    
+    this.state = {
+      cant: ''
+    };
   }    
-    
-  render() {    
-    const { params } = this.props.navigation.state;
-    const { alias, descripcion, precio, cantidad } = params.product;
-    console.log(alias, descripcion, precio, cantidad);
-    const { wrapper } = styles;
+  
+  render() {        
+    const { alias, descripcion, precio, cantidad } = this.props.navigation.state.params.product;      
     return (
-      <View>
+      <View style={styles.wrapper}>
           <Text style={styles.title}>{alias}</Text>
           <Text style={styles.desc}>{descripcion}</Text>
-          <Text style={styles.price}>{cantidad}</Text>
-          <Text style={styles.price}>{precio}</Text>         
+          <Text>Cantidad por bulto:{cantidad}</Text>
+          <Text>Cantidad de bultos:</Text>
+          <Input 
+            keyboardType="numeric" placeholder="Indique cuantos bultos"
+            onChangeText={(text) => this.setState({cant:parseInt(text)})} 
+            value={this.state.cant} style={styles.desc}
+          />          
+          <Text style={styles.price}>Precio x bulto: ${precio}</Text>          
+          <Text style={styles.newPrice}>
+            Precio Total: ${ this.state.cant
+                          ? parseFloat(precio) * this.state.cant
+                          : parseFloat(precio) }
+          </Text>         
       </View>
     )
   }
@@ -25,7 +37,9 @@ export default class Details extends React.Component {
 const styles = StyleSheet.create({
   wrapper: {
     borderWidth: 1,
-    flex: 2
+    flexDirection: 'column',
+    flexWrap:'wrap',
+    alignContent: 'space-between'  
   },
   title: {
     fontSize: 16,
