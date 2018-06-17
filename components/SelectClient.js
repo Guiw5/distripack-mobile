@@ -1,78 +1,46 @@
 import React from 'react';
-import { View, FlatList, StyleSheet, ScrollView } from 'react-native';
-import { SearchBar, ListItem } from 'react-native-elements';
-import Clients from '../data/test-clients.json';
+import { View, FlatList, StyleSheet } from 'react-native';
+import { ListItem } from 'react-native-elements';
+import SearchList from './SearchList';
 
 export default class SelectClient extends React.Component {
   constructor(props){
-    super(props);
-
-    this.state = {
-      data: []
-    };
-  }
-
-  search = (text) => {  
-    let results = [];    
+    super(props);    
+  }  
+ 
+  filterFunction = (text) => {
+    let results = this.props.clients;        
     if(text) {      
-      results = this.filterData(text);
-    }
-    this.setState({data: results});            
-  }      
-
-  filterData = (text) => {
-    return Clients.filter(client => 
-            client.name.toLowerCase().includes(text.toLowerCase()) ||
-            client.mail.toLowerCase().includes(text.toLowerCase())
-          );
-  }
-
-  renderHeader = () => {
-    return  <SearchBar 
-              autoFocus
-              inputStyle={styles.searchBar} 
-              clearIcon={{ color: 'red' }}
-              onClear={() => this.setState({data: []})}
-              placeholder='Escriba nombre, local o e-mail del cliente' 
-              onChangeText={this.search} 
-            />
-  }
-
-  renderSeparator = () => <View style={{ height: 1, backgroundColor: "#CED0CE" }} />  
+      results = results.filter(item =>         
+        item.mail.toLowerCase().includes(text.toLowerCase()) ||
+        item.name.toLowerCase().includes(text.toLowerCase())
+      );
+    }       
+    return results;
+  };
 
   onPress = (client) => {      
     this.props.navigation.navigate('Products', { client: client });
-  }  
+  }    
 
+  renderItem = ({ item }) => (
+    <ListItem              
+      title={item.name}
+      subtitle={item.mail} 
+      subtitleStyle={{fontSize: 12}}            
+      containerStyle={{ borderBottomWidth: 0 }}
+      onPress={() => this.onPress(item)}
+    />
+  )
   render() {    
     return (
-      <ScrollView 
-        keyboardShouldPersistTaps="handled"
-        containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}
-      >                      
-        <FlatList
-          keyboardShouldPersistTaps="handled"
-          data={this.state.data}
-          keyExtractor={item => item.mail}
-          ListHeaderComponent={this.renderHeader}
-          ItemSeparatorComponent={this.renderSeparator}          
-          renderItem={({ item }) => (
-            <ListItem
-              roundAvatar
-              title={item.name}
-              subtitle={item.mail}            
-              containerStyle={{ borderBottomWidth: 0 }}
-              onPress={() => this.onPress(item)}
-            />
-          )}          
-        />             
-      </ScrollView>
+      <SearchList 
+        itemKey='mail'
+        headerPlaceholder='Escriba nombre, alias o mail del cliente'        
+        renderItem={this.renderItem}
+        filterFunction={this.filterFunction}
+        data={this.props.clients}        
+      />
     );
   }
-} 
-
-const styles = StyleSheet.create({
-  searchBar: {
-    fontSize: 14
-  }
-});
+}
