@@ -11,8 +11,7 @@ export default class DetailScreen extends React.Component {
     console.log('navigation_details', this.props.navigation.state);
     return (
       <View>        
-        <Details navigation={this.props.navigation} />
-        <Button title='Confirmar Pedido' onPress={this.saveOrder}/>
+        <Details navigation={this.props.navigation} />        
       </View>
     );
   }

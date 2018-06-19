@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, View, FlatList, StyleSheet } from 'react-native';
-import { ListItem } from 'react-native-elements';
+import { View, StyleSheet } from 'react-native';
+import { ListItem, Button } from 'react-native-elements';
 import SearchList from './SearchList';
 
 export default class SelectProducts extends React.Component {
@@ -22,8 +22,19 @@ export default class SelectProducts extends React.Component {
     return results;
   }
 
-  onPress = (product) => {      
-    this.props.navigation.navigate('Details', { product: product });
+  addToOrder = (product) => {
+    let { order } = this.state;
+    console.log("order", order);
+    order.push(product);
+    this.setState({order});
+  }
+
+  goToDetails = (product) => {      
+    this.props.navigation.navigate('Details', { product: product, 'addToOrder': (product) => this.addToOrder(product) });
+  }
+
+  goToOrder = (order) => {
+    this.props.navigation.navigate('Order', { order: order });
   }
 
   renderItem = ({ item }) => (
@@ -33,11 +44,13 @@ export default class SelectProducts extends React.Component {
       subtitleStyle={{fontSize: 12}}      
       rightSubtitle={'$' + item.precio.toFixed(2)}     
       containerStyle={{ borderBottomWidth: 0 }}
-      onPress={() => this.onPress(item)}
+      onPress={() => this.goToDetails(item)}
     />
   );  
 
+
   render() {                 
+    let order = this.state.order;
     return (
       <View>
         <SearchList 
@@ -45,9 +58,12 @@ export default class SelectProducts extends React.Component {
           headerPlaceholder='Escriba nombre, o alias del producto'          
           renderItem={this.renderItem}  
           filterFunction={this.filterFunction}
-          data={this.props.products}         
+          data={this.props.products}
         />
-        {/* this.props.order && <ViewOrder order={this.props.order} /> */}
+        { order.length > 0 
+          ? <Button title='Ver Pedido' onPress={() => this.goToOrder(order)} /> 
+          : <View />
+        }
       </View>
     );
   }

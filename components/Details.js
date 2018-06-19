@@ -1,14 +1,25 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { Input } from 'react-native-elements';
+import { Input, Button } from 'react-native-elements';
 
 export default class Details extends React.Component {   
   constructor(props) {
     super(props);    
     this.state = {
-      cant: ''
+      cant: ''      
     };
   }    
+
+  addToOrder = () => {
+    let { state, goBack } = this.props.navigation;
+    let product = state.params.product;
+    let cant = this.state.cant;
+    product = { product, cant };
+    console.log('product', product);
+    state.params.addToOrder(product);
+    goBack();
+    //this.props.navigation.navigate('Products');
+  }
   
   render() {        
     const { alias, descripcion, precio, cantidad } = this.props.navigation.state.params.product;      
@@ -28,7 +39,8 @@ export default class Details extends React.Component {
             Precio Total: ${ this.state.cant
                           ? parseFloat(precio) * this.state.cant
                           : parseFloat(precio) }
-          </Text>         
+          </Text> 
+          <Button title='Agregar al pedido' onPress={this.addToOrder}/>        
       </View>
     )
   }

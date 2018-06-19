@@ -1,37 +1,39 @@
 import React from 'react';
-import { View, Text, TextInput, ListView } from 'react-native';
-import { FormInput, FormLabel } from 'react-native-elements';
+import { View, Text, FlatList } from 'react-native';
+import { FormInput } from 'react-native-elements';
 
 export default class Order extends React.Component {
   constructor(props) {
-    super(props);
-    const { params } = this.props.navigation.state;
-    
-    let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    this.state = {      
-      dataSource: ds.cloneWithRows([params.products])
-    };
+    super(props);    
   }    
 
-  renderRow(item) {
-    console.log('orderGridItem',item);
-    var cant = 1;
+  renderItem = (item) => {
+    console.log('orderGridItem', item);
+    var cant = item.cant;
     return (    
       <View>
-        <Text>{item.alias? item.alias : item.descripcion}</Text>      
+        <Text>{item.alias? item.product.alias : item.product.descripcion}</Text>      
         <FormInput value={cant} onChange={this.setState({cant})} placeholder="Cantidad" keyboardType="numeric" />
-        <Text>${item.precio * cant}</Text>
+        <Text>${item.product.precio * cant}</Text>
       </View>
-    )
+    );
   }
 
+  renderSeparator = () => <View style={{ height: 1, backgroundColor: "#CED0CE" }} />
+
   render() {    
+    let { order } = this.props.navigation.state.params;
+    console.log(order);
     return (    
-      <ScrollView keyboardShouldPersistTaps="handled">
-        <ListView keyboardShouldPersistTaps="handled" 
-          dataSource={this.state.dataSource} 
-          renderRow={this.renderRow}/>        
-      </ScrollView>     
+      <View containerStyle={styles.container} >                      
+        <FlatList
+          keyboardShouldPersistTaps="handled"
+          data={order}
+          keyExtractor={item => item.id}          
+          ItemSeparatorComponent={this.renderSeparator}          
+          renderItem={this.renderItem}          
+        />
+      </View>   
     );
   };
 }
