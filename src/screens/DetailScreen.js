@@ -8,10 +8,10 @@ export default class DetailScreen extends React.Component {
   }  
 
   render() {
-    console.log('navigation_details', this.props.navigation.state);
+    console.log('navigation_details', this.props.navigation.state);    
     return (
       <View>        
-        <Details navigation={this.props.navigation} />        
+        <Details navigation={this.props.navigation} />
       </View>
     );
   }

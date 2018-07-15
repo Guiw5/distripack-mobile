@@ -7,8 +7,7 @@ export default class OrderScreen extends React.Component {
     super(props);
   }  
 
-  render() {
-    console.log('navigation_order', this.props.navigation.state);
+  render() {    
     return (
       <View>        
         <Order navigation={this.props.navigation} />
@@ -16,3 +15,5 @@ export default class OrderScreen extends React.Component {
     );
   }
 }
+
+//export default withOrder(OrderScreen)

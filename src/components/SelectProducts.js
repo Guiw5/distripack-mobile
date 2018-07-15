@@ -2,15 +2,20 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ListItem, Button } from 'react-native-elements';
 import SearchList from './SearchList';
+import { getOrder, getProducts } from '../actions/index';
+import { connect } from 'react-redux';
 
-export default class SelectProducts extends React.Component {
+class SelectProducts extends React.Component {
   constructor(props){
-    super(props);  
-    
-    this.state = { 
-      order: []
-    }
+    super(props);          
   }     
+
+  componentDidMount() {
+    if(this.props.products.length === 0)
+      this.props.getProducts();
+    if(this.props.order)
+      this.props.getOrder();
+  }
 
   filterFunction = (text) => {
     let results = this.props.products;        
@@ -20,17 +25,10 @@ export default class SelectProducts extends React.Component {
         item.descripcion.toLowerCase().includes(text.toLowerCase()));
     }
     return results;
-  }
-
-  addToOrder = (product) => {
-    let { order } = this.state;
-    console.log("order", order);
-    order.push(product);
-    this.setState({order});
-  }
+  }  
 
   goToDetails = (product) => {      
-    this.props.navigation.navigate('Details', { product: product, 'addToOrder': (product) => this.addToOrder(product) });
+    this.props.navigation.navigate('Details', { product: product });
   }
 
   goToOrder = (order) => {
@@ -49,10 +47,12 @@ export default class SelectProducts extends React.Component {
   );  
 
 
-  render() {                 
-    let order = this.state.order;
+  render() {                
+    let order = this.props.order;
     return (
-      <View>
+      this.props.products.length > 0 && 
+      this.props.order &&
+      <View style={styles.container}>
         <SearchList 
           itemKey='id'
           headerPlaceholder='Escriba nombre, o alias del producto'          
@@ -60,24 +60,41 @@ export default class SelectProducts extends React.Component {
           filterFunction={this.filterFunction}
           data={this.props.products}
         />
-        { order.length > 0 
-          ? <Button title='Ver Pedido' onPress={() => this.goToOrder(order)} /> 
+        { order && order.items.length > 0 
+          ? <Button style={styles.button}  title={'Ver Pedido ('+ order.items.length +')'} onPress={() => this.goToOrder(order)} /> 
           : <View />
         }
       </View>
     );
   }
-}      
-// styles = StyleSheet.create({ 
-//   subtitleView: {
-//     flexDirection: 'row',
-//     paddingLeft: 10    
-//   },
-//   ratingText: {
-//     paddingLeft: 10,
-//     color: 'grey'
-//   },
-//   count: {
-//     width:80
-//   }
-// });
+}
+
+const mapStateToProps = state => {
+  return {
+    products: state.products,
+    order: state.order
+  }
+}
+
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getOrder: item => {
+      dispatch(getOrder(item))
+    },
+    getProducts: () => {
+      dispatch(getProducts())
+    }
+  };
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(SelectProducts);
+
+styles = StyleSheet.create({   
+  button: {    
+    bottom: 0,
+    left: 0,
+    position: 'absolute'
+  }  
+});

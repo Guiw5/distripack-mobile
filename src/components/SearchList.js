@@ -23,7 +23,7 @@ export default class SearchList extends React.Component {
       inputStyle={styles.searchBar}              
       onClear={this.props.onClear}
       placeholder={this.props.headerPlaceholder}
-      onChangeText={this.onSearch} 
+      onChangeText={this.onSearch}       
     />
   );
 

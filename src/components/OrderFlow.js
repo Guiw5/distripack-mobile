@@ -1,12 +1,12 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { StackNavigator, TabNavigator } from 'react-navigation';
-import ClientScreen from './screens/ClientScreen';
-import ProductScreen from './screens/ProductScreen';
-import DetailScreen from './screens/DetailScreen';
-import OrderScreen from './screens/OrderScreen';
+import { StackNavigator } from 'react-navigation';
 
-const SimpleApp = StackNavigator({
+import ClientScreen from '../screens/ClientScreen';
+import ProductScreen from '../screens/ProductScreen';
+import DetailScreen from '../screens/DetailScreen';
+import OrderScreen from '../screens/OrderScreen';
+
+
+export default OrderFlow = StackNavigator({
   Client: { 
     screen: ClientScreen, 
     navigationOptions: {
@@ -36,15 +36,3 @@ const SimpleApp = StackNavigator({
     }
   }  
 });
-
-export default class App extends React.Component {  
-  render() {
-    return <SimpleApp style={styles.SimpleApp} />;
-  }
-}
-
-const styles = StyleSheet.create({
-   SimpleApp: {
-    paddingTop: 110
-  }
- });
