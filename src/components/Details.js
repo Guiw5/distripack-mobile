@@ -40,7 +40,7 @@ class Details extends React.Component {
                         ? parseFloat(precio) * this.state.cant
                         : parseFloat(precio) }
         </Text> 
-        <Button title='Agregar al pedido' onPress={this.addToOrder}/>        
+        <Button buttonStyle={styles.button} title='Agregar al pedido' onPress={this.addToOrder}/>        
       </View>
     )
   }
@@ -80,5 +80,15 @@ const styles = StyleSheet.create({
     borderColor: 'red',
     height: 44,
     paddingLeft: 5
+  },
+  button: {
+    bottom: 0,
+    left: 0,
+    position: 'absolute',
+    width: 300,
+    height: 45,
+    borderColor: "transparent",
+    borderWidth: 0,
+    borderRadius: 5
   }
 });

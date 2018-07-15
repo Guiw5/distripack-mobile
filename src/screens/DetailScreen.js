@@ -7,8 +7,7 @@ export default class DetailScreen extends React.Component {
     super(props);
   }  
 
-  render() {
-    console.log('navigation_details', this.props.navigation.state);    
+  render() {    
     return (
       <View>        
         <Details navigation={this.props.navigation} />

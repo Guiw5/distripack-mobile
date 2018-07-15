@@ -5,12 +5,7 @@ import SelectClient from '../components/SelectClient';
 export default class ClientScreen extends React.Component {
   constructor(props){
     super(props)
-  }
-
-  componentDidMount() {    
-    if(this.props.clients)
-      this.props.getClients();
-  }
+  }  
   
   render() {
     return (
@@ -20,8 +15,3 @@ export default class ClientScreen extends React.Component {
     );
   }
 }
-mapDispatchToProps = dispatch => ({
-  getClients: () => {
-    dispatch(getClients())
-  }
-})

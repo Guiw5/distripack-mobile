@@ -49,6 +49,7 @@ class SelectProducts extends React.Component {
 
   render() {                
     let order = this.props.order;
+    let show = order && order.items.length > 0;
     return (
       this.props.products.length > 0 && 
       this.props.order &&
@@ -60,10 +61,7 @@ class SelectProducts extends React.Component {
           filterFunction={this.filterFunction}
           data={this.props.products}
         />
-        { order && order.items.length > 0 
-          ? <Button style={styles.button}  title={'Ver Pedido ('+ order.items.length +')'} onPress={() => this.goToOrder(order)} /> 
-          : <View />
-        }
+        <Button style={{backfaceVisibility: show? "visible": "hidden"}} buttonStyle={styles.button} title={'Ver Pedido ('+ order.items.length +')'} onPress={() => this.goToOrder(order)} />      
       </View>
     );
   }

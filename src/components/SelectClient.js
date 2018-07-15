@@ -40,8 +40,7 @@ class SelectClient extends React.Component {
     />
   )
   
-  render() {  
-    console.log('pero no tenemos data por acá?', this.props.clients)  
+  render() {    
     return (
         this.props.clients.length > 0 && 
         <SearchList 

@@ -15,5 +15,3 @@ export default class OrderScreen extends React.Component {
     );
   }
 }
-
-//export default withOrder(OrderScreen)
