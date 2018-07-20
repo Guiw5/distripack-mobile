@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import OrderFlow from './components/OrderFlow';
+import OrderFlow from './src/components/OrderFlow';
 
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import rootReducer from './reducers/index';
+import rootReducer from './src/reducers/index';
 
 // import axios from 'axios';
 // import axiosMiddleware from 'redux-axios-middleware';
@@ -21,17 +21,14 @@ export default class App extends React.Component {
     return (     
       <Provider store={store}>
         <View style={styles.Container}>
-          <OrderFlow style={styles.OrderFlow}/>
+          <OrderFlow />
         </View>
       </Provider>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  OrderFlow: {
-    paddingTop: 110
-  },
+const styles = StyleSheet.create({  
   Container: {
     flex: 1,
     backgroundColor: '#fff'
