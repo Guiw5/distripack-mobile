@@ -1,14 +1,14 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import { Input, Button } from 'react-native-elements';
+import { StyleSheet, View } from 'react-native';
+import { Button, ListItem, Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { addToOrder } from '../actions/index';
 
-class Details extends React.Component {   
+class Details extends React.Component {    
   constructor(props) {
-    super(props);  
+    super(props);    
     this.state = {
-      cant: ''
+      cant: 1            
     }      
   }    
   
@@ -20,27 +20,45 @@ class Details extends React.Component {
     this.props.addToOrder(orderItem);
     goBack();    
   }
-  
+
+  quantityChanged = (text) => {    
+    this.setState({cant: parseInt(text)});
+  }
+
   render() {        
-    const { alias, descripcion, precio, cantidad } = this.props.navigation.state.params.product;          
-    return (
-      <View style={styles.wrapper}>
-        <Text style={styles.title}>{alias}</Text>
-        <Text style={styles.desc}>{descripcion}</Text>
-        <Text>Cantidad por bulto:{cantidad}</Text>
-        <Text>Cantidad de bultos:</Text>
-        <Input 
-          keyboardType="numeric" placeholder="Indique cuantos bultos"
-          onChangeText={(text) => this.setState({cant: text})} 
-          value={this.state.cant} style={styles.desc}
-        />          
-        <Text style={styles.price}>Precio x bulto: ${precio}</Text>          
-        <Text style={styles.newPrice}>
-          Precio Total: ${ this.state.cant
-                        ? parseFloat(precio) * this.state.cant
-                        : parseFloat(precio) }
-        </Text> 
-        <Button buttonStyle={styles.button} title='Agregar al pedido' onPress={this.addToOrder}/>        
+    const { descripcion, precio, cantidad } = this.props.navigation.state.params.product;      
+    let subtotal = this.state.cant ? parseFloat(precio) * this.state.cant : parseFloat(precio);    
+    return (      
+      <View style={{minHeight:'100%', alignContent: "center"}}>
+        <ListItem             
+          title={descripcion}          
+          rightTitle={'$' + precio.toFixed(2)}
+          titleStyle={{width:270}}     
+          containerStyle={{ borderBottomWidth: 0 }}                  
+        />
+        <ListItem 
+          subtitle="Cantidad por bulto"
+          subtitleStyle={{fontSize: 12}}
+          rightSubtitle={'' + cantidad}
+        />    
+        <ListItem 
+          title="Indique cuantos bultos"          
+          titleStyle={{fontSize: 14, width:200, backgroundColor: '#f6f6f6'}}                                                  
+          input={{onChangeText: this.quantityChanged, placeholder:"NRO", inputStyle:{fontSize:14}, keyboardType:"numeric"}}
+          chevron
+          chevronColor="#2089dc"
+        />  
+        <ListItem
+          title="Subtotal"
+          rightSubtitle={'$' + subtotal.toFixed(2)}
+          titleStyle={{fontSize: 14}}
+        />              
+        <Button 
+          buttonStyle={styles.button} 
+          containerStyle={{backgroundColor:'#fff', flex: 2, flexDirection: 'row', alignItems: 'flex-end', alignContent: 'center', justifyContent: 'center'}}          
+          title='Agregar al pedido' 
+          onPress={this.addToOrder}
+        />        
       </View>
     )
   }
@@ -56,39 +74,14 @@ const mapDispatchToProps = dispatch => {
 
 export default connect(null, mapDispatchToProps)(Details);
 
-const styles = StyleSheet.create({
-  wrapper: {
-    borderWidth: 1,
-    flexDirection: 'column',
-    flexWrap:'wrap',
-    alignContent: 'space-between'  
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: '400'
-  },
-  desc: {
-    fontSize: 12
-  },
-  price: {
-    fontSize: 20,
-    fontWeight: '600'
-  },
-  newPrice: {
-    fontSize: 20,
-    borderWidth: 1,
-    borderColor: 'red',
-    height: 44,
-    paddingLeft: 5
-  },
-  button: {
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-    width: 300,
-    height: 45,
+const styles = StyleSheet.create({    
+  button: {        
+    width:300,      
     borderColor: "transparent",
     borderWidth: 0,
-    borderRadius: 5
-  }
+    borderRadius: 5,
+    height: 50,    
+    position: 'absolute',
+    bottom: 5    
+  }  
 });
