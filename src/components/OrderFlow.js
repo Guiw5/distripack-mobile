@@ -10,29 +10,25 @@ export default OrderFlow = StackNavigator({
   Client: { 
     screen: ClientScreen, 
     navigationOptions: {
-      title: 'Seleccione Cliente',
-      headerStyle: {paddingTop:25}
+      title: 'Seleccione Cliente'      
     } 
   },
   Products: { 
     screen: ProductScreen,
     navigationOptions: {
-      title: 'Seleccione Productos',
-      headerStyle: {paddingTop:25}
+      title: 'Seleccione Productos'      
     }
   },
   Details: { 
     screen: DetailScreen,
-    navigationOptions: {  
-      title: 'Seleccione Cantidad',
-      headerStyle: {paddingTop:25}
-    }
+    navigationOptions: ({ navigation }) => ({
+      title: `${navigation.state.params.product.alias}`,
+    }),
   }, 
   Order: {
     screen: OrderScreen,
     navigationOptions: {  
-      title: 'Orden de Compra',
-      headerStyle: {paddingTop:25}
+      title: 'Orden de Compra'      
     }
   }  
 });
