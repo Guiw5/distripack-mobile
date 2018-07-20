@@ -1,23 +1,27 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Keyboard } from 'react-native';
 import { ListItem, Button } from 'react-native-elements';
-import SearchList from './SearchList';
+import Select from './Select';
 import { getOrder, getProducts } from '../actions/index';
 import { connect } from 'react-redux';
 
 class SelectProducts extends React.Component {
   constructor(props){
-    super(props);          
+    super(props);   
+    this.state = { 
+      query: ''
+    }       
   }     
 
   componentDidMount() {
     if(this.props.products.length === 0)
       this.props.getProducts();
-    if(this.props.order)
-      this.props.getOrder();
-  }
 
-  filterFunction = (text) => {
+    if(this.props.order.items.length === 0)
+      this.props.getOrder();
+  }  
+  
+  filterProducts = (text) => {
     let results = this.props.products;        
     if(text) {      
       results = results.filter(item =>         
@@ -27,11 +31,12 @@ class SelectProducts extends React.Component {
     return results;
   }  
 
-  goToDetails = (product) => {      
+  goToDetails = (product) => {
+    Keyboard.dismiss();      
     this.props.navigation.navigate('Details', { product: product });
   }
 
-  goToOrder = (order) => {
+  goToOrder = (order) => {    
     this.props.navigation.navigate('Order', { order: order });
   }
 
@@ -51,17 +56,21 @@ class SelectProducts extends React.Component {
     let order = this.props.order;
     let show = order && order.items.length > 0;
     return (
-      this.props.products.length > 0 && 
-      this.props.order &&
+      this.props.products.length > 0 &&       
       <View style={styles.container}>
-        <SearchList 
+        <Select           
+          placeholder='Escriba nombre o alias del producto'          
           itemKey='id'
-          headerPlaceholder='Escriba nombre, o alias del producto'          
-          renderItem={this.renderItem}  
-          filterFunction={this.filterFunction}
-          data={this.props.products}
-        />
-        <Button style={{backfaceVisibility: show? "visible": "hidden"}} buttonStyle={styles.button} title={'Ver Pedido ('+ order.items.length +')'} onPress={() => this.goToOrder(order)} />      
+          renderItem={this.renderItem}
+          getData={this.filterProducts}          
+        />        
+        { show && 
+          <Button 
+            buttonStyle={styles.btnOrder} 
+            title={'Ver Pedido ('+ order.items.length +')'} 
+            onPress={() => this.goToOrder(order)} 
+          />          
+        }
       </View>
     );
   }
@@ -90,9 +99,13 @@ const mapDispatchToProps = dispatch => {
 export default connect(mapStateToProps, mapDispatchToProps)(SelectProducts);
 
 styles = StyleSheet.create({   
-  button: {    
-    bottom: 0,
-    left: 0,
-    position: 'absolute'
+  btnOrder: {    
+    bottom: 0,    
+    position: 'absolute',
+    width: 350,    
+    height: 45,
+    borderColor: "transparent",
+    borderWidth: 0,
+    borderRadius: 5
   }  
 });

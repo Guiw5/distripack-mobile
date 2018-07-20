@@ -1,20 +1,21 @@
 import React from 'react';
 import { ListItem } from 'react-native-elements';
-import SearchList from './SearchList';
+import { StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { setClient, getClients } from '../actions/index';
+import Select from './Select';
 
 class SelectClient extends React.Component {
   constructor(props){
     super(props);        
   }  
- 
+  
   componentDidMount() {    
     if(this.props.clients.length === 0)
       this.props.getClients();
-  }
+  }    
 
-  filterFunction = (text) => {
+  filterClients = (text) => {    
     let results = this.props.clients;        
     if(text) {      
       results = results.filter(item =>         
@@ -42,14 +43,13 @@ class SelectClient extends React.Component {
   
   render() {    
     return (
-        this.props.clients.length > 0 && 
-        <SearchList 
-          itemKey='mail'
-          headerPlaceholder='Escriba nombre, alias o mail del cliente'        
-          renderItem={this.renderItem}
-          filterFunction={this.filterFunction}
-          data={this.props.clients}        
-        />       
+      this.props.clients.length > 0 &&       
+        <Select           
+          placeholder='Escriba nombre, alias o mail del cliente'                    
+          getData={this.filterClients}
+          itemKey='mail'          
+          renderItem={this.renderItem} 
+        />      
     );
   }
 }
@@ -70,3 +70,9 @@ const mapDispatchToProps = dispatch => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SelectClient);
+
+const styles = StyleSheet.create({
+  searchBar: {
+    fontSize: 14
+  }  
+});
