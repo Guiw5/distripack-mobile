@@ -1,13 +1,8 @@
-import React from 'react';
-import { View, Text } from 'react-native';
-import SelectProducts from '../components/SelectProducts';
+import React from 'react'
+import SelectProducts from '../components/SelectProducts'
 
 export default class ProductScreen extends React.Component {
-  render() {       
-    return (
-      <View>        
-        <SelectProducts navigation={this.props.navigation} />                  
-      </View>
-    );
+  render() {
+    return <SelectProducts navigation={this.props.navigation} />
   }
 }

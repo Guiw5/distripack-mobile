@@ -1,13 +1,8 @@
-import React from 'react';
-import { View } from 'react-native';
-import Order from '../components/Order';
+import React from 'react'
+import Order from '../components/Order'
 
-export default class OrderScreen extends React.Component {   
-  render() {    
-    return (
-      <View>        
-        <Order navigation={this.props.navigation} />
-      </View>
-    );
+export default class OrderScreen extends React.Component {
+  render() {
+    return <Order navigation={this.props.navigation} />
   }
 }

@@ -1,10 +1,10 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import OrderFlow from './src/components/OrderFlow';
+import React from 'react'
+import { StyleSheet, View } from 'react-native'
+import OrderFlow from './src/components/OrderFlow'
 
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
-import rootReducer from './src/reducers/index';
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import rootReducer from './src/reducers/index'
 
 // import axios from 'axios';
 // import axiosMiddleware from 'redux-axios-middleware';
@@ -14,23 +14,23 @@ import rootReducer from './src/reducers/index';
 //   responseType: 'json'
 // });
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer)
 
-export default class App extends React.Component {  
+export default class App extends React.Component {
   render() {
-    return (     
+    return (
       <Provider store={store}>
         <View style={styles.Container}>
           <OrderFlow />
         </View>
       </Provider>
-    );
+    )
   }
 }
 
-const styles = StyleSheet.create({  
+const styles = StyleSheet.create({
   Container: {
     flex: 1,
     backgroundColor: '#fff'
   }
-});
+})

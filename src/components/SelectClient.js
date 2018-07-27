@@ -1,61 +1,63 @@
-import React from 'react';
-import { ListItem } from 'react-native-elements';
-import { StyleSheet } from 'react-native';
-import { connect } from 'react-redux';
-import { setClient, getClients } from '../actions/index';
-import Select from './Select';
+import React from 'react'
+import { ListItem } from 'react-native-elements'
+import { StyleSheet } from 'react-native'
+import { connect } from 'react-redux'
+import { setClient, getClients } from '../actions/index'
+import Select from './Select'
 
 class SelectClient extends React.Component {
-  constructor(props){
-    super(props);        
-  }  
-  
-  componentDidMount() {    
-    if(this.props.clients.length === 0)
-      this.props.getClients();
-  }    
+  constructor(props) {
+    super(props)
+  }
 
-  filterClients = (text) => {    
-    let results = this.props.clients;        
-    if(text) {      
-      results = results.filter(item =>         
-        item.mail.toLowerCase().includes(text.toLowerCase()) ||
-        item.name.toLowerCase().includes(text.toLowerCase())
-      );
-    }       
-    return results;
-  };
+  componentDidMount() {
+    if (this.props.clients.length === 0) this.props.getClients()
+  }
 
-  onPress = (client) => {      
-    this.props.setClient(client.mail);
-    this.props.navigation.navigate('Products');
-  }    
+  filterClients = text => {
+    let results = this.props.clients
+    if (text) {
+      results = results.filter(
+        item =>
+          item.mail.toLowerCase().includes(text.toLowerCase()) ||
+          item.name.toLowerCase().includes(text.toLowerCase())
+      )
+    }
+    return results
+  }
+
+  onPress = client => {
+    this.props.setClient(client.mail)
+    this.props.navigation.navigate('Products')
+  }
 
   renderItem = ({ item }) => (
-    <ListItem              
+    <ListItem
       title={item.name}
-      subtitle={item.mail} 
-      subtitleStyle={{fontSize: 12}}            
+      subtitle={item.mail}
+      subtitleStyle={{ fontSize: 12 }}
       containerStyle={{ borderBottomWidth: 0 }}
       onPress={() => this.onPress(item)}
     />
   )
-  
-  render() {    
+
+  render() {
     return (
-      this.props.clients.length > 0 &&       
-        <Select           
-          placeholder='Escriba nombre, alias o mail del cliente'                    
-          getData={this.filterClients}
-          itemKey='mail'          
-          renderItem={this.renderItem} 
-        />      
-    );
+      this.props.clients.length > 0 && (
+        <Select
+          keyExtractor={item => item.mail}
+          placeholder="Escriba nombre, alias o mail del cliente"
+          filter={this.filterClients}
+          renderItem={this.renderItem}
+          button={{ title: 'Agregar Cliente' }}
+        />
+      )
+    )
   }
 }
 
-const mapStateToProps = state => { 
-  return { clients: state.clients };
+const mapStateToProps = state => {
+  return { clients: state.clients }
 }
 
 const mapDispatchToProps = dispatch => {
@@ -66,13 +68,16 @@ const mapDispatchToProps = dispatch => {
     getClients: () => {
       dispatch(getClients())
     }
-  };
+  }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SelectClient);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SelectClient)
 
 const styles = StyleSheet.create({
   searchBar: {
     fontSize: 14
-  }  
-});
+  }
+})
