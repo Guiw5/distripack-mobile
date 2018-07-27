@@ -1,9 +1,18 @@
-let itemId = 0;
+let itemId = 0
 export const addToOrder = item => ({
   type: 'ADD_TO_ORDER',
   id: itemId++,
-  item: item.product,
-  quantity: item.quantity
+  item
+})
+
+export const modifyOrder = item => ({
+  type: 'UPDATE_ORDER',
+  item
+})
+
+export const removeItems = items => ({
+  type: 'REMOVE_FROM_ORDER',
+  items
 })
 
 export const setClient = id => ({

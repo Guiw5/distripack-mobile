@@ -1,6 +1,6 @@
-import { tassign } from 'tassign';
+import { tassign } from 'tassign'
 
-const initialState = {  
+const initialState = {
   order: {
     items: [],
     clientId: 0
@@ -10,21 +10,31 @@ const initialState = {
 const order = (state = initialState.order, action) => {
   switch (action.type) {
     case 'ADD_TO_ORDER':
-      let newItem = { id: action.id, product: action.item, quantity: action.quantity };
-      return tassign(state, { items: [...state.items, newItem] });
+      let newItem = { id: action.id, ...action.item }
+      return tassign(state, { items: [...state.items, newItem] })
     case 'REMOVE_FROM_ORDER':
-      return tassign(state, { items: state.items.filter(i => i.id !== action.item.id) });
+      return tassign(state, {
+        items: state.items.filter(i => !action.items.includes(i.id))
+      })
     case 'UPDATE_ORDER':
-      return tassign(state);
+      let updatedItem = { ...action.item }
+      return tassign(state, {
+        items: [
+          ...state.items.filter(
+            item => item.product.id !== updatedItem.product.id
+          ),
+          updatedItem
+        ]
+      })
     case 'SET_CLIENT':
-      return tassign(state, {clientId: action.clientId});
+      return tassign(state, { clientId: action.clientId })
     case 'FETCH_ORDER':
-      return state;
+      return state
     default:
-      return state;
+      return state
   }
-};
-export default order;
+}
+export default order
 
 // const todos = (state = [], action) => {
 //   switch (action.type) {
