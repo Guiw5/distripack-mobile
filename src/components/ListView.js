@@ -1,14 +1,11 @@
 import React from 'react'
 import { View, FlatList } from 'react-native'
+import { Separator } from './commons'
 
 export default class ListView extends React.PureComponent {
   constructor(props) {
     super(props)
   }
-
-  renderSeparator = () => (
-    <View style={{ height: 1, backgroundColor: '#CED0CE' }} />
-  )
 
   render() {
     return (
@@ -20,7 +17,7 @@ export default class ListView extends React.PureComponent {
           keyExtractor={this.props.keyExtractor}
           ListFooterComponent={this.props.ListFooterComponent}
           keyboardShouldPersistTaps="handled"
-          ItemSeparatorComponent={this.renderSeparator}
+          ItemSeparatorComponent={Separator}
         />
       </View>
     )

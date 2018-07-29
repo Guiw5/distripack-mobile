@@ -1,34 +1,36 @@
-import React from 'react';
-import { Modal, Text, TouchableHighlight, View } from 'react-native';
+import React from 'react'
+import { Modal, Text, TouchableHighlight, View } from 'react-native'
 
 export default class OrderModal extends React.Component {
   state = {
-    modalVisible: false,
-  };
+    modalVisible: false
+  }
 
   setModalVisible(visible) {
-    this.setState({modalVisible: visible});
+    this.setState({ modalVisible: visible })
   }
 
   render() {
     return (
-      <View style={{marginTop: 22}}>
+      <View style={{ marginTop: 22 }}>
         <Modal
           animationType="slide"
           transparent={false}
           visible={this.state.modalVisible}
           onRequestClose={() => {
-            alert('Modal has been closed.');
-          }}>
-          <View style={{marginTop: 22}}>
+            alert('Modal has been closed.')
+          }}
+        >
+          <View style={{ marginTop: 22 }}>
             <View>
-              <Text>Hello World!</Text>
+              <Text>Desea confirmar la orden?</Text>
 
               <TouchableHighlight
                 onPress={() => {
-                  this.setModalVisible(!this.state.modalVisible);
-                }}>
-                <Text>Hide Modal</Text>
+                  this.setModalVisible(!this.state.modalVisible)
+                }}
+              >
+                <Text>Cancelar</Text>
               </TouchableHighlight>
             </View>
           </View>
@@ -36,11 +38,12 @@ export default class OrderModal extends React.Component {
 
         <TouchableHighlight
           onPress={() => {
-            this.setModalVisible(true);
-          }}>
+            this.setModalVisible(true)
+          }}
+        >
           <Text>Show Modal</Text>
         </TouchableHighlight>
       </View>
-    );
+    )
   }
 }
