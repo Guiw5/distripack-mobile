@@ -11,7 +11,7 @@ const order = (state = initialState.order, action) => {
   switch (action.type) {
     case 'ADD_TO_ORDER':
       let newItem = { id: action.id, ...action.item }
-      return tassign(state, { items: [...state.items, newItem] })
+      return tassign(state, { items: state.items.concat(newItem) })
     case 'REMOVE_FROM_ORDER':
       return tassign(state, {
         items: state.items.filter(i => !action.items.includes(i.id))
@@ -19,12 +19,10 @@ const order = (state = initialState.order, action) => {
     case 'UPDATE_ORDER':
       let updatedItem = { ...action.item }
       return tassign(state, {
-        items: [
-          ...state.items.filter(
-            item => item.product.id !== updatedItem.product.id
-          ),
-          updatedItem
-        ]
+        items: state.items.map(
+          item =>
+            item.product.id === updatedItem.product.id ? updatedItem : item
+        )
       })
     case 'SET_CLIENT':
       return tassign(state, { clientId: action.clientId })
