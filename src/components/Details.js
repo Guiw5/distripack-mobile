@@ -5,16 +5,20 @@ import { connect } from 'react-redux'
 import { addToOrder, modifyOrder } from '../actions/index'
 import ButtonFooter from './ButtonFooter'
 
+const editIconProps = {
+  type: 'materialIcons',
+  name: 'edit',
+  color: colors.primary,
+  size: 20
+}
+
 class Details extends React.Component {
   constructor(props) {
     super(props)
     let { quantity, price } = this.props.navigation.state.params.item
-    // let focus = false
     this.state = { quantity, price }
   }
-  // componentDidMount() {
-  //   if (this.state.focus) this..input.focus()
-  // }
+
   addToOrder = () => {
     let { state, goBack } = this.props.navigation
     let { product } = state.params.item
@@ -24,8 +28,11 @@ class Details extends React.Component {
 
   modify = () => {
     let { state, goBack } = this.props.navigation
-    let { product } = state.params.item
-    this.props.modify({ product, ...this.state })
+    let { product, price, quantity } = state.params.item
+
+    if (price !== this.state.price || quantity !== this.state.quantity)
+      this.props.modify({ product, ...this.state })
+
     goBack()
   }
 
@@ -48,16 +55,11 @@ class Details extends React.Component {
     const subtotal = price * quantity
 
     return (
-      <View
-        style={{ flex: 1, alignContent: 'center', backgroundColor: '#FFF' }}
-      >
+      <View style={styles.containerStyle}>
         <ListItem
           title={alias}
           subtitle={descripcion}
-          containerStyle={{
-            borderBottomWidth: 1,
-            justifyContent: 'space-around'
-          }}
+          containerStyle={styles.containerList}
           input={{
             ref: ref => (this.priceInput = ref),
             defaultValue: '$' + this.state.price.toFixed(2),
@@ -67,13 +69,7 @@ class Details extends React.Component {
             keyboardType: 'numeric',
             containerStyle: { flex: 0.3 }
           }}
-          rightIcon={{
-            type: 'materialIcons',
-            name: 'edit',
-            color: colors.primary,
-            size: 20,
-            containerStyle: { paddingRight: 0, marginRight: 0 }
-          }}
+          rightIcon={editIconProps}
           rightContentContainerStyle={{ backgroundColor: 'yellow' }}
           onPress={() => this.priceInput.focus()}
         />
@@ -97,12 +93,7 @@ class Details extends React.Component {
             inputStyle: { fontSize: 14, color: colors.primary },
             keyboardType: 'numeric'
           }}
-          rightIcon={{
-            type: 'materialIcons',
-            name: 'edit',
-            color: colors.primary,
-            size: 20
-          }}
+          rightIcon={editIconProps}
           onPress={() => this.quantInput.focus()}
         />
 
@@ -138,6 +129,15 @@ export default connect(
 )(Details)
 
 const styles = StyleSheet.create({
+  containerList: {
+    borderBottomWidth: 1,
+    justifyContent: 'space-around'
+  },
+  containerStyle: {
+    flex: 1,
+    alignContent: 'center',
+    backgroundColor: '#FFF'
+  },
   button: {
     width: 300,
     borderColor: 'transparent',
