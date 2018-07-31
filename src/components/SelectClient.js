@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { setClient, getClients } from '../actions/index'
 import Select from './Select'
 
-class SelectClient extends React.Component {
+class SelectClient extends React.PureComponent {
   constructor(props) {
     super(props)
   }
@@ -14,17 +14,9 @@ class SelectClient extends React.Component {
     if (this.props.clients.length === 0) this.props.getClients()
   }
 
-  filterClients = text => {
-    let results = this.props.clients
-    if (text) {
-      results = results.filter(
-        item =>
-          item.mail.toLowerCase().includes(text.toLowerCase()) ||
-          item.name.toLowerCase().includes(text.toLowerCase())
-      )
-    }
-    return results
-  }
+  filter = text => item =>
+    item.mail.toLowerCase().includes(text.toLowerCase()) ||
+    item.name.toLowerCase().includes(text.toLowerCase())
 
   onPress = client => {
     this.props.setClient(client.mail)
@@ -47,7 +39,8 @@ class SelectClient extends React.Component {
         <Select
           keyExtractor={item => item.mail}
           placeholder="Escriba nombre, alias o mail del cliente"
-          filter={this.filterClients}
+          filter={this.filter}
+          data={this.props.clients}
           renderItem={this.renderItem}
           button={{ title: 'Agregar Cliente' }}
         />

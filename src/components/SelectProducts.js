@@ -5,12 +5,9 @@ import Select from './Select'
 import { getOrder, getProducts } from '../actions/index'
 import { connect } from 'react-redux'
 
-class SelectProducts extends React.Component {
+class SelectProducts extends React.PureComponent {
   constructor(props) {
     super(props)
-    this.state = {
-      query: ''
-    }
   }
 
   componentDidMount() {
@@ -19,32 +16,29 @@ class SelectProducts extends React.Component {
     if (this.props.order.items.length === 0) this.props.getOrder()
   }
 
-  filterProducts = text => {
-    let results = this.props.products
-    if (text) {
-      results = results.filter(
-        item =>
-          item.alias.toLowerCase().includes(text.toLowerCase()) ||
-          item.descripcion.toLowerCase().includes(text.toLowerCase())
-      )
-    }
-    return results
+  filter = text => item =>
+    item.alias.toLowerCase().includes(text.toLowerCase()) ||
+    item.descripcion.toLowerCase().includes(text.toLowerCase())
+
+  createItem = product => {
+    return { product, quantity: 1, price: product.precio }
   }
+
+  getItem = id => this.props.order.items.find(item => item.product.id === id)
 
   goToDetails = product => {
     Keyboard.dismiss()
-    let orderItem = { product, quantity: 1, price: product.precio }
-    let included = this.props.order.items
-      .map(item => item.product.id)
-      .includes(product.id)
-    this.props.navigation.navigate('Details', {
-      item: orderItem,
-      isNew: !included
-    })
+
+    let item = this.getItem(product.id)
+
+    let isNew = !item
+    if (isNew) item = this.createItem(product)
+
+    this.props.navigation.navigate('Details', { item, isNew })
   }
 
-  goToOrder = order => {
-    this.props.navigation.navigate('Order', { order })
+  goToOrder = () => {
+    this.props.navigation.navigate('Order')
   }
 
   renderItem = ({ item }) => (
@@ -67,12 +61,13 @@ class SelectProducts extends React.Component {
           keyExtractor={item => item.id}
           placeholder="Escriba nombre o alias del producto"
           renderItem={this.renderItem}
-          filter={this.filterProducts}
+          filter={this.filter}
+          data={this.props.products}
           button={
             show
               ? {
                   title: 'Ver Pedido (' + order.items.length + ')',
-                  onPress: () => this.goToOrder(order)
+                  onPress: this.goToOrder
                 }
               : null
           }

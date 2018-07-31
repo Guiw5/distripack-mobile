@@ -7,19 +7,20 @@ import ButtonFooter from './ButtonFooter'
 export default class Select extends React.Component {
   constructor(props) {
     super(props)
+
+    this.filterCriteria = this.props.filter('')
+
     this.state = {
       query: ''
     }
   }
 
   onChangeText = query => {
+    this.filterCriteria = this.props.filter(query)
     this.setState({ query: query || '' })
   }
 
-  getData = () => {
-    let { filter } = this.props
-    return filter(this.state.query)
-  }
+  filterData = () => this.props.data.filter(this.filterCriteria)
 
   render() {
     return (
@@ -34,7 +35,7 @@ export default class Select extends React.Component {
         <SearchList
           keyExtractor={this.props.keyExtractor}
           renderItem={this.props.renderItem}
-          data={this.getData()}
+          data={this.filterData()}
         />
         {this.props.button ? <ButtonFooter {...this.props.button} /> : null}
       </View>
