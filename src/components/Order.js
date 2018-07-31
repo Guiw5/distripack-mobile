@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { View, StyleSheet } from 'react-native'
+import { View } from 'react-native'
 import { getOrder, setClient, removeItems } from '../actions'
 import ListView from './ListView'
 import OrderItem from './OrderItem'
@@ -11,8 +11,11 @@ import OrderTitle from './OrderTitle'
 class Order extends React.Component {
   constructor(props) {
     super(props)
-    this.props.order = this.props.navigation.state.params.order
     this.state = { deleteList: [] }
+  }
+
+  componentDidMount() {
+    this.props.getOrder()
   }
 
   select = itemId => {
