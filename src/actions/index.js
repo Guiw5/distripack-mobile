@@ -15,9 +15,9 @@ export const removeItems = items => ({
   items
 })
 
-export const setClient = id => ({
+export const setClient = client => ({
   type: 'SET_CLIENT',
-  clientId: id
+  client
 })
 
 export const getClients = () => ({

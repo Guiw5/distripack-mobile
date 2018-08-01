@@ -75,7 +75,7 @@ class Order extends React.Component {
     let toDelete = this.state.deleteList.length > 0
     return (
       <View style={{ flex: 1, backgroundColor: '#FFF' }}>
-        <OrderTitle title={this.props.order.clientId} />
+        <OrderTitle title={this.props.order.client.name} />
         <ListView
           containerStyle={{ flex: 0.8 }}
           data={this.props.order.items}

@@ -3,7 +3,7 @@ import { tassign } from 'tassign'
 const initialState = {
   order: {
     items: [],
-    clientId: 0
+    client: {}
   }
 }
 
@@ -25,7 +25,7 @@ const order = (state = initialState.order, action) => {
         )
       })
     case 'SET_CLIENT':
-      return tassign(state, { clientId: action.clientId })
+      return tassign(state, { client: action.client })
     case 'FETCH_ORDER':
       return state
     default:

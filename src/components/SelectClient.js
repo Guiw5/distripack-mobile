@@ -19,7 +19,7 @@ class SelectClient extends React.PureComponent {
     item.name.toLowerCase().includes(text.toLowerCase())
 
   onPress = client => {
-    this.props.setClient(client.mail)
+    this.props.setClient(client)
     this.props.navigation.navigate('Products')
   }
 
@@ -55,8 +55,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    setClient: id => {
-      dispatch(setClient(id))
+    setClient: client => {
+      dispatch(setClient(client))
     },
     getClients: () => {
       dispatch(getClients())
