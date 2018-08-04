@@ -50,15 +50,15 @@ class Details extends React.Component {
 
   render() {
     const { item, isNew } = this.props.navigation.state.params
-    const { alias, descripcion, cantidad } = item.product
+    const { nickSku, description, quantity: cantidad } = item.product
     const { price, quantity } = this.state
     const subtotal = price * quantity
 
     return (
       <View style={styles.containerStyle}>
         <ListItem
-          title={alias}
-          subtitle={descripcion}
+          title={nickSku}
+          subtitle={description}
           containerStyle={styles.containerList}
           input={{
             ref: ref => (this.priceInput = ref),

@@ -28,6 +28,10 @@ export const getProducts = () => ({
   type: 'FETCH_PRODUCTS'
 })
 
+export const getSkus = () => ({
+  type: 'FETCH_SKUS'
+})
+
 export const getOrder = () => ({
   type: 'FETCH_ORDER'
 })

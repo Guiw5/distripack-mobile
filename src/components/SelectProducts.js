@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Keyboard } from 'react-native'
+import { Keyboard } from 'react-native'
 import { ListItem } from 'react-native-elements'
 import Select from './Select'
 import { getOrder, getProducts } from '../actions/index'
@@ -11,30 +11,41 @@ class SelectProducts extends React.PureComponent {
   }
 
   componentDidMount() {
-    if (this.props.products.length === 0) this.props.getProducts()
-
-    if (this.props.order.items.length === 0) this.props.getOrder()
+    this.props.getProducts()
+    this.props.getOrder()
   }
 
-  filter = text => item =>
-    item.alias.toLowerCase().includes(text.toLowerCase()) ||
-    item.descripcion.toLowerCase().includes(text.toLowerCase())
+  filter = text => item => {
+    if (!text) return true
 
-  createItem = product => {
-    return { product, quantity: 1, price: product.precio }
+    let name = item.name.toLowerCase()
+    let nick = item.nick.toLowerCase()
+    let keywordsName = name.split(' ')
+    let keywordsNick = nick.replace('/', ' ').split(' ')
+    let keywords = keywordsName.concat(keywordsNick, [nick, name])
+    return keywords.includes(text.toLowerCase())
   }
 
-  getItem = id => this.props.order.items.find(item => item.product.id === id)
+  createItem = sku => {
+    return { sku, quantity: 1, price: sku.price }
+  }
+
+  getFromOrder = code =>
+    this.props.order.items.find(item => item.sku.code === code)
 
   goToDetails = product => {
     Keyboard.dismiss()
+    console.log(product)
+    if (product.skus.length > 1)
+      this.props.navigation.navigate('Skus', { skus: product.skus })
+    else {
+      let item = this.getFromOrder(product.skus[0].code)
 
-    let item = this.getItem(product.id)
+      let isNew = !item
+      if (isNew) item = this.createItem(product.skus[0])
 
-    let isNew = !item
-    if (isNew) item = this.createItem(product)
-
-    this.props.navigation.navigate('Details', { item, isNew })
+      this.props.navigation.navigate('Details', { item, isNew })
+    }
   }
 
   goToOrder = () => {
@@ -43,10 +54,10 @@ class SelectProducts extends React.PureComponent {
 
   renderItem = ({ item }) => (
     <ListItem
-      title={item.alias}
-      subtitle={item.descripcion}
+      title={item.nick}
+      subtitle={item.name}
       subtitleStyle={{ fontSize: 12 }}
-      rightSubtitle={'$' + item.precio.toFixed(2)}
+      // rightSubtitle={'$' + item.price.toFixed(2)}
       containerStyle={{ borderBottomWidth: 0 }}
       onPress={() => this.goToDetails(item)}
     />
@@ -77,17 +88,14 @@ class SelectProducts extends React.PureComponent {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    products: state.products,
-    order: state.order
-  }
+const mapStateToProps = ({ products, order }) => {
+  return { products, order }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    getOrder: item => {
-      dispatch(getOrder(item))
+    getOrder: () => {
+      dispatch(getOrder())
     },
     getProducts: () => {
       dispatch(getProducts())
@@ -99,5 +107,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(SelectProducts)
-
-styles = StyleSheet.create({})

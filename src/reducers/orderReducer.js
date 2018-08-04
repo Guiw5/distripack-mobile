@@ -1,13 +1,11 @@
 import { tassign } from 'tassign'
 
 const initialState = {
-  order: {
-    items: [],
-    client: {}
-  }
+  items: [],
+  client: {}
 }
 
-const order = (state = initialState.order, action) => {
+const order = (state = initialState, action) => {
   switch (action.type) {
     case 'ADD_TO_ORDER':
       let newItem = { id: action.id, ...action.item }

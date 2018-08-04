@@ -9,7 +9,6 @@ export default class Select extends React.Component {
     super(props)
 
     this.filterCriteria = this.props.filter('')
-
     this.state = {
       query: ''
     }
