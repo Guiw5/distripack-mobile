@@ -28,7 +28,7 @@ export default (OrderFlow = StackNavigator({
   Details: {
     screen: DetailScreen,
     navigationOptions: ({ navigation }) => ({
-      title: `${navigation.state.params.item.product.nick}`
+      title: `${navigation.state.params.item.sku.nick}`
     })
   },
   Order: {

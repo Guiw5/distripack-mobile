@@ -9,11 +9,11 @@ export default class OrderItem extends React.PureComponent {
 
   render() {
     let { item } = this.props
-    let { price, quantity, product } = item
+    let { price, quantity, sku } = item
     let subtotal = price * quantity
     return (
       <ListItem
-        title={product.alias}
+        title={sku.nick}
         onPress={this.props.onPress}
         contentContainerStyle={styles.listContent}
         containerStyle={[

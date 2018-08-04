@@ -21,17 +21,17 @@ class Details extends React.Component {
 
   addToOrder = () => {
     let { state, goBack } = this.props.navigation
-    let { product } = state.params.item
-    this.props.addToOrder({ product, ...this.state })
+    let { sku } = state.params.item
+    this.props.addToOrder({ sku, ...this.state })
     goBack()
   }
 
   modify = () => {
     let { state, goBack } = this.props.navigation
-    let { product, price, quantity } = state.params.item
+    let { sku, price, quantity } = state.params.item
 
     if (price !== this.state.price || quantity !== this.state.quantity)
-      this.props.modify({ product, ...this.state })
+      this.props.modify({ sku, ...this.state })
 
     goBack()
   }
@@ -50,14 +50,14 @@ class Details extends React.Component {
 
   render() {
     const { item, isNew } = this.props.navigation.state.params
-    const { nickSku, description, quantity: cantidad } = item.product
+    const { nick, description, quantity: cantidad } = item.sku
     const { price, quantity } = this.state
     const subtotal = price * quantity
 
     return (
       <View style={styles.containerStyle}>
         <ListItem
-          title={nickSku}
+          title={nick}
           subtitle={description}
           containerStyle={styles.containerList}
           input={{

@@ -80,7 +80,7 @@ class Order extends React.Component {
           containerStyle={{ flex: 0.8 }}
           data={this.props.order.items}
           extraData={this.state.deleteList}
-          keyExtractor={item => item.product.id}
+          keyExtractor={item => item.sku.code}
           renderItem={this.renderItem}
           ListFooterComponent={
             <OrderFooter

@@ -18,8 +18,7 @@ const order = (state = initialState, action) => {
       let updatedItem = { ...action.item }
       return tassign(state, {
         items: state.items.map(
-          item =>
-            item.product.id === updatedItem.product.id ? updatedItem : item
+          item => (item.sku.code === updatedItem.sku.code ? updatedItem : item)
         )
       })
     case 'SET_CLIENT':

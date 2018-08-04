@@ -16,20 +16,6 @@ const products = (state = [], action) => {
 }
 export default products
 
-function groupBy(list, keyGetter) {
-  const map = new Map()
-  list.forEach(item => {
-    const key = keyGetter(item)
-    const collection = map.get(key)
-    if (!collection) {
-      map.set(key, [item])
-    } else {
-      collection.push(item)
-    }
-  })
-  return map
-}
-
 const MemoryMapProducts = () => {
   let mappedProducts = []
   let id = 1
@@ -62,7 +48,6 @@ const MemoryMapProducts = () => {
       id++
     }
   })
-  console.log(mappedProducts)
 
   return mappedProducts
 }
@@ -91,7 +76,6 @@ const MemoryMapSkus = () => {
       mapped.id = id++
     }
   })
-  console.log(mappedProducts)
 
   return mappedProducts
 }
