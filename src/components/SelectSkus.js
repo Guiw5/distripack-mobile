@@ -1,7 +1,7 @@
 import React from 'react'
 import { Keyboard, FlatList } from 'react-native'
 import { ListItem } from 'react-native-elements'
-import { getSkus } from '../actions/index'
+import { getOrder, getSkus } from '../actions/index'
 import { connect } from 'react-redux'
 
 class SelectSkus extends React.PureComponent {
