@@ -20,20 +20,20 @@ class Details extends React.Component {
   }
 
   addToOrder = () => {
-    let { state, goBack } = this.props.navigation
+    let { state, navigate } = this.props.navigation
     let { sku } = state.params.item
     this.props.addToOrder({ sku, ...this.state })
-    goBack()
+    navigate('Products')
   }
 
   modify = () => {
-    let { state, goBack } = this.props.navigation
+    let { state, navigate } = this.props.navigation
     let { sku, price, quantity } = state.params.item
 
     if (price !== this.state.price || quantity !== this.state.quantity)
       this.props.modify({ sku, ...this.state })
 
-    goBack()
+    navigate('Products')
   }
 
   quantityChanged = event => {
@@ -58,7 +58,6 @@ class Details extends React.Component {
       <View style={styles.containerStyle}>
         <ListItem
           title={nick}
-          subtitle={description}
           containerStyle={styles.containerList}
           input={{
             ref: ref => (this.priceInput = ref),
@@ -70,19 +69,24 @@ class Details extends React.Component {
             containerStyle: { flex: 0.3 }
           }}
           rightIcon={editIconProps}
-          rightContentContainerStyle={{ backgroundColor: 'yellow' }}
           onPress={() => this.priceInput.focus()}
         />
+        <ListItem title={description.toProperCase()} />
         <ListItem
           title={'Cantidad por bulto: ' + cantidad}
           titleStyle={{ fontSize: 12 }}
         />
-        <ListItem title={'Capacidad: 200cc'} titleStyle={{ fontSize: 12 }} />
+        {/* <ListItem title={'Capacidad: 200cc'} titleStyle={{ fontSize: 12 }} />
         <ListItem title={'Color: blanco'} titleStyle={{ fontSize: 12 }} />
-        <ListItem title={'Medidas: no tiene'} titleStyle={{ fontSize: 12 }} />
+        <ListItem title={'Medidas: no tiene'} titleStyle={{ fontSize: 12 }} /> */}
         <ListItem
           title="Indique cuantos bultos"
           titleStyle={{ fontSize: 14 }}
+          containerStyle={{
+            borderRadius: 10,
+            borderColor: colors.primary,
+            borderWidth: 1
+          }}
           input={{
             ref: ref => (this.quantInput = ref),
             onEndEditing: this.quantityChanged,

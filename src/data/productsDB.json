@@ -1782,7 +1782,7 @@
    "f21": null
  },
  {
-   "Alias": "BAN 615 x100",
+   "Alias": "BAN 615",
    "Nombre": "BANDEJA 615",
    "Alias SKU": "BAN 615 x100",
    "Marca": null,
@@ -1804,7 +1804,7 @@
    "f21": null
  },
  {
-   "Alias": "BAN 615 x25",
+   "Alias": "BAN 615",
    "Nombre": "BANDEJA 615",
    "Alias SKU": "BAN 615 x25",
    "Marca": null,
@@ -1826,7 +1826,7 @@
    "f21": null
  },
  {
-   "Alias": "BAN 615 x400",
+   "Alias": "BAN 615",
    "Nombre": "BANDEJA 615",
    "Alias SKU": "BAN 615 x400",
    "Marca": null,
@@ -1848,7 +1848,7 @@
    "f21": null
  },
  {
-   "Alias": "BAN 615 x50",
+   "Alias": "BAN 615",
    "Nombre": "BANDEJA 615",
    "Alias SKU": "BAN 615 x50",
    "Marca": null,
@@ -1870,7 +1870,7 @@
    "f21": null
  },
  {
-   "Alias": "BAN 617 x100",
+   "Alias": "BAN 617",
    "Nombre": "BANDEJA 617",
    "Alias SKU": "BAN 617 x100",
    "Marca": null,
@@ -1892,7 +1892,7 @@
    "f21": null
  },
  {
-   "Alias": "BAN 617 x25",
+   "Alias": "BAN 617",
    "Nombre": "BANDEJA 617",
    "Alias SKU": "BAN 617 x25",
    "Marca": null,
@@ -1914,7 +1914,7 @@
    "f21": null
  },
  {
-   "Alias": "BAN 617 x400",
+   "Alias": "BAN 617",
    "Nombre": "BANDEJA 617",
    "Alias SKU": "BAN 617 x400",
    "Marca": null,
@@ -5148,7 +5148,7 @@
    "f21": null
  },
  {
-   "Alias": "C/PIZZA RED/CH",
+   "Alias": "C/PIZZA RED",
    "Nombre": "CAJA PIZZA REDONDA",
    "Alias SKU": "C/PIZZA RED/CH",
    "Marca": "Celulosa Moldeada",
@@ -5170,7 +5170,7 @@
    "f21": null
  },
  {
-   "Alias": "C/PIZZA RED/GR",
+   "Alias": "C/PIZZA RED",
    "Nombre": "CAJA PIZZA REDONDA",
    "Alias SKU": "C/PIZZA RED/GR",
    "Marca": "Celulosa Moldeada",
@@ -14081,10 +14081,10 @@
  },
  {
    "Alias": "RES 45X60 MAPSA",
-   "Nombre": "ROLLO RESIDUO 45X60",
+   "Nombre": "ROLLO RESIDUO 45X60 MAPSA",
    "Alias SKU": "RES 45X60 MAPSA",
    "Marca": "Mapsa",
-   "Descripcion": "ROLLO RESIDUO 45X60",
+   "Descripcion": "ROLLO RESIDUO 45X60 MAPSA",
    "Cantidad": "30",
    "capacidad": null,
    "precio": "12.9",
@@ -14124,11 +14124,11 @@
    "f21": null
  },
  {
-   "Alias": "RES 45X60 SON BUENAS",
+   "Alias": "RES 45X60 SB",
    "Nombre": "ROLLO RESIDUO 45X60",
-   "Alias SKU": "RES 45X60 SON BUENAS",
+   "Alias SKU": "RES 45X60 SB",
    "Marca": "Son Buenas",
-   "Descripcion": "ROLLO RESIDUO 45X60",
+   "Descripcion": "ROLLO RESIDUO 45X60 SON BUENAS",
    "Cantidad": "30",
    "capacidad": null,
    "precio": "17.3",
@@ -14146,11 +14146,11 @@
    "f21": null
  },
  {
-   "Alias": "RES 45X60 SON BUENAS VERDE",
-   "Nombre": "ROLLO RESIDUO 45X60 VERDE",
-   "Alias SKU": "RES 45X60 SON BUENAS VERDE",
+   "Alias": "RES 45X60 SB/VE",
+   "Nombre": "ROLLO RESIDUO 45X60 SON BUENAS VERDE",
+   "Alias SKU": "RES 45X60 SB/VE",
    "Marca": "Son Buenas",
-   "Descripcion": "ROLLO RESIDUO 45X60 VERDE",
+   "Descripcion": "ROLLO RESIDUO 45X60 SON BUENAS VERDE",
    "Cantidad": "30",
    "capacidad": null,
    "precio": "17.3",

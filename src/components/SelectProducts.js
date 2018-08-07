@@ -16,14 +16,15 @@ class SelectProducts extends React.PureComponent {
   }
 
   filter = text => item => {
-    if (!text) return true
-
+    if (text.length < 1) return true
     let name = item.name.toLowerCase()
-    let nick = item.nick.toLowerCase()
-    let keywordsName = name.split(' ')
-    let keywordsNick = nick.replace('/', ' ').split(' ')
-    let keywords = keywordsName.concat(keywordsNick, [nick, name])
-    return keywords.includes(text.toLowerCase())
+    let nick = item.nick.replace('/', ' ').toLowerCase()
+    let query = text.replace('/', ' ').toLowerCase()
+
+    let isInProductName = text => name.contains(text) || nick.contains(text)
+
+    let words = query.split(' ')
+    return isInProductName(query) || words.every(isInProductName)
   }
 
   createItem = sku => {
@@ -35,7 +36,7 @@ class SelectProducts extends React.PureComponent {
 
   goToDetails = product => {
     Keyboard.dismiss()
-    console.log(product)
+
     if (product.skus.length > 1)
       this.props.navigation.navigate('Skus', { skus: product.skus })
     else {
@@ -54,10 +55,12 @@ class SelectProducts extends React.PureComponent {
 
   renderItem = ({ item }) => (
     <ListItem
-      title={item.nick}
-      subtitle={item.name}
+      title={item.nick.toProperCase()}
+      subtitle={item.name.toProperCase()}
       subtitleStyle={{ fontSize: 12 }}
-      // rightSubtitle={'$' + item.price.toFixed(2)}
+      rightSubtitle={
+        item.skus.length > 1 ? '+' : '$' + item.skus[0].price.toFixed(2)
+      }
       containerStyle={{ borderBottomWidth: 0 }}
       onPress={() => this.goToDetails(item)}
     />
@@ -69,7 +72,7 @@ class SelectProducts extends React.PureComponent {
     return (
       this.props.products.length > 0 && (
         <Select
-          keyExtractor={item => item.id}
+          keyExtractor={item => `${item.id}`}
           placeholder="Escriba nombre o alias del producto"
           renderItem={this.renderItem}
           filter={this.filter}

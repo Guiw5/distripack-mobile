@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text } from 'react-native-elements'
-import { Separator, Capitalize } from './commons'
+import { Separator } from './commons'
 
 export default class OrderTitle extends React.PureComponent {
   constructor(props) {
@@ -11,7 +11,7 @@ export default class OrderTitle extends React.PureComponent {
   render() {
     return (
       <View>
-        <Text style={styles.title}>{Capitalize(this.props.title)}</Text>
+        <Text style={styles.title}>{this.props.title.capitalize()}</Text>
         <Separator />
       </View>
     )

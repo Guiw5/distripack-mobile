@@ -2,10 +2,11 @@ import { tassign } from 'tassign'
 import Products from '../data/test-products.json'
 import ProductsDB from '../data/productsDB.json'
 
+const mappedProducts = []
 const products = (state = [], action) => {
   switch (action.type) {
     case 'FETCH_PRODUCTS':
-      return MemoryMapProducts()
+      return mappedProducts.length > 0 ? mappedProducts : MemoryMapProducts()
     case 'FETCH_SKUS':
       return MemoryMapSkus()
     case 'FETCH_SKUS_BY_PRODUCT':
@@ -16,10 +17,13 @@ const products = (state = [], action) => {
 }
 export default products
 
+const getCode = text => {
+  let words = text.split(' ')
+  let code = words.length == 1 ? text : words.map(x => x[0]).join()
+  return code.substring(0, 3)
+}
 const MemoryMapProducts = () => {
-  let mappedProducts = []
   let id = 1
-  let skus = []
   let skuId = 1001
   let last = ''
 
@@ -32,10 +36,11 @@ const MemoryMapProducts = () => {
       mapped.skus = []
       last = prod.Nombre
       let skus = ProductsDB.filter(x => x.Nombre === mapped.name)
-      skuId = 1001
+      skuId = 1
       skus.forEach(skuProd => {
         let sku = {}
-        sku.code = id * 1000 + skuId++
+        sku.code = `${getCode(mapped.name) + skuId}`
+        skuId++
         sku.nick = skuProd['Alias SKU']
         sku.description = skuProd['Descripcion']
         sku.quantity = parseFloat(skuProd.Cantidad)

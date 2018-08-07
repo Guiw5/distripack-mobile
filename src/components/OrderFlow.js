@@ -1,16 +1,23 @@
-import { StackNavigator } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation'
 
+import ClientsScreen from '../screens/ClientsScreen'
 import ClientScreen from '../screens/ClientScreen'
 import ProductScreen from '../screens/ProductScreen'
 import SkuScreen from '../screens/SkuScreen'
 import DetailScreen from '../screens/DetailScreen'
 import OrderScreen from '../screens/OrderScreen'
 
-export default (OrderFlow = StackNavigator({
+export default (OrderFlow = createStackNavigator({
+  Clients: {
+    screen: ClientsScreen,
+    navigationOptions: {
+      title: 'Seleccione Cliente'
+    }
+  },
   Client: {
     screen: ClientScreen,
     navigationOptions: {
-      title: 'Seleccione Cliente'
+      title: 'Nuevo Cliente'
     }
   },
   Products: {
@@ -27,9 +34,9 @@ export default (OrderFlow = StackNavigator({
   },
   Details: {
     screen: DetailScreen,
-    navigationOptions: ({ navigation }) => ({
-      title: `${navigation.state.params.item.sku.nick}`
-    })
+    navigationOptions: {
+      title: 'Detalle'
+    }
   },
   Order: {
     screen: OrderScreen,

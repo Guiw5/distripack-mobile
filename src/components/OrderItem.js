@@ -33,6 +33,7 @@ export default class OrderItem extends React.PureComponent {
             containerStyle={styles.checkContainer}
           />
         }
+        rightContentContainerStyle={{ flex: 0.4 }}
         rightSubtitle={'$' + subtotal.toFixed(2)}
         rightSubtitleStyle={{ color: '#42adb3' }}
       />
@@ -47,8 +48,7 @@ const styles = StyleSheet.create({
     paddingTop: 4,
     paddingBottom: 4,
     marginTop: 0,
-    marginBottom: 0,
-    alignItems: 'center'
+    marginBottom: 0
   },
   checkText: {
     marginLeft: 0,
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     paddingRight: 0
   },
   checkContainer: {
-    marginLeft: 10,
+    marginLeft: 0,
     marginRight: 0,
     paddingLeft: 0,
     paddingRight: 0,
@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingLeft: 0,
-    marginLeft: 0,
-    alignItems: 'center'
+    marginLeft: 0
   }
 })

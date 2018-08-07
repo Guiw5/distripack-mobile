@@ -1,8 +1,13 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 
-export const Capitalize = str =>
-  str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+String.prototype.capitalize = function() {
+  return this.charAt(0).toUpperCase() + this.substr(1).toLowerCase()
+}
+
+String.prototype.toProperCase = function() {
+  return this.replace(/\w\S*/g, text => text.capitalize())
+}
 
 export const Separator = () => <View style={style.separator} />
 

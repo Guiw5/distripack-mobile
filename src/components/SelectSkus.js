@@ -3,6 +3,7 @@ import { Keyboard, FlatList } from 'react-native'
 import { ListItem } from 'react-native-elements'
 import { getOrder, getSkus } from '../actions/index'
 import { connect } from 'react-redux'
+import ListView from './ListView'
 
 class SelectSkus extends React.PureComponent {
   constructor(props) {
@@ -37,11 +38,10 @@ class SelectSkus extends React.PureComponent {
   }
 
   renderItem = ({ item }) => {
-    console.log(item)
     return (
       <ListItem
-        title={item.nick}
-        subtitle={item.description}
+        title={item.nick.toProperCase()}
+        subtitle={item.description.toProperCase()}
         subtitleStyle={{ fontSize: 12 }}
         rightSubtitle={'$' + item.price.toFixed(2)}
         containerStyle={{ borderBottomWidth: 0 }}
@@ -52,7 +52,7 @@ class SelectSkus extends React.PureComponent {
 
   render() {
     return (
-      <FlatList
+      <ListView
         keyExtractor={item => item.code}
         renderItem={this.renderItem}
         data={this.skus}
