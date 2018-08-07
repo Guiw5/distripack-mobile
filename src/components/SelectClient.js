@@ -33,16 +33,18 @@ class SelectClient extends React.PureComponent {
     />
   )
 
+  goToClient = () => this.props.navigation.navigate('Client')
+
   render() {
     return (
       this.props.clients.length > 0 && (
         <Select
           keyExtractor={item => item.mail}
-          placeholder="Escriba nombre, alias o mail del cliente"
+          placeholder="Escriba alias o mail del cliente"
           filter={this.filter}
           data={this.props.clients}
           renderItem={this.renderItem}
-          button={{ title: 'Agregar Cliente' }}
+          button={{ title: 'Agregar Cliente', onPress: this.goToClient }}
         />
       )
     )
