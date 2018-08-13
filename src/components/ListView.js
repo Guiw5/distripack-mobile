@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, FlatList } from 'react-native'
-import { Separator } from './commons'
+import { Separator } from '../commons'
 
 export default class ListView extends React.PureComponent {
   constructor(props) {
