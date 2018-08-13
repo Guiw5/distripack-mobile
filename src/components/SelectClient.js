@@ -2,8 +2,9 @@ import React from 'react'
 import { ListItem } from 'react-native-elements'
 import { StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
-import { setClient, getClients } from '../actions/index'
+import actions from '../store/actions'
 import Select from './Select'
+import selectors from '../store/selectors'
 
 class SelectClient extends React.PureComponent {
   constructor(props) {
@@ -11,7 +12,7 @@ class SelectClient extends React.PureComponent {
   }
 
   componentDidMount() {
-    if (this.props.clients.length === 0) this.props.getClients()
+    this.props.loadClients()
   }
 
   filter = text => item =>
@@ -25,7 +26,7 @@ class SelectClient extends React.PureComponent {
 
   renderItem = ({ item }) => (
     <ListItem
-      title={item.name}
+      title={item.nick}
       subtitle={item.mail}
       subtitleStyle={{ fontSize: 12 }}
       containerStyle={{ borderBottomWidth: 0 }}
@@ -37,31 +38,29 @@ class SelectClient extends React.PureComponent {
 
   render() {
     return (
-      this.props.clients.length > 0 && (
-        <Select
-          keyExtractor={item => item.mail}
-          placeholder="Escriba alias o mail del cliente"
-          filter={this.filter}
-          data={this.props.clients}
-          renderItem={this.renderItem}
-          button={{ title: 'Agregar Cliente', onPress: this.goToClient }}
-        />
-      )
+      <Select
+        keyExtractor={item => item.mail}
+        placeholder="Escriba alias o mail del cliente"
+        filter={this.filter}
+        data={this.props.clients}
+        renderItem={this.renderItem}
+        button={{ title: 'Agregar Cliente', onPress: this.goToClient }}
+      />
     )
   }
 }
 
 const mapStateToProps = state => {
-  return { clients: state.clients }
+  return { clients: selectors.getClients(state) }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    setClient: client => {
-      dispatch(setClient(client))
+    setClient: id => {
+      dispatch(actions.setClient(id))
     },
-    getClients: () => {
-      dispatch(getClients())
+    loadClients: () => {
+      dispatch(actions.loadClients())
     }
   }
 }

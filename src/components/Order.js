@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { View } from 'react-native'
-import { getOrder, setClient, removeItems } from '../actions'
+import actions from '../store/actions'
+import selectors from '../store/selectors'
 import ListView from './ListView'
 import OrderItem from './OrderItem'
 import ButtonFooter from './ButtonFooter'
@@ -75,7 +76,7 @@ class Order extends React.Component {
     let toDelete = this.state.deleteList.length > 0
     return (
       <View style={{ flex: 1, backgroundColor: '#FFF' }}>
-        <OrderTitle title={this.props.order.client.name} />
+        <OrderTitle title={this.props.order.client.nick} />
         <ListView
           containerStyle={{ flex: 0.8 }}
           data={this.props.order.items}
@@ -106,22 +107,24 @@ class Order extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    clients: state.clients,
-    order: state.order,
-    products: state.products
+    clients: selectors.getClients(state),
+    order: selectors.getOrder(state)
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    setClient: id => {
-      dispatch(setClient(id))
+    setClient: client => {
+      dispatch(actions.setClient(client))
     },
     getOrder: () => {
-      dispatch(getOrder())
+      dispatch(actions.getOrder())
     },
     removeItems: items => {
-      dispatch(removeItems(items))
+      dispatch(actions.removeItems(items))
+    },
+    createOrder: order => {
+      dispatch(actions.createOrder(order))
     }
   }
 }

@@ -1,53 +1,52 @@
 [
-    {
-      "id": 1,
-      "name": "Ward",
-      "mail": "nuevo@gmail.com"
-    },
-    {
-      "id": 2,
-      "name": "Kevin",
-      "mail": "laloca@gmail.com"
-    },
-    {
-      "id": 3,
-      "name": "Eric",
-      "mail": "juans@asd.com"
-    },
-    {
-      "id": 4,
-      "name": "Sally",
-      "mail": "epdros@asd.com"
-    },
-    {
-      "id": 5,
-      "name": "Emmet",
-      "mail": "asd11@gmail.com"
-    },
-    {
-      "id": 11,
-      "name": "jhon",
-      "mail": "jhon@gmail.com"
-    },
-    {
-      "id": 22,
-      "name": "Start",
-      "mail": "tharts@gmail.com"
-    },
-    {
-      "id": 23,
-      "name": "Clark",
-      "mail": "jclak@gmail.com"
-    },
-    {
-      "id": 14,
-      "name": "Porti",
-      "mail": "podri@gmail.com"
-    },
-    {
-      "id": 15,
-      "name": "Andrew",
-      "mail": "hotsand@gmail.com"
-    }
-    
-  ]
+  {
+    "id": 1,
+    "nick": "Ward",
+    "mail": "nuevo@gmail.com"
+  },
+  {
+    "id": 2,
+    "nick": "Kevin",
+    "mail": "laloca@gmail.com"
+  },
+  {
+    "id": 3,
+    "nick": "Eric",
+    "mail": "juans@asd.com"
+  },
+  {
+    "id": 4,
+    "nick": "Sally",
+    "mail": "epdros@asd.com"
+  },
+  {
+    "id": 5,
+    "nick": "Emmet",
+    "mail": "asd11@gmail.com"
+  },
+  {
+    "id": 11,
+    "nick": "jhon",
+    "mail": "jhon@gmail.com"
+  },
+  {
+    "id": 22,
+    "nick": "Start",
+    "mail": "tharts@gmail.com"
+  },
+  {
+    "id": 23,
+    "nick": "Clark",
+    "mail": "jclak@gmail.com"
+  },
+  {
+    "id": 14,
+    "nick": "Porti",
+    "mail": "podri@gmail.com"
+  },
+  {
+    "id": 15,
+    "nick": "Andrew",
+    "mail": "hotsand@gmail.com"
+  }
+]

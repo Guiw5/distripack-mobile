@@ -5,6 +5,10 @@ export const addToOrder = item => ({
   item
 })
 
+export const getOrder = () => ({
+  type: 'FETCH_ORDER'
+})
+
 export const modifyOrder = item => ({
   type: 'UPDATE_ORDER',
   item
@@ -16,22 +20,11 @@ export const removeItems = items => ({
 })
 
 export const setClient = client => ({
-  type: 'SET_CLIENT',
+  type: 'SET_ORDER_CLIENT',
   client
 })
 
-export const getClients = () => ({
-  type: 'FETCH_CLIENTS'
-})
-
-export const getProducts = () => ({
-  type: 'FETCH_PRODUCTS'
-})
-
-export const getSkus = () => ({
-  type: 'FETCH_SKUS'
-})
-
-export const getOrder = () => ({
-  type: 'FETCH_ORDER'
+export const createOrder = order => ({
+  type: 'CREATE_ORDER',
+  order
 })

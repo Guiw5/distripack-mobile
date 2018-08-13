@@ -1,7 +1,8 @@
 import React from 'react'
 import { Keyboard, FlatList } from 'react-native'
 import { ListItem } from 'react-native-elements'
-import { getOrder, getSkus } from '../actions/index'
+import actions from '../store/actions'
+import selectors from '../store/selectors'
 import { connect } from 'react-redux'
 import ListView from './ListView'
 
@@ -61,17 +62,19 @@ class SelectSkus extends React.PureComponent {
   }
 }
 
-const mapStateToProps = ({ skus, order }) => {
-  return { skus, order }
+const mapStateToProps = state => {
+  return {
+    order: selectors.getOrder(state)
+  }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     getOrder: () => {
-      dispatch(getOrder())
+      dispatch(actions.getOrder())
     },
     getSkus: () => {
-      dispatch(getSkus())
+      dispatch(actions.getSkus())
     }
   }
 }

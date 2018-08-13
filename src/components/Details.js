@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { ListItem, colors } from 'react-native-elements'
 import { connect } from 'react-redux'
-import { addToOrder, modifyOrder } from '../actions/index'
+import actions from '../store/actions'
 import ButtonFooter from './ButtonFooter'
 
 const editIconProps = {
@@ -119,10 +119,10 @@ class Details extends React.Component {
 const mapDispatchToProps = dispatch => {
   return {
     addToOrder: item => {
-      dispatch(addToOrder(item))
+      dispatch(actions.addToOrder(item))
     },
     modify: item => {
-      dispatch(modifyOrder(item))
+      dispatch(actions.modifyOrder(item))
     }
   }
 }

@@ -2,7 +2,8 @@ import React from 'react'
 import { Keyboard } from 'react-native'
 import { ListItem } from 'react-native-elements'
 import Select from './Select'
-import { getOrder, getProducts } from '../actions/index'
+import actions from '../store/actions'
+import selectors from '../store/selectors'
 import { connect } from 'react-redux'
 
 class SelectProducts extends React.PureComponent {
@@ -11,7 +12,7 @@ class SelectProducts extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.props.getProducts()
+    this.props.loadProducts()
     this.props.getOrder()
   }
 
@@ -70,38 +71,39 @@ class SelectProducts extends React.PureComponent {
     let order = this.props.order
     let show = order && order.items.length > 0
     return (
-      this.props.products.length > 0 && (
-        <Select
-          keyExtractor={item => `${item.id}`}
-          placeholder="Escriba nombre o alias del producto"
-          renderItem={this.renderItem}
-          filter={this.filter}
-          data={this.props.products}
-          button={
-            show
-              ? {
-                  title: 'Ver Pedido (' + order.items.length + ')',
-                  onPress: this.goToOrder
-                }
-              : null
-          }
-        />
-      )
+      <Select
+        keyExtractor={item => `${item.id}`}
+        placeholder="Escriba nombre o alias del producto"
+        renderItem={this.renderItem}
+        filter={this.filter}
+        data={this.props.products}
+        button={
+          show
+            ? {
+                title: 'Ver Pedido (' + order.items.length + ')',
+                onPress: this.goToOrder
+              }
+            : null
+        }
+      />
     )
   }
 }
 
-const mapStateToProps = ({ products, order }) => {
-  return { products, order }
+const mapStateToProps = state => {
+  return {
+    products: selectors.getProducts(state),
+    order: selectors.getOrder(state)
+  }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     getOrder: () => {
-      dispatch(getOrder())
+      dispatch(actions.getOrder())
     },
-    getProducts: () => {
-      dispatch(getProducts())
+    loadProducts: () => {
+      dispatch(actions.loadProducts())
     }
   }
 }
