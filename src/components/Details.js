@@ -4,6 +4,7 @@ import { ListItem, colors } from 'react-native-elements'
 import { connect } from 'react-redux'
 import actions from '../store/actions'
 import ButtonFooter from './ButtonFooter'
+import selectors from '../store/selectors'
 
 const editIconProps = {
   type: 'materialIcons',
@@ -15,23 +16,22 @@ const editIconProps = {
 class Details extends React.Component {
   constructor(props) {
     super(props)
-    let { quantity, price } = this.props.navigation.state.params.item
+    let { quantity, price } = this.props.item
     this.state = { quantity, price }
   }
 
   addToOrder = () => {
-    let { state, navigate } = this.props.navigation
-    let { sku } = state.params.item
-    this.props.addToOrder({ sku, ...this.state })
+    let { navigate } = this.props.navigation
+    let { id, nick } = this.props.sku
+    this.props.addToOrder({ skuId: id, skuNick: nick, ...this.state })
     navigate('Products')
   }
 
   modify = () => {
-    let { state, navigate } = this.props.navigation
-    let { sku, price, quantity } = state.params.item
-
+    let { navigate } = this.props.navigation
+    let { skuId, price, quantity } = this.props.item
     if (price !== this.state.price || quantity !== this.state.quantity)
-      this.props.modify({ sku, ...this.state })
+      this.props.modify({ skuId, ...this.state })
 
     navigate('Products')
   }
@@ -49,8 +49,8 @@ class Details extends React.Component {
   }
 
   render() {
-    const { item, isNew } = this.props.navigation.state.params
-    const { nick, description, quantity: cantidad } = item.sku
+    const { sku, isUpdate } = this.props
+    const { nick, description } = sku
     const { price, quantity } = this.state
     const subtotal = price * quantity
 
@@ -73,12 +73,9 @@ class Details extends React.Component {
         />
         <ListItem title={description.toProperCase()} />
         <ListItem
-          title={'Cantidad por bulto: ' + cantidad}
+          title={'Cantidad por bulto: ' + quantity}
           titleStyle={{ fontSize: 12 }}
         />
-        {/* <ListItem title={'Capacidad: 200cc'} titleStyle={{ fontSize: 12 }} />
-        <ListItem title={'Color: blanco'} titleStyle={{ fontSize: 12 }} />
-        <ListItem title={'Medidas: no tiene'} titleStyle={{ fontSize: 12 }} /> */}
         <ListItem
           title="Indique cuantos bultos"
           titleStyle={{ fontSize: 14 }}
@@ -106,14 +103,23 @@ class Details extends React.Component {
           rightSubtitle={'$' + subtotal.toFixed(2)}
           titleStyle={{ fontSize: 14 }}
         />
-        {isNew ? (
-          <ButtonFooter title="Agregar al pedido" onPress={this.addToOrder} />
-        ) : (
+        {isUpdate ? (
           <ButtonFooter title="Modificar" onPress={this.modify} />
+        ) : (
+          <ButtonFooter title="Agregar al pedido" onPress={this.addToOrder} />
         )}
       </View>
     )
   }
+}
+
+const mapStateToProps = (state, ownProps) => {
+  let skuId = ownProps.navigation.getParam('skuId')
+  let isUpdate = selectors.getItemFromOrder(state, skuId)
+  let skus = selectors.getSkusMap(state)
+  let sku = skus[skuId]
+  let item = isUpdate ? isUpdate : { skuId, quantity: 1, price: sku.price }
+  return { isUpdate, sku, item }
 }
 
 const mapDispatchToProps = dispatch => {
@@ -128,7 +134,7 @@ const mapDispatchToProps = dispatch => {
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Details)
 

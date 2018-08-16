@@ -15,10 +15,6 @@ class Order extends React.Component {
     this.state = { deleteList: [] }
   }
 
-  componentDidMount() {
-    this.props.getOrder()
-  }
-
   select = itemId => {
     this.setState((prevState, props) => {
       return { deleteList: prevState.deleteList.concat(itemId) }
@@ -26,7 +22,7 @@ class Order extends React.Component {
   }
 
   unselect = itemId => {
-    this.setState((prevState, props) => {
+    this.setState(prevState => {
       return { deleteList: prevState.deleteList.filter(id => id !== itemId) }
     })
   }
@@ -38,7 +34,7 @@ class Order extends React.Component {
   }
 
   goToDetails = item => {
-    this.props.navigation.navigate('Details', { item })
+    this.props.navigation.navigate('Details', { skuId: item.skuId })
   }
 
   renderItem = ({ item }) => {
@@ -67,30 +63,30 @@ class Order extends React.Component {
 
   goToClients = () => this.props.navigation.navigate('Clients')
 
-  createOrder = () => {
-    this.props.createOrder(this.props.order)
-    this.goToClients()
+  createOrder = async () => {
+    await this.props.createOrder(this.props.order)
+    if (!this.props.error) this.goToClients()
   }
 
   render() {
     let toDelete = this.state.deleteList.length > 0
     return (
       <View style={{ flex: 1, backgroundColor: '#FFF' }}>
-        <OrderTitle title={this.props.order.client.nick} />
+        <OrderTitle title={this.props.client.nick} />
         <ListView
           containerStyle={{ flex: 0.8 }}
           data={this.props.order.items}
           extraData={this.state.deleteList}
-          keyExtractor={item => item.sku.code}
+          keyExtractor={item => `${item.skuId}`}
           renderItem={this.renderItem}
           ListFooterComponent={
             <OrderFooter
+              error={this.props.error}
               subtotal={this.getSubtotal()}
               onPress={this.goToProducts}
             />
           }
         />
-
         {toDelete ? (
           <ButtonFooter
             title="Eliminar Seleccionados"
@@ -107,19 +103,14 @@ class Order extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    clients: selectors.getClients(state),
-    order: selectors.getOrder(state)
+    client: selectors.getClientFromOrder(state),
+    order: selectors.getOrder(state),
+    error: selectors.getOrderError(state)
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    setClient: client => {
-      dispatch(actions.setClient(client))
-    },
-    getOrder: () => {
-      dispatch(actions.getOrder())
-    },
     removeItems: items => {
       dispatch(actions.removeItems(items))
     },

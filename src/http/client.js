@@ -1,8 +1,11 @@
 import axios from 'axios'
 //172.20.0.53
+//192.168.137.1:3000
+//192.168.0.68:3000
+//192.168.0.182:3000
 const http = axios.create({
-  baseURL: 'http://192.168.0.68:3005/api',
+  baseURL: 'http://172.20.0.215:3000/api',
   responseType: 'json'
 })
 
-export default http
+export { http }

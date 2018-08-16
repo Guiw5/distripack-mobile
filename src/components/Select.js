@@ -19,7 +19,7 @@ export default class Select extends React.Component {
     this.setState({ query: query || '' })
   }
 
-  filterData = () => this.props.data.filter(this.filterCriteria)
+  filterData = () => this.props.data.filter(this.filterCriteria).slice(0, 40)
 
   render() {
     return (

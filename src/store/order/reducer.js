@@ -1,55 +1,82 @@
 import { createReducer } from '../reducers'
 
-const addToOrder = (state, action) => {
-  let newItem = { id: action.id, ...action.item }
-  let items = [...state.order.items, newItem]
-  let order = { ...state.order, items }
-  return { ...state, order }
-}
+const addToOrder = (state, action) => ({
+  ...state,
+  data: {
+    ...state.data,
+    items: [...state.data.items, { id: action.id, ...action.item }]
+  }
+})
 
-const removeItem = (state, action) => {
-  let { items } = state.order
-  items = items.filter(i => !action.items.includes(i.id))
-  let order = { ...state.order, items }
-  return { ...state, order }
-}
+const removeItems = (state, action) => ({
+  ...state,
+  data: {
+    ...state.data,
+    items: state.data.items.filter(i => !action.items.includes(i.id))
+  }
+})
 
-const updateOrder = (state, action) => {
-  let neww = { ...action.item }
-  let { items } = state.order
-  items = items.map(item => (item.sku.code === neww.sku.code ? neww : item))
-  let order = { ...state.order, items }
-  return { ...state, order }
-}
+const updateOrder = (state, action) => ({
+  ...state,
+  order: {
+    ...state.order,
+    items: state.data.items.map(
+      item =>
+        item.id !== action.item.id
+          ? item
+          : {
+              ...item,
+              price: action.item.price,
+              quantity: action.item.quantity
+            }
+    )
+  }
+})
 
-const setClient = (state, action) => {
-  let order = { ...state.order, client: action.client }
-  return { ...state, order }
-}
+const setClient = (state, action) => ({
+  ...state,
+  data: { ...state.data, clientId: action.clientId }
+})
 
 const fetchOrder = (state, action) => {
   return state
 }
 
-const createOrder = (state, action) => {
-  console.log('Se ha creado la orden correctamente')
-  return state
-}
+const createOrderRequest = (state, action) => ({
+  ...state,
+  loading: true,
+  error: null
+})
+
+const createOrderSuccess = (state, action) => ({
+  ...state,
+  data: action.data,
+  loading: false
+})
+
+const createOrderError = (state, action) => ({
+  ...state,
+  loading: false,
+  error: action.error
+})
 
 const initialState = {
-  order: {
+  data: {
     items: [],
-    client: {}
-  }
+    clientId: null
+  },
+  loading: false,
+  error: null
 }
 const order = createReducer((state = initialState), {
-  ['ADD_TO_ORDER']: addToOrder,
-  ['REMOVE_ITEM']: removeItem,
-  ['UPDATE_ORDER']: updateOrder,
-  ['CREATE_ORDER']: createOrder,
-  ['SET_ORDER_CLIENT']: setClient,
   ['FETCH_ORDER']: fetchOrder,
-  ['CREATE_ORDER']: createOrder
+  ['ADD_TO_ORDER']: addToOrder,
+  ['UPDATE_ORDER']: updateOrder,
+  ['SET_ORDER_CLIENT']: setClient,
+  ['REMOVE_FROM_ORDER']: removeItems,
+  ['CREATE_ORDER_REQUEST']: createOrderRequest,
+  ['CREATE_ORDER_SUCCESS']: createOrderSuccess,
+  ['CREATE_ORDER_ERROR']: createOrderError
 })
 
 export default order

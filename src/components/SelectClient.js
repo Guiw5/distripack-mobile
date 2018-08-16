@@ -1,6 +1,5 @@
 import React from 'react'
 import { ListItem } from 'react-native-elements'
-import { StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import actions from '../store/actions'
 import Select from './Select'
@@ -12,7 +11,8 @@ class SelectClient extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.props.loadClients()
+    console.log('did mount clients', this.props.clients.length)
+    if (this.props.clients.length === 0) this.props.loadClients()
   }
 
   filter = text => item =>
@@ -20,7 +20,7 @@ class SelectClient extends React.PureComponent {
     item.name.toLowerCase().includes(text.toLowerCase())
 
   onPress = client => {
-    this.props.setClient(client)
+    this.props.setClient(client.id)
     this.props.navigation.navigate('Products')
   }
 
@@ -69,9 +69,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(SelectClient)
-
-const styles = StyleSheet.create({
-  searchBar: {
-    fontSize: 14
-  }
-})

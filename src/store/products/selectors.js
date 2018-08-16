@@ -1,20 +1,35 @@
-import createSelector from 'reselect'
+import { createSelector } from 'reselect'
 
 export const getProducts = state => state.products.data
 
-export const getProduct = (state, props) =>
-  state.products.find(p => p.id === props.idProduct)
+export const getProductId = (_, productId) => productId
 
-// export const getAllSkus = createSelector(getProducts, products =>
-//   products.reduce((skus, prod) => skus.concat(prod.skus), [])
-// )
+export const getSkuId = (_, skuId) => skuId
 
-// export const getSkus = createSelector(getProducts, products =>
-//   products.reduce((skus, prod) => skus.concat(prod.skus), [])
-// )
+export const getProduct = createSelector(
+  getProducts,
+  getProductId,
+  (products, productId) => products.find(p => p.id === productId)
+)
 
-// export const getFullProducts = createSelector(
-//   getProducts,
-//   getSkus,
-//   (products, skus) => products.map(p => p.skus.map(s => skus[s]))
-// )
+export const getSkus = createSelector(getProducts, products =>
+  products.reduce((skus, prod) => skus.concat(prod.skus), [])
+)
+
+export const getSkusByProduct = createSelector(
+  getProduct,
+  product => product.skus
+)
+
+export const getSkusMap = createSelector(getSkus, skus =>
+  skus.reduce((dict, sku) => {
+    dict[sku.id] = sku
+    return dict
+  }, {})
+)
+
+export const getSku = createSelector(
+  getSkusMap,
+  getSkuId,
+  (skus, skuId) => skus[skuId]
+)

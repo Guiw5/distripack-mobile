@@ -1,4 +1,4 @@
-import http from '../../http/client'
+import { http } from '../../http/client'
 
 export const getProducts = () => ({
   type: 'FETCH_PRODUCTS'

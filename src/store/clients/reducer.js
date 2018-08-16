@@ -1,20 +1,22 @@
-import Clients from '../../data/test-clients.json'
 import { createReducer } from '../reducers'
 
-const fetchClients = (state, action) => ({ ...state, data: Clients })
-
-const fetchClientsRequest = (state, action) => ({ ...state, isLoading: true })
+const fetchClientsRequest = (state, action) => ({
+  ...state,
+  loading: true,
+  error: null
+})
 
 const fetchClientsSuccess = (state, action) => ({
   ...state,
   data: action.data,
-  isLoading: false
+  loading: false
 })
 
 const fetchClientsError = (state, action) => ({
   ...state,
-  error: action.data,
-  isLoading: false
+  data: [],
+  loading: false,
+  error: action.error
 })
 
 const initialState = {
@@ -24,7 +26,6 @@ const initialState = {
 }
 
 const clients = createReducer((state = initialState), {
-  ['FETCH_CLIENTS']: fetchClients,
   ['FETCH_CLIENTS_REQUEST']: fetchClientsRequest,
   ['FETCH_CLIENTS_SUCCESS']: fetchClientsSuccess,
   ['FETCH_CLIENTS_ERROR']: fetchClientsError

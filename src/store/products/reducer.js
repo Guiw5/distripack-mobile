@@ -1,14 +1,4 @@
-import ProductsDB from '../../data/productsDB.json'
 import { createReducer } from '../reducers'
-
-const initialState = {
-  data: [],
-  loading: false,
-  error: null
-}
-
-const fetchProducts = (state, action) =>
-  mappedProducts.length > 0 ? mappedProducts : MemoryMapProducts()
 
 const fetchProductsRequest = (state, action) => ({
   ...state,
@@ -31,8 +21,13 @@ const fetchSkus = (state, action) => MemoryMapSkus()
 
 const fetchSkusByProducts = (state, action) => MemoryMapSkus()
 
+const initialState = {
+  data: [],
+  loading: false,
+  error: null
+}
+
 const products = createReducer((state = initialState), {
-  ['FETCH_PRODUCTS']: fetchProducts,
   ['FETCH_PRODUCTS_REQUEST']: fetchProductsRequest,
   ['FETCH_PRODUCTS_SUCCESS']: fetchProductsSuccess,
   ['FETCH_PRODUCTS_ERROR']: fetchProductsError,

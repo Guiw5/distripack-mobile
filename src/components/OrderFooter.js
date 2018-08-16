@@ -9,7 +9,9 @@ export default class OrderFooter extends React.PureComponent {
   }
 
   render() {
-    return (
+    return this.props.error ? (
+      <Text>Ups, hubo un error al confirmar la orden</Text>
+    ) : (
       <View>
         <Separator />
         <View style={styles.subtotalContainer}>

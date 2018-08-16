@@ -11,7 +11,7 @@ export default class NewClient extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Input label="Alias" />
+        <Input label="Alias" autoCapitalize="words" />
         <Input keyboardType="email-address" label="Email" />
         <Button title="Crear Cliente" />
       </View>
@@ -24,6 +24,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'flex-start'
+    justifyContent: 'space-around'
   }
 })

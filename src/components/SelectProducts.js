@@ -1,10 +1,11 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Keyboard } from 'react-native'
 import { ListItem } from 'react-native-elements'
+
 import Select from './Select'
 import actions from '../store/actions'
 import selectors from '../store/selectors'
-import { connect } from 'react-redux'
 
 class SelectProducts extends React.PureComponent {
   constructor(props) {
@@ -12,8 +13,8 @@ class SelectProducts extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.props.loadProducts()
-    this.props.getOrder()
+    console.log('products did mount', this.props.products.length)
+    if (this.props.products.length === 0) this.props.loadProducts()
   }
 
   filter = text => item => {
@@ -28,25 +29,14 @@ class SelectProducts extends React.PureComponent {
     return isInProductName(query) || words.every(isInProductName)
   }
 
-  createItem = sku => {
-    return { sku, quantity: 1, price: sku.price }
-  }
-
-  getFromOrder = code =>
-    this.props.order.items.find(item => item.sku.code === code)
-
   goToDetails = product => {
     Keyboard.dismiss()
 
     if (product.skus.length > 1)
-      this.props.navigation.navigate('Skus', { skus: product.skus })
+      this.props.navigation.navigate('Skus', { productId: product.id })
     else {
-      let item = this.getFromOrder(product.skus[0].code)
-
-      let isNew = !item
-      if (isNew) item = this.createItem(product.skus[0])
-
-      this.props.navigation.navigate('Details', { item, isNew })
+      let skuId = product.skus[0].id
+      this.props.navigation.navigate('Details', { skuId })
     }
   }
 
@@ -68,8 +58,7 @@ class SelectProducts extends React.PureComponent {
   )
 
   render() {
-    let order = this.props.order
-    let show = order && order.items.length > 0
+    const { order } = this.props
     return (
       <Select
         keyExtractor={item => `${item.id}`}
@@ -78,7 +67,7 @@ class SelectProducts extends React.PureComponent {
         filter={this.filter}
         data={this.props.products}
         button={
-          show
+          order.items && order.items.length > 0
             ? {
                 title: 'Ver Pedido (' + order.items.length + ')',
                 onPress: this.goToOrder
@@ -99,9 +88,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getOrder: () => {
-      dispatch(actions.getOrder())
-    },
     loadProducts: () => {
       dispatch(actions.loadProducts())
     }

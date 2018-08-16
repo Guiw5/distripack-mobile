@@ -1,7 +1,6 @@
 import React from 'react'
 import { Keyboard, FlatList } from 'react-native'
 import { ListItem } from 'react-native-elements'
-import actions from '../store/actions'
 import selectors from '../store/selectors'
 import { connect } from 'react-redux'
 import ListView from './ListView'
@@ -9,29 +8,11 @@ import ListView from './ListView'
 class SelectSkus extends React.PureComponent {
   constructor(props) {
     super(props)
-    this.skus = this.props.navigation.state.params.skus
   }
-
-  componentDidMount() {
-    this.props.getOrder()
-  }
-
-  createItem = sku => {
-    return { sku, quantity: 1, price: sku.price }
-  }
-
-  getFromOrder = code =>
-    this.props.order.items.find(item => item.sku.code === code)
 
   goToDetails = sku => {
     Keyboard.dismiss()
-
-    let item = this.getFromOrder(sku.code)
-
-    let isNew = !item
-    if (isNew) item = this.createItem(sku)
-
-    this.props.navigation.navigate('Details', { item, isNew })
+    this.props.navigation.navigate('Details', { skuId: sku.id })
   }
 
   goToOrder = () => {
@@ -56,30 +37,21 @@ class SelectSkus extends React.PureComponent {
       <ListView
         keyExtractor={item => item.code}
         renderItem={this.renderItem}
-        data={this.skus}
+        data={this.props.skus}
       />
     )
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
+  let productId = ownProps.navigation.getParam('productId')
   return {
-    order: selectors.getOrder(state)
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    getOrder: () => {
-      dispatch(actions.getOrder())
-    },
-    getSkus: () => {
-      dispatch(actions.getSkus())
-    }
+    order: selectors.getOrder(state),
+    skus: selectors.getSkusByProduct(state, productId)
   }
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  null
 )(SelectSkus)

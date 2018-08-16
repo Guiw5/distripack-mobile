@@ -1,8 +1,4 @@
-import http from '../../http/client'
-
-export const getClients = () => ({
-  type: 'FETCH_CLIENTS'
-})
+import { http } from '../../http/client'
 
 export const fetchClients = () => ({
   type: 'FETCH_CLIENTS_REQUEST'
@@ -13,18 +9,18 @@ export const fetchClientsSuccess = data => ({
   data
 })
 
-export const fetchClientsError = data => ({
+export const fetchClientsError = error => ({
   type: 'FETCH_CLIENTS_ERROR',
-  data
+  error
 })
 
-export const loadClients = () => async (dispatch, getState) => {
+export const loadClients = () => async dispatch => {
   try {
     dispatch(fetchClients())
-    console.log(http)
     let { data } = await http.get('/clients')
     dispatch(fetchClientsSuccess(data))
   } catch (error) {
+    console.log(error, error.message)
     dispatch(fetchClientsError(error))
   }
 }
