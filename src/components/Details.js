@@ -50,7 +50,7 @@ class Details extends React.Component {
 
   render() {
     const { sku, isUpdate } = this.props
-    const { nick, description } = sku
+    const { nick, description, quantity: skuQuantity } = sku
     const { price, quantity } = this.state
     const subtotal = price * quantity
 
@@ -73,7 +73,7 @@ class Details extends React.Component {
         />
         <ListItem title={description.toProperCase()} />
         <ListItem
-          title={'Cantidad por bulto: ' + quantity}
+          title={'Cantidad por bulto: ' + skuQuantity}
           titleStyle={{ fontSize: 12 }}
         />
         <ListItem

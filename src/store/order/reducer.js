@@ -50,7 +50,7 @@ const createOrderRequest = (state, action) => ({
 
 const createOrderSuccess = (state, action) => ({
   ...state,
-  data: action.data,
+  data: action.order,
   loading: false
 })
 

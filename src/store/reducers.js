@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import order from './order/reducer'
 import products from './products/reducer'
 import clients from './clients/reducer'
+import { reducer as formReducer } from 'redux-form'
 
 export function createReducer(initialState, handlers) {
   return function reducer(state = initialState, action) {
@@ -16,5 +17,6 @@ export function createReducer(initialState, handlers) {
 export const rootReducer = combineReducers({
   order,
   products,
-  clients
+  clients,
+  form: formReducer
 })

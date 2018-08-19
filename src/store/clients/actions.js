@@ -1,12 +1,12 @@
 import { http } from '../../http/client'
 
-export const fetchClients = () => ({
+export const fetchClientsRequest = () => ({
   type: 'FETCH_CLIENTS_REQUEST'
 })
 
-export const fetchClientsSuccess = data => ({
+export const fetchClientsSuccess = clients => ({
   type: 'FETCH_CLIENTS_SUCCESS',
-  data
+  clients
 })
 
 export const fetchClientsError = error => ({
@@ -14,13 +14,39 @@ export const fetchClientsError = error => ({
   error
 })
 
+export const createClientRequest = () => ({
+  type: 'CREATE_CLIENT_REQUEST'
+})
+
+export const createClientSuccess = client => ({
+  type: 'CREATE_CLIENT_SUCCESS',
+  client
+})
+
+export const createClientError = error => ({
+  type: 'CREATE_CLIENT_ERROR',
+  error
+})
+
 export const loadClients = () => async dispatch => {
   try {
-    dispatch(fetchClients())
+    dispatch(fetchClientsRequest())
     let { data } = await http.get('/clients')
     dispatch(fetchClientsSuccess(data))
   } catch (error) {
     console.log(error, error.message)
     dispatch(fetchClientsError(error))
+  }
+}
+
+export const createClient = client => async dispatch => {
+  try {
+    dispatch(createClientRequest())
+    console.log('posting client', client)
+    let { data } = await http.post('/clients', client)
+    dispatch(createClientSuccess(data))
+  } catch (error) {
+    console.log(error)
+    dispatch(createClientError(error))
   }
 }
