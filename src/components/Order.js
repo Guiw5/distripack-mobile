@@ -74,7 +74,7 @@ class Order extends React.Component {
       <View style={{ flex: 1, backgroundColor: '#FFF' }}>
         <OrderTitle title={this.props.client.nick} />
         <ListView
-          containerStyle={{ flex: 0.8, fontSize: 12 }}
+          containerStyle={{ flex: 0.8 }}
           data={this.props.order.items}
           extraData={this.state.deleteList}
           keyExtractor={item => `${item.skuId}`}

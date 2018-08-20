@@ -14,6 +14,7 @@ export default class OrderItem extends React.PureComponent {
     return (
       <ListItem
         title={skuNick}
+        titleStyle={{ fontSize: 12 }}
         onPress={this.props.onPress}
         contentContainerStyle={styles.listContent}
         containerStyle={[
