@@ -18,11 +18,11 @@ const removeItems = (state, action) => ({
 
 const updateOrder = (state, action) => ({
   ...state,
-  order: {
-    ...state.order,
+  data: {
+    ...state.data,
     items: state.data.items.map(
       item =>
-        item.id !== action.item.id
+        item.skuId !== action.item.skuId
           ? item
           : {
               ...item,
@@ -50,7 +50,7 @@ const createOrderRequest = (state, action) => ({
 
 const createOrderSuccess = (state, action) => ({
   ...state,
-  data: action.order,
+  data: initialState.data,
   loading: false
 })
 

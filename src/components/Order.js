@@ -70,9 +70,10 @@ class Order extends React.Component {
 
   render() {
     let toDelete = this.state.deleteList.length > 0
+    let nick = this.props.client ? this.props.client.nick : ''
     return (
       <View style={{ flex: 1, backgroundColor: '#FFF' }}>
-        <OrderTitle title={this.props.client.nick} />
+        <OrderTitle title={nick} />
         <ListView
           containerStyle={{ flex: 0.8 }}
           data={this.props.order.items}
