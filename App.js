@@ -1,20 +1,22 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import OrderFlow from './src/components/OrderFlow'
-import Menu from './src/components/Menu'
-import { rootReducer } from './src/store/reducers'
 import { Provider } from 'react-redux'
-import { createStore, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
+import configureStore from './src/store/configureStore'
 
-const store = createStore(rootReducer, applyMiddleware(thunk))
+import Drawer from './src/navigation/Drawer'
+
+const store = configureStore()
 
 export default class App extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+
   render() {
     return (
       <Provider store={store}>
         <View style={styles.Container}>
-          <Menu />
+          <Drawer />
         </View>
       </Provider>
     )

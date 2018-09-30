@@ -1,27 +1,32 @@
 import React from 'react'
 import { ListItem } from 'react-native-elements'
-import { connect } from 'react-redux'
-import actions from '../store/actions'
-import Select from './Select'
-import selectors from '../store/selectors'
+import memoize from 'lodash/memoize'
 
-class SelectClient extends React.PureComponent {
+import Select from './Select'
+
+export default class SelectClient extends React.PureComponent {
   constructor(props) {
     super(props)
+    this.onPress = memoize(item => () => this.goToProducts(item))
   }
 
   componentDidMount() {
-    console.log('did mount clients', this.props.clients.length)
     if (this.props.clients.length === 0) this.props.loadClients()
   }
 
   filter = text => item =>
     item.mail.toLowerCase().includes(text.toLowerCase()) ||
-    item.name.toLowerCase().includes(text.toLowerCase())
+    item.nick.toLowerCase().includes(text.toLowerCase())
 
-  onPress = client => {
-    this.props.setClient(client.id)
-    this.props.navigation.navigate('Products')
+  goToProducts = client => {
+    let order = this.props.ordersMap[client.id]
+    if (order) {
+      this.props.setOrder(order)
+      this.props.navigation.navigate('Order')
+    } else {
+      this.props.setClient(client.id)
+      this.props.navigation.navigate('Products')
+    }
   }
 
   renderItem = ({ item }) => (
@@ -30,7 +35,7 @@ class SelectClient extends React.PureComponent {
       subtitle={item.mail}
       subtitleStyle={{ fontSize: 12 }}
       containerStyle={{ borderBottomWidth: 0 }}
-      onPress={() => this.onPress(item)}
+      onPress={this.onPress(item)}
     />
   )
 
@@ -49,23 +54,3 @@ class SelectClient extends React.PureComponent {
     )
   }
 }
-
-const mapStateToProps = state => {
-  return { clients: selectors.getClients(state) }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    setClient: id => {
-      dispatch(actions.setClient(id))
-    },
-    loadClients: () => {
-      dispatch(actions.loadClients())
-    }
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SelectClient)

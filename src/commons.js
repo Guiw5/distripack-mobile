@@ -9,6 +9,10 @@ String.prototype.toProperCase = function() {
   return this.replace(/\w\S*/g, text => text.capitalize())
 }
 
+String.prototype.contains = function(str) {
+  return this.indexOf(str) != -1
+}
+
 Array.prototype.toDictionary = function(keyGenerator = el => el.id) {
   this.reduce((dict, el) => {
     dict[keyGenerator(el)] = el

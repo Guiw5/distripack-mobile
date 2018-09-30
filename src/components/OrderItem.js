@@ -23,7 +23,7 @@ export default class OrderItem extends React.PureComponent {
         ]}
         leftElement={
           <CheckBox
-            title={'' + item.quantity}
+            title={`${item.quantity}`}
             checked={this.props.checked}
             onPress={this.props.onCheck}
             iconType="ionicon"
@@ -35,7 +35,7 @@ export default class OrderItem extends React.PureComponent {
           />
         }
         rightContentContainerStyle={{ flex: 0.4 }}
-        rightSubtitle={'$' + subtotal.toFixed(2)}
+        rightSubtitle={`$${subtotal.toFixed(2)}`}
         rightSubtitleStyle={{ color: '#42adb3' }}
       />
     )

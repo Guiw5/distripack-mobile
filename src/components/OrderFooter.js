@@ -16,7 +16,7 @@ export default class OrderFooter extends React.PureComponent {
         <Separator />
         <View style={styles.subtotalContainer}>
           <Text style={styles.subtotal}>
-            {'$' + this.props.subtotal.toFixed(2)}
+            {`$${this.props.subtotal.toFixed(2)}`}
           </Text>
           <Text>Subtotal </Text>
         </View>

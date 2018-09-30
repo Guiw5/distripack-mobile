@@ -1,5 +1,5 @@
 import React from 'react'
-import SelectSkus from '../components/SelectSkus'
+import SelectSkus from '../../components/SelectSkus'
 
 export default class SkuScreen extends React.Component {
   render() {

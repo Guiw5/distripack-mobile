@@ -16,6 +16,7 @@ export default class ListView extends React.PureComponent {
           data={this.props.data}
           initialNumToRender={8}
           keyExtractor={this.props.keyExtractor}
+          ListHeaderComponent={this.props.ListHeaderComponent}
           ListFooterComponent={this.props.ListFooterComponent}
           keyboardShouldPersistTaps="handled"
           ItemSeparatorComponent={Separator}

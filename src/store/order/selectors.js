@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect'
 import { getClients } from '../clients/selectors'
-import { getSku } from '../products/selectors'
 
 export const getOrder = state => state.order.data
 
@@ -16,3 +15,5 @@ export const getClientFromOrder = createSelector(
 
 export const getItemFromOrder = (state, skuId) =>
   getOrder(state).items.find(i => i.skuId === skuId)
+
+export const isOrderUpdate = createSelector(getOrder, order => order.createdAt)

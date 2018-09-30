@@ -1,13 +1,13 @@
 import React from 'react'
-import { Keyboard, FlatList } from 'react-native'
+import { Keyboard } from 'react-native'
 import { ListItem } from 'react-native-elements'
-import selectors from '../store/selectors'
-import { connect } from 'react-redux'
 import ListView from './ListView'
+import memoize from 'lodash/memoize'
 
-class SelectSkus extends React.PureComponent {
+export default class SelectSkus extends React.PureComponent {
   constructor(props) {
     super(props)
+    this.onPress = memoize(item => () => this.goToDetails(item))
   }
 
   goToDetails = sku => {
@@ -25,9 +25,9 @@ class SelectSkus extends React.PureComponent {
         title={item.nick.toProperCase()}
         subtitle={item.description.toProperCase()}
         subtitleStyle={{ fontSize: 12 }}
-        rightSubtitle={'$' + item.price.toFixed(2)}
+        rightSubtitle={`${item.price.toFixed(2)}`}
         containerStyle={{ borderBottomWidth: 0 }}
-        onPress={() => this.goToDetails(item)}
+        onPress={this.onPress(item)}
       />
     )
   }
@@ -42,16 +42,3 @@ class SelectSkus extends React.PureComponent {
     )
   }
 }
-
-const mapStateToProps = (state, ownProps) => {
-  let productId = ownProps.navigation.getParam('productId')
-  return {
-    order: selectors.getOrder(state),
-    skus: selectors.getSkusByProduct(state, productId)
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  null
-)(SelectSkus)

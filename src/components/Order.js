@@ -1,50 +1,41 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import { View } from 'react-native'
-import actions from '../store/actions'
-import selectors from '../store/selectors'
+import memoize from 'lodash/memoize'
 import ListView from './ListView'
 import OrderItem from './OrderItem'
 import ButtonFooter from './ButtonFooter'
 import OrderFooter from './OrderFooter'
 import OrderTitle from './OrderTitle'
 
-class Order extends React.Component {
+export default class Order extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { deleteList: [] }
+    this.state = { deleteMap: {} }
+    this.onCheck = memoize(id => () => this.onCheckItem(id))
+    this.onPress = memoize(item => () => this.goToDetails(item))
   }
 
-  select = itemId => {
-    this.setState((prevState, props) => {
-      return { deleteList: prevState.deleteList.concat(itemId) }
-    })
-  }
-
-  unselect = itemId => {
+  onCheckItem = skuId => {
     this.setState(prevState => {
-      return { deleteList: prevState.deleteList.filter(id => id !== itemId) }
+      let deleteMap = { ...prevState.deleteMap }
+      deleteMap[skuId] = !prevState.deleteMap[skuId]
+      return { deleteMap }
     })
   }
 
-  toDelete = itemId => !this.state.deleteList.includes(itemId)
-
-  onCheckItem = itemId => {
-    this.toDelete(itemId) ? this.select(itemId) : this.unselect(itemId)
-  }
+  toDelete = skuId => !!this.state.deleteMap[skuId]
 
   goToDetails = item => {
     this.props.navigation.navigate('Details', { skuId: item.skuId })
   }
 
   renderItem = ({ item }) => {
-    let checked = !this.toDelete(item.id)
     return (
       <OrderItem
         item={item}
-        checked={checked}
-        onCheck={() => this.onCheckItem(item.id)}
-        onPress={() => this.goToDetails(item)}
+        checked={this.toDelete(item.skuId)}
+        onCheck={this.onCheck(item.skuId)}
+        onPress={this.onPress(item)}
       />
     )
   }
@@ -57,27 +48,32 @@ class Order extends React.Component {
   goToProducts = () => this.props.navigation.navigate('Products')
 
   removeItems = () => {
-    this.props.removeItems(this.state.deleteList)
-    this.setState({ deleteList: [] })
+    this.props.removeItems(this.state.deleteMap)
+    this.setState({ deleteMap: {} })
   }
 
   goToClients = () => this.props.navigation.navigate('Clients')
 
-  createOrder = async () => {
-    await this.props.createOrder(this.props.order)
+  create = async () => {
+    await this.props.create(this.props.order)
     if (!this.props.error) this.goToClients()
   }
 
+  modify = async () => {
+    await this.props.modify(this.props.order)
+    if (!this.props.error) this.goToClients()
+  }
+
+  getNick = () => (this.props.client ? this.props.client.nick : '')
+
   render() {
-    let toDelete = this.state.deleteList.length > 0
-    let nick = this.props.client ? this.props.client.nick : ''
     return (
       <View style={{ flex: 1, backgroundColor: '#FFF' }}>
-        <OrderTitle title={nick} />
+        <OrderTitle title={this.getNick()} />
         <ListView
           containerStyle={{ flex: 0.8 }}
           data={this.props.order.items}
-          extraData={this.state.deleteList}
+          extraData={this.state.deleteMap}
           keyExtractor={item => `${item.skuId}`}
           renderItem={this.renderItem}
           ListFooterComponent={
@@ -88,40 +84,27 @@ class Order extends React.Component {
             />
           }
         />
-        {toDelete ? (
-          <ButtonFooter
-            title="Eliminar Seleccionados"
-            buttonStyle={{ backgroundColor: '#db3838' }}
-            onPress={this.removeItems}
-          />
-        ) : (
-          <ButtonFooter title="Confirmar Pedido" onPress={this.createOrder} />
-        )}
+        {this.renderButton(this.hasSelected(), this.props.isUpdate)}
       </View>
     )
   }
-}
 
-const mapStateToProps = state => {
-  return {
-    client: selectors.getClientFromOrder(state),
-    order: selectors.getOrder(state),
-    error: selectors.getOrderError(state)
-  }
-}
+  hasSelected = () =>
+    Object.values(this.state.deleteMap).some(selected => selected)
 
-const mapDispatchToProps = dispatch => {
-  return {
-    removeItems: items => {
-      dispatch(actions.removeItems(items))
-    },
-    createOrder: order => {
-      dispatch(actions.createOrder(order))
+  renderButton = (hasSelected, isUpdate) => {
+    if (hasSelected) {
+      return (
+        <ButtonFooter
+          title="Eliminar Seleccionados"
+          buttonStyle={{ backgroundColor: '#db3838' }}
+          onPress={this.removeItems}
+        />
+      )
     }
+    if (isUpdate) {
+      return <ButtonFooter title="Modificar Pedido" onPress={this.modify} />
+    }
+    return <ButtonFooter title="Confirmar Pedido" onPress={this.create} />
   }
 }
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Order)
