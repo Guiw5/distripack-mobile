@@ -5,8 +5,8 @@ import LastOrders from '../components/LastOrders'
 
 const mapStateToProps = state => ({
   clientsLoaded: selectors.getClients(state),
-  clients: selectors.getClientsFromOrders(state),
-  orders: selectors.getOrders(state)
+  orders: selectors.getOrders(state),
+  clients: selectors.getClientsFromOrders(state)
 })
 
 const mapDispatchToProps = dispatch => ({

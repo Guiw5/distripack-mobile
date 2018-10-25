@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { ListItem, CheckBox } from 'react-native-elements'
+import * as epson from '../lib/epson'
 
 import Select from './Select'
 import { colors } from 'react-native-elements/src/config'
@@ -61,9 +62,40 @@ export default class LastOrders extends React.PureComponent {
   )
 
   printOrders = () => {
-    console.log('printed alls')
-    //popup?
-    //this.props.printOrders() -> backend print()
+    console.log(this.state)
+    var address =
+      'http://192.168.0.3/cgi-bin/epos/service.cgi?devid=local_printer&timeout=6000'
+
+    var builder = new epson.ePOSBuilder()
+    builder.addTextAlign(builder.ALIGN_CENTER)
+    builder.addText('hola soy fefo el maS TOPU DE LONGDONG\n')
+    builder.addText('hola soy fefo el maS TOPU DE LONGDONG\n')
+    builder.addText('hola soy fefo el maS TOPU DE LONGDONG\n')
+    builder.addText('hola soy fefo el maS TOPU DE LONGDONG\n')
+    builder.addText('hola soy fefo el maS TOPU DE LONGDONG\n')
+    builder.addFeedUnit(20)
+    builder.addTextFont(builder.FONT_A)
+    builder.addTextAlign(builder.ALIGN_LEFT)
+    builder.addText('10')
+    builder.addText('\tBOBINA P/PAN/PP/AZ 40\t')
+    builder.addText('\tBOBINA P/PAN/PP/AZ 40\t')
+    builder.addText('\tBOBINA P/PAN/PP/AZ 40\t')
+    builder.addTextAlign(builder.ALIGN_RIGHT)
+    builder.addText('$960,00\n')
+    builder.addFeed()
+    builder.addCut(builder.CUT_FEED)
+
+    var epos = new epson.ePOSPrint(address)
+    epos.onreceive = function(res) {
+      alert(res.success)
+    }
+    epos.onerror = function(err) {
+      alert(err.status)
+    }
+    epos.oncoveropen = function() {
+      alert('coveropen')
+    }
+    epos.send(builder.toString())
   }
 
   onCheckAll = () => {
@@ -97,8 +129,6 @@ export default class LastOrders extends React.PureComponent {
   )
 
   render() {
-    console.log('one two three?')
-    if (!this.props.clients) return null
     return (
       <Select
         autoFocus={false}
