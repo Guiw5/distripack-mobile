@@ -1,29 +1,39 @@
 import { http } from '../../http/client'
 
 let itemId = 0
-export const addToOrder = item => ({
-  type: 'ADD_TO_ORDER',
+export const addItem = item => ({
+  type: 'ADD_ITEM',
   id: itemId++,
   item
+})
+
+export const modifyItem = item => ({
+  type: 'UPDATE_ITEM',
+  item
+})
+
+export const removeItems = items => ({
+  type: 'REMOVE_ITEMS',
+  items
+})
+
+export const setClient = clientId => ({
+  type: 'SET_CLIENT',
+  clientId
+})
+
+export const setOrder = order => ({
+  type: 'SET_ORDER',
+  order
 })
 
 export const getOrder = () => ({
   type: 'FETCH_ORDER'
 })
 
-export const modifyOrder = item => ({
+export const modifyOrder = order => ({
   type: 'UPDATE_ORDER',
-  item
-})
-
-export const removeItems = items => ({
-  type: 'REMOVE_FROM_ORDER',
-  items
-})
-
-export const setClient = clientId => ({
-  type: 'SET_ORDER_CLIENT',
-  clientId
+  order
 })
 
 export const createOrderRequest = () => ({
@@ -49,5 +59,15 @@ export const createOrder = order => async dispatch => {
   } catch (error) {
     console.log(error)
     dispatch(createOrderError(error))
+  }
+}
+
+export const updateOrder = order => async dispatch => {
+  try {
+    dispatch(modifyOrderRequest())
+    let { data } = await http.put('/orders', order)
+    dispatch(modifyOrderSuccess(data))
+  } catch (error) {
+    dispatch(modifyOrderError(error))
   }
 }

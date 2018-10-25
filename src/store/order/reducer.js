@@ -12,17 +12,17 @@ const removeItems = (state, action) => ({
   ...state,
   data: {
     ...state.data,
-    items: state.data.items.filter(i => !action.items.includes(i.id))
+    items: state.data.items.filter(item => !action.items[item.skuId])
   }
 })
 
-const updateOrder = (state, action) => ({
+const updateItem = (state, action) => ({
   ...state,
-  order: {
-    ...state.order,
+  data: {
+    ...state.data,
     items: state.data.items.map(
       item =>
-        item.id !== action.item.id
+        item.skuId !== action.item.skuId
           ? item
           : {
               ...item,
@@ -33,9 +33,19 @@ const updateOrder = (state, action) => ({
   }
 })
 
+const updateOrder = (state, action) => ({
+  ...state,
+  data: { ...action.order }
+})
+
+const setOrder = (state, action) => ({
+  ...state,
+  data: { ...action.order }
+})
+
 const setClient = (state, action) => ({
   ...state,
-  data: { ...state.data, clientId: action.clientId }
+  data: { ...initialState.data, clientId: action.clientId }
 })
 
 const fetchOrder = (state, action) => {
@@ -50,7 +60,7 @@ const createOrderRequest = (state, action) => ({
 
 const createOrderSuccess = (state, action) => ({
   ...state,
-  data: action.order,
+  data: initialState.data,
   loading: false
 })
 
@@ -70,10 +80,12 @@ const initialState = {
 }
 const order = createReducer((state = initialState), {
   ['FETCH_ORDER']: fetchOrder,
-  ['ADD_TO_ORDER']: addToOrder,
+  ['ADD_ITEM']: addToOrder,
+  ['UPDATE_ITEM']: updateItem,
   ['UPDATE_ORDER']: updateOrder,
-  ['SET_ORDER_CLIENT']: setClient,
-  ['REMOVE_FROM_ORDER']: removeItems,
+  ['SET_ORDER']: setOrder,
+  ['SET_CLIENT']: setClient,
+  ['REMOVE_ITEMS']: removeItems,
   ['CREATE_ORDER_REQUEST']: createOrderRequest,
   ['CREATE_ORDER_SUCCESS']: createOrderSuccess,
   ['CREATE_ORDER_ERROR']: createOrderError
