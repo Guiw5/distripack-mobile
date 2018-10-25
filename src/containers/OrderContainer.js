@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import actions from '../store/actions'
 import selectors from '../store/selectors'
+import Order from '../components/Order'
 
 const mapStateToProps = state => ({
   client: selectors.getClientFromOrder(state),

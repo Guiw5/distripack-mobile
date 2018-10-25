@@ -1,8 +1,8 @@
 import React from 'react'
-import Order from '../../components/Order'
+import OrderContainer from '../../containers/OrderContainer'
 
 export default class OrderScreen extends React.Component {
   render() {
-    return <Order navigation={this.props.navigation} />
+    return <OrderContainer navigation={this.props.navigation} />
   }
 }

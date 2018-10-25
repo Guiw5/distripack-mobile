@@ -1,8 +1,8 @@
 import React from 'react'
-import SelectSkus from '../../components/SelectSkus'
+import SelectSkusContainer from '../../containers/SelectSkusContainer'
 
 export default class SkuScreen extends React.Component {
   render() {
-    return <SelectSkus navigation={this.props.navigation} />
+    return <SelectSkusContainer navigation={this.props.navigation} />
   }
 }

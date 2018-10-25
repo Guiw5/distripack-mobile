@@ -8,7 +8,6 @@ import {
 } from 'react-navigation'
 
 import OrderFlow from './OrderFlow'
-
 import LastOrdersFlow from './LastOrdersFlow'
 
 export default createDrawerNavigator(
