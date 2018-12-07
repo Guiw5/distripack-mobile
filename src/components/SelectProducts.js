@@ -66,12 +66,12 @@ export default class SelectProducts extends React.PureComponent {
         renderItem={this.renderItem}
         filter={this.filter}
         data={this.props.products}
-        button={this.getButtonOrDefault(order)}
+        button={this.getButtonProps(order)}
       />
     )
   }
 
-  getButtonOrDefault = order => {
+  getButtonProps = order => {
     if (order.items && order.items.length > 0)
       return {
         title: 'Ver Pedido (' + order.items.length + ')',
