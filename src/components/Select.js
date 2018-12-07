@@ -1,5 +1,5 @@
 import React from 'react'
-import SearchBar from 'react-native-elements/src/searchbar/SearchBar-android'
+import { SearchBar } from 'react-native-elements'
 import { StyleSheet, View } from 'react-native'
 import SearchList from './ListView'
 import ButtonFooter from './ButtonFooter'
@@ -32,6 +32,8 @@ export default class Select extends React.Component {
           value={this.state.query}
         />
         <SearchList
+          onRefresh={this.props.onRefresh}
+          refreshing={this.props.refreshing}
           ListHeaderComponent={this.props.headerComponent}
           keyExtractor={this.props.keyExtractor}
           renderItem={this.props.renderItem}

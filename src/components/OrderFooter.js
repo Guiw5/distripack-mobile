@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text, Button, colors } from 'react-native-elements'
-import { Separator } from '../commons'
+import { Separator } from '../lib/commons'
 
 export default class OrderFooter extends React.PureComponent {
   constructor(props) {

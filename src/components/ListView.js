@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, FlatList } from 'react-native'
-import { Separator } from '../commons'
+import { Separator } from '../lib/commons'
 
 export default class ListView extends React.PureComponent {
   constructor(props) {
@@ -11,6 +11,8 @@ export default class ListView extends React.PureComponent {
     return (
       <View style={{ flex: 1, ...this.props.containerStyle }}>
         <FlatList
+          onRefresh={this.props.onRefresh}
+          refreshing={this.props.refreshing}
           extraData={this.props.extraData}
           renderItem={this.props.renderItem}
           data={this.props.data}

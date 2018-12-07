@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field } from 'redux-form'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Alert } from 'react-native'
 import { Input } from 'react-native-elements'
 import KeyboardSpacer from 'react-native-keyboard-spacer'
 import ButtonFooter from './ButtonFooter'
@@ -11,7 +11,9 @@ export default class NewClient extends React.Component {
   }
 
   onSubmit = client => {
-    this.props.createClient(client)
+    if (this.props.emails.includes(client.mail)) {
+      Alert.alert('Pepitooo', 'El email ingresado ya se encuentra asociado')
+    } else this.props.createClient(client)
   }
 
   renderNick = ({ input, label, type, meta: { touched, error, warning } }) => {

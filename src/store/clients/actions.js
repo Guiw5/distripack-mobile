@@ -28,13 +28,12 @@ export const createClientError = error => ({
   error
 })
 
-export const loadClients = () => async dispatch => {
+export const fetchClients = () => async dispatch => {
   try {
     dispatch(fetchClientsRequest())
     let { data } = await http.get('/clients')
     dispatch(fetchClientsSuccess(data))
   } catch (error) {
-    console.log(error)
     dispatch(fetchClientsError(error))
   }
 }
@@ -45,7 +44,6 @@ export const createClient = client => async dispatch => {
     let { data } = await http.post('/clients', client)
     dispatch(createClientSuccess(data))
   } catch (error) {
-    console.log(error)
     dispatch(createClientError(error))
   }
 }

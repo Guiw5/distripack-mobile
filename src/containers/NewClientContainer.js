@@ -6,7 +6,8 @@ import NewClient from '../components/NewClient'
 
 const mapStateToProps = state => ({
   error: selectors.getClientsError(state),
-  isLoading: selectors.getClientsLoading(state)
+  isLoading: selectors.getClientsLoading(state),
+  emails: selectors.getClientEmails(state)
 })
 
 const mapDispatchToProps = dispatch => ({

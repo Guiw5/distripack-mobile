@@ -5,14 +5,15 @@ import LastOrders from '../components/LastOrders'
 
 const mapStateToProps = state => ({
   clientsLoaded: selectors.getClients(state),
+  orders: selectors.getOrders(state),
   clients: selectors.getClientsFromOrders(state),
-  orders: selectors.getOrders(state)
+  ordersMap: selectors.getOrdersMap(state)
 })
 
 const mapDispatchToProps = dispatch => ({
   setOrder: order => dispatch(actions.setOrder(order)),
   loadOrders: () => dispatch(actions.fetchOrders()),
-  loadClients: () => dispatch(actions.loadClients())
+  loadClients: () => dispatch(actions.fetchClients())
 })
 
 export default connect(

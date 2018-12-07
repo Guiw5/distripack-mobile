@@ -1,13 +1,10 @@
 import React from 'react'
 import { View } from 'react-native'
-import { Icon, Text } from 'react-native-elements'
-import {
-  createDrawerNavigator,
-  createStackNavigator,
-  DrawerItems
-} from 'react-navigation'
+import { Icon } from 'react-native-elements'
+import { createDrawerNavigator, DrawerItems } from 'react-navigation'
 
 import OrderFlow from './OrderFlow'
+import ToPrintFlow from './ToPrintFlow'
 import LastOrdersFlow from './LastOrdersFlow'
 
 export default createDrawerNavigator(
@@ -27,11 +24,21 @@ export default createDrawerNavigator(
         )
       }
     },
+    ToPrint: {
+      screen: ToPrintFlow,
+      navigationOptions: {
+        title: 'Para Imprimir',
+        drawerLabel: 'Para Imprimir',
+        drawerIcon: ({ tintColor }) => (
+          <Icon name="print" size={20} color={tintColor} />
+        )
+      }
+    },
     LastOrders: {
       screen: LastOrdersFlow,
       navigationOptions: {
-        title: 'Ultimos Pedidos',
-        drawerLabel: 'Ultimos Pedidos',
+        title: 'Ultimas Ventas',
+        drawerLabel: 'Ultimas Ventas',
         drawerIcon: ({ tintColor }) => (
           <Icon
             type="material-community"
@@ -45,21 +52,17 @@ export default createDrawerNavigator(
   },
   {
     contentComponent: props => (
-      <View>
-        <Text>CustomHeader</Text>
+      <View style={{ paddingVertical: 40 }}>
         <DrawerItems {...props} />
-        <Text>CustomerFOOTER</Text>
       </View>
     ),
     contentOptions: {
-      //items:['Home'],
-
       itemsContainerStyle: {},
       iconContainerStyle: {
         opacity: 1
       }
     },
-    initialRouteName: 'LastOrders'
+    initialRouteName: 'ToPrint'
   }
 )
 

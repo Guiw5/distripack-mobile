@@ -26,7 +26,9 @@ export default class Order extends React.Component {
   toDelete = skuId => !!this.state.deleteMap[skuId]
 
   goToDetails = item => {
-    this.props.navigation.navigate('Details', { skuId: item.skuId })
+    this.props.navigation.navigate('Details', {
+      skuId: item.skuId
+    })
   }
 
   renderItem = ({ item }) => {
@@ -52,6 +54,8 @@ export default class Order extends React.Component {
     this.setState({ deleteMap: {} })
   }
 
+  goBack = () => this.props.navigation.goBack()
+
   goToClients = () => this.props.navigation.navigate('Clients')
 
   create = async () => {
@@ -61,7 +65,7 @@ export default class Order extends React.Component {
 
   modify = async () => {
     await this.props.modify(this.props.order)
-    if (!this.props.error) this.goToClients()
+    if (!this.props.error) this.goBack()
   }
 
   getNick = () => (this.props.client ? this.props.client.nick : '')
@@ -84,7 +88,11 @@ export default class Order extends React.Component {
             />
           }
         />
-        {this.renderButton(this.hasSelected(), this.props.isUpdate)}
+        {this.renderButton(
+          this.hasSelected(),
+          this.props.isUpdate,
+          this.props.order.items.length > 0
+        )}
       </View>
     )
   }
@@ -92,7 +100,7 @@ export default class Order extends React.Component {
   hasSelected = () =>
     Object.values(this.state.deleteMap).some(selected => selected)
 
-  renderButton = (hasSelected, isUpdate) => {
+  renderButton = (hasSelected, isUpdate, hasItems) => {
     if (hasSelected) {
       return (
         <ButtonFooter
@@ -102,9 +110,12 @@ export default class Order extends React.Component {
         />
       )
     }
+    if (!hasItems) return <ButtonFooter title="Volver" onPress={this.goBack} />
+
     if (isUpdate) {
       return <ButtonFooter title="Modificar Pedido" onPress={this.modify} />
     }
+
     return <ButtonFooter title="Confirmar Pedido" onPress={this.create} />
   }
 }
