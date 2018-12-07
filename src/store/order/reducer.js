@@ -20,15 +20,14 @@ const updateItem = (state, action) => ({
   ...state,
   data: {
     ...state.data,
-    items: state.data.items.map(
-      item =>
-        item.skuId !== action.item.skuId
-          ? item
-          : {
-              ...item,
-              price: action.item.price,
-              quantity: action.item.quantity
-            }
+    items: state.data.items.map(item =>
+      item.skuId !== action.item.skuId
+        ? item
+        : {
+            ...item,
+            price: action.item.price,
+            quantity: action.item.quantity
+          }
     )
   }
 })
@@ -72,6 +71,7 @@ const createOrderError = (state, action) => ({
 
 const initialState = {
   data: {
+    id: null,
     items: [],
     clientId: null
   },
