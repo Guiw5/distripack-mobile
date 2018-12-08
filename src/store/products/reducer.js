@@ -1,4 +1,4 @@
-import { createReducer } from '../reducers'
+import createReducer from '../createReducer'
 
 const fetchProductsRequest = (state, action) => ({
   ...state,
