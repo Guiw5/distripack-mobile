@@ -139,9 +139,38 @@ ePOSBuilder.prototype.build = function(orders) {
   orders.forEach(o => this.buildOrder(o))
 }
 
+const months = new Array(
+  'ENE',
+  'FEB',
+  'MAR',
+  'ABR',
+  'MAY',
+  'JUN',
+  'JUL',
+  'AGO',
+  'SEP',
+  'OCT',
+  'NOV',
+  'DIC'
+)
+
 ePOSBuilder.prototype.buildOrder = function(order) {
   //get client nick, and date
-  this.buildOrderHeader(order.client.nick, order.createdAt)
+  let date = new Date(order.createdAt)
+  let dateString =
+    (date.getDate() < 10 ? '0' : '') +
+    `${date.getDate()}` +
+    '/' +
+    `${months[date.getMonth()]}` +
+    '/' +
+    `${date.getFullYear()}` +
+    ', ' +
+    `${date.getHours()}` +
+    ':' +
+    `${date.getMinutes()}` +
+    'hs'
+
+  this.buildOrderHeader(order.client.nick, dateString)
   let subtotal = 0
   order.items.forEach(item => {
     this.buildItemLine(item)
@@ -159,7 +188,7 @@ ePOSBuilder.prototype.buildOrderHeader = function(clientNick, date) {
   this.addText('-'.repeat(16))
   this.addTextFont(this.FONT_B)
   this.addFeedLine(1)
-  this.addText('Fecha:' + date + '\n')
+  this.addText('Fecha: ' + date + '\n')
   this.addFeed()
   this.addText('-'.repeat(56))
   this.addText('Cant  Descripcion                       Precio Importe  ')
@@ -1110,9 +1139,6 @@ export function ePOSPrint(ip, devId, timeout) {
       SOAPAction: '""'
     }
   })
-  this.enabled = false
-  this.timeout = timeout
-  this.status = 0
 }
 
 ePOSPrint.prototype.constructor = ePOSPrint

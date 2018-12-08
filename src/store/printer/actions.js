@@ -21,7 +21,7 @@ export const clearStatus = key => ({
   key
 })
 
-export const checkPrinterStatus = data => async dispatch => {
+export const checkPrinterStatus = (data = null) => async dispatch => {
   try {
     dispatch(checkStatusRequest())
     let status = await printerService.status(data)

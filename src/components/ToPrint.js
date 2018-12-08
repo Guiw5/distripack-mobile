@@ -1,8 +1,6 @@
 import React from 'react'
-import { View } from 'react-native'
 
 import Select from './Select'
-import Notification from './Notification'
 import SelectAll from './SelectAll'
 import CheckItem from './CheckItem'
 
@@ -19,7 +17,6 @@ export default class ToPrint extends React.PureComponent {
   loadData = async () => {
     await this.props.loadClients()
     await this.props.loadOrders()
-    await this.props.checkPrinterStatus()
   }
 
   filter = text => item =>
@@ -83,40 +80,30 @@ export default class ToPrint extends React.PureComponent {
   }
 
   render() {
-    console.log('status', this.props.status)
+    console.log('son muchos renders?')
     return (
-      <View style={{ flex: 1, backgroundColor: '#fff' }}>
-        {this.props.status.map(status => (
-          <Notification
-            key={status.key}
-            id={status.key}
-            msg={status.msg}
-            onPress={this.onStatusPress}
-          />
-        ))}
-        <Select
-          onRefresh={this.loadData}
-          refreshing={this.props.loadingOrders || this.props.loadingClients}
-          autoFocus={false}
-          keyExtractor={item => item.client.mail}
-          placeholder="Escriba alias o mail del cliente"
-          filter={this.filter}
-          data={this.props.orders}
-          extraData={this.state.items}
-          renderItem={this.renderItem}
-          headerComponent={
-            <SelectAll onPress={this.onCheckAll} checked={this.state.all} />
-          }
-          button={{
-            disabled:
-              !Object.values(this.state.items).some(selected => selected) &&
-              !this.state.all,
-            title: 'Imprimir',
-            onPress: this.printOrders,
-            loading: this.props.printing
-          }}
-        />
-      </View>
+      <Select
+        onRefresh={this.loadData}
+        refreshing={this.props.loadingOrders || this.props.loadingClients}
+        autoFocus={false}
+        keyExtractor={item => item.client.mail}
+        placeholder="Escriba alias o mail del cliente"
+        filter={this.filter}
+        data={this.props.orders}
+        extraData={this.state.items}
+        renderItem={this.renderItem}
+        headerComponent={
+          <SelectAll onPress={this.onCheckAll} checked={this.state.all} />
+        }
+        button={{
+          disabled:
+            !Object.values(this.state.items).some(selected => selected) &&
+            !this.state.all,
+          title: 'Imprimir',
+          onPress: this.printOrders,
+          loading: this.props.printing
+        }}
+      />
     )
   }
 }

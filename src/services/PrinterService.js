@@ -1,13 +1,12 @@
 import { ePOSBuilder, ePOSPrint } from '../lib/epson'
 
 class PrinterService {
-  constructor(ip = '192.168.0.3', devId = 'local_printer', timeout = 2000) {
+  constructor(ip = '192.168.0.3', devId = 'local_printer', timeout = 6000) {
     this.builder = new ePOSBuilder()
     this.epos = new ePOSPrint(ip, devId, timeout)
   }
 
   status = async status => {
-    console.log('status response', status)
     if (status) {
       return this.checkStatus(status)
     }
