@@ -23,7 +23,7 @@ export default class Notification extends PureComponent {
         }}
         title={this.props.msg}
         titleStyle={{ color: '#000', fontFamily: 'sans-serif-light' }}
-        onPress={() => this.props.onPress(this.props.id)}
+        onPress={this.props.onPress}
       />
     )
   }

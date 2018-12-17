@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, TouchableHighlight, TouchableOpacity } from 'react-native'
+import { View, TouchableOpacity } from 'react-native'
 import { Icon, Text } from 'react-native-elements'
 
 import { connect } from 'react-redux'

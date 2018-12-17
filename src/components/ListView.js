@@ -1,28 +1,17 @@
 import React from 'react'
-import { View, FlatList } from 'react-native'
+import { View, FlatList, ScrollView } from 'react-native'
 import { Separator } from '../lib/commons'
 
-export default class ListView extends React.PureComponent {
+export class ListView extends React.PureComponent {
   constructor(props) {
     super(props)
   }
 
   render() {
+    let { containerStyle, ...props } = this.props
     return (
-      <View style={{ flex: 1, ...this.props.containerStyle }}>
-        <FlatList
-          onRefresh={this.props.onRefresh}
-          refreshing={this.props.refreshing}
-          extraData={this.props.extraData}
-          renderItem={this.props.renderItem}
-          data={this.props.data}
-          initialNumToRender={8}
-          keyExtractor={this.props.keyExtractor}
-          ListHeaderComponent={this.props.ListHeaderComponent}
-          ListFooterComponent={this.props.ListFooterComponent}
-          keyboardShouldPersistTaps="handled"
-          ItemSeparatorComponent={Separator}
-        />
+      <View style={{ flex: 1, ...containerStyle }}>
+        <FlatList keyboardShouldPersistTaps="handled" {...props} />
       </View>
     )
   }

@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react'
 import { StyleSheet } from 'react-native'
 import { colors } from 'react-native-elements/src/config'
-import { ListItem, CheckBox } from 'react-native-elements'
 import CheckItem from './CheckItem'
 
 export default class SelectAll extends PureComponent {
@@ -17,6 +16,7 @@ export default class SelectAll extends PureComponent {
         onPress={this.props.onPress}
         onCheck={this.props.onPress}
         checked={this.props.checked}
+        checkedColor={colors.primary}
       />
     )
   }
@@ -27,6 +27,7 @@ export const styles = StyleSheet.create({
     marginVertical: 0,
     height: 45,
     borderWidth: 1,
-    borderColor: colors.primary
+    borderColor: colors.primary,
+    backgroundColor: '#fff'
   }
 })

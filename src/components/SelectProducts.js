@@ -52,7 +52,8 @@ export default class SelectProducts extends React.PureComponent {
       subtitle={item.name.toProperCase()}
       subtitleStyle={{ fontSize: 12 }}
       rightSubtitle={this.rightSubtitle(item)}
-      containerStyle={{ borderBottomWidth: 0 }}
+      bottomDivider
+      containerStyle={{ paddingVertical: 15 }}
       onPress={this.onPress(item)}
     />
   )

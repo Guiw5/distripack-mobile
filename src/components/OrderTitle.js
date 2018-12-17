@@ -10,7 +10,7 @@ export default class OrderTitle extends React.PureComponent {
 
   render() {
     return (
-      <View>
+      <View style={{ backgroundColor: '#fff' }}>
         <Text style={styles.title}>{this.props.title.capitalize()}</Text>
         <Separator />
       </View>

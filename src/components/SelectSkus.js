@@ -26,7 +26,8 @@ export default class SelectSkus extends React.PureComponent {
         subtitle={item.description.toProperCase()}
         subtitleStyle={{ fontSize: 12 }}
         rightSubtitle={`${item.price.toFixed(2)}`}
-        containerStyle={{ borderBottomWidth: 0 }}
+        bottomDivider
+        containerStyle={{ paddingVertical: 15 }}
         onPress={this.onPress(item)}
       />
     )

@@ -1,7 +1,7 @@
 import React from 'react'
 import { SearchBar } from 'react-native-elements'
 import { StyleSheet, View } from 'react-native'
-import SearchList from './ListView'
+import { ListView as SearchList } from './ListView'
 import ButtonFooter from './ButtonFooter'
 
 export default class Select extends React.Component {

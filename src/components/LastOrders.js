@@ -17,9 +17,7 @@ export default class LastOrders extends React.PureComponent {
     item.mail.toLowerCase().includes(text.toLowerCase()) ||
     item.nick.toLowerCase().includes(text.toLowerCase())
 
-  onPress = item => {
-    console.log(item)
-  }
+  onPress = item => {}
 
   renderItem = ({ item }) => (
     <ListItem
@@ -27,7 +25,7 @@ export default class LastOrders extends React.PureComponent {
       subtitle={item.mail}
       subtitleStyle={{ fontSize: 12 }}
       onPress={this.onPress}
-      containerStyle={{ borderBottomWidth: 0, paddingVertical: 10 }}
+      containerStyle={{ borderBottomWidth: 1, paddingVertical: 15 }}
     />
   )
 

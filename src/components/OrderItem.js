@@ -26,9 +26,9 @@ export default class OrderItem extends React.PureComponent {
             title={`${item.quantity}`}
             checked={this.props.checked}
             onPress={this.props.onCheck}
-            iconType="ionicon"
-            uncheckedIcon="ios-square-outline"
-            checkedIcon="ios-checkbox-outline"
+            iconType="material"
+            uncheckedIcon="close"
+            checkedIcon="close"
             checkedColor="#db3838"
             textStyle={styles.checkText}
             containerStyle={styles.checkContainer}
@@ -43,26 +43,30 @@ export default class OrderItem extends React.PureComponent {
 }
 const styles = StyleSheet.create({
   listContainer: {
+    borderBottomWidth: 1,
     marginLeft: 0,
     paddingLeft: 0,
     paddingRight: 10,
     paddingTop: 4,
     paddingBottom: 4,
     marginTop: 0,
-    marginBottom: 0
+    marginBottom: 0,
+    height: 50
   },
   checkText: {
     marginLeft: 0,
-    paddingLeft: 0,
+    paddingLeft: 4,
     marginRight: 0,
     paddingRight: 0
   },
   checkContainer: {
-    marginLeft: 0,
+    justifyContent: 'flex-start',
+    marginLeft: -13,
     marginRight: 0,
     paddingLeft: 0,
     paddingRight: 0,
     borderWidth: 0,
+    width: 60,
     backgroundColor: 'transparent'
   },
   listContent: {

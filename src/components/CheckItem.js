@@ -13,15 +13,21 @@ export default class CheckItem extends PureComponent {
         subtitle={this.props.subtitle}
         subtitleStyle={{ fontSize: 12 }}
         onPress={this.props.onPress}
-        containerStyle={this.props.containerStyle}
+        bottomDivider={this.props.bottomDivider}
+        containerStyle={[
+          this.props.checked && { backgroundColor: '#42adb320' },
+          this.props.containerStyle
+        ]}
         leftElement={
           <CheckBox
             checked={this.props.checked}
             onPress={this.props.onCheck}
-            iconType="ionicon"
-            uncheckedIcon="ios-square-outline"
-            checkedIcon="ios-checkbox-outline"
-            checkedColor="#42adb3"
+            iconType="material"
+            uncheckedIcon="check"
+            checkedIcon="check"
+            checkedColor={
+              this.props.checkedColor ? this.props.checkedColor : '#42adb3'
+            }
             textStyle={styles.checkText}
             containerStyle={styles.checkContainer}
           />
@@ -38,7 +44,7 @@ const styles = StyleSheet.create({
     paddingRight: 0
   },
   checkContainer: {
-    marginLeft: 0,
+    marginLeft: -13,
     marginRight: 0,
     paddingLeft: 0,
     paddingRight: 0,

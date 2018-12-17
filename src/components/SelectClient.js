@@ -33,8 +33,9 @@ export default class SelectClient extends React.PureComponent {
     <ListItem
       title={item.nick}
       subtitle={item.mail}
+      bottomDivider
       subtitleStyle={{ fontSize: 12 }}
-      containerStyle={{ borderBottomWidth: 0 }}
+      containerStyle={{ paddingVertical: 15 }}
       onPress={this.onPress(item)}
     />
   )
