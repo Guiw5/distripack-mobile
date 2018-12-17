@@ -16,4 +16,7 @@ export const getClientFromOrder = createSelector(
 export const getItemFromOrder = (state, skuId) =>
   getOrder(state).items.find(i => i.skuId === skuId)
 
-export const isOrderUpdate = createSelector(getOrder, order => order.createdAt)
+export const isOrderUpdate = createSelector(
+  getOrder,
+  order => order.createdAt
+)

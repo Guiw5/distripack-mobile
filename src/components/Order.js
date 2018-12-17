@@ -1,13 +1,14 @@
-import React from 'react'
-import { View } from 'react-native'
+import React, { Component } from 'react'
+import { View, StyleSheet } from 'react-native'
+import { Text } from 'react-native-elements'
 import memoize from 'lodash/memoize'
-import ListView from './ListView'
+import { ListView as OrderItems } from './ListView'
 import OrderItem from './OrderItem'
 import ButtonFooter from './ButtonFooter'
 import OrderFooter from './OrderFooter'
 import OrderTitle from './OrderTitle'
 
-export default class Order extends React.Component {
+export default class Order extends Component {
   constructor(props) {
     super(props)
     this.state = { deleteMap: {} }
@@ -70,23 +71,30 @@ export default class Order extends React.Component {
 
   getNick = () => (this.props.client ? this.props.client.nick : '')
 
+  Subtotal = () => (
+    <View style={styles.subtotalContainer}>
+      <Text style={styles.subtotal}>{`$${this.getSubtotal().toFixed(2)}`}</Text>
+      <Text>Subtotal </Text>
+    </View>
+  )
+
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: '#FFF' }}>
         <OrderTitle title={this.getNick()} />
-        <ListView
-          containerStyle={{ flex: 0.8 }}
+        <OrderItems
+          containerStyle={{ flex: 0.7 }}
+          initialNumToRender={this.props.order.items.length}
           data={this.props.order.items}
           extraData={this.state.deleteMap}
           keyExtractor={item => `${item.skuId}`}
           renderItem={this.renderItem}
-          ListFooterComponent={
-            <OrderFooter
-              error={this.props.error}
-              subtotal={this.getSubtotal()}
-              onPress={this.goToProducts}
-            />
-          }
+          ListFooterComponent={this.Subtotal()}
+        />
+        <OrderFooter
+          addProducts={this.goToProducts}
+          addDeliveryDate={this.props.setDeliveryDate}
+          selectedDate={this.props.order.deliveryDate}
         />
         {this.renderButton(
           this.hasSelected(),
@@ -119,3 +127,16 @@ export default class Order extends React.Component {
     return <ButtonFooter title="Confirmar Pedido" onPress={this.create} />
   }
 }
+
+const styles = StyleSheet.create({
+  subtotalContainer: {
+    flexDirection: 'row-reverse',
+    paddingVertical: 15,
+    paddingRight: 10
+  },
+  subtotal: {
+    color: '#42adb3',
+    paddingHorizontal: 15,
+    marginRight: 0
+  }
+})

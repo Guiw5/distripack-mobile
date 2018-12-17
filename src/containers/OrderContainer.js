@@ -13,7 +13,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   removeItems: items => dispatch(actions.removeItems(items)),
   create: order => dispatch(actions.createOrder(order)),
-  modify: order => dispatch(actions.modifyOrder(order))
+  modify: order => dispatch(actions.modifyOrder(order)),
+  setDeliveryDate: date => dispatch(actions.setDeliveryDate(date))
 })
 
 export default connect(

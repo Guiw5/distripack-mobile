@@ -36,6 +36,11 @@ export const modifyOrder = order => ({
   order
 })
 
+export const setDeliveryDate = deliveryDate => ({
+  type: 'SET_DELIVERY_DATE',
+  deliveryDate
+})
+
 export const createOrderRequest = () => ({
   type: 'CREATE_ORDER_REQUEST'
 })

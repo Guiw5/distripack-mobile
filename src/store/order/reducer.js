@@ -1,5 +1,16 @@
 import createReducer from '../createReducer'
 
+const initialState = {
+  data: {
+    id: null,
+    items: [],
+    clientId: null,
+    deliveryDate: null
+  },
+  loading: false,
+  error: null
+}
+
 const addToOrder = (state, action) => ({
   ...state,
   data: {
@@ -47,6 +58,11 @@ const setClient = (state, action) => ({
   data: { ...initialState.data, clientId: action.clientId }
 })
 
+const setDeliveryDate = (state, action) => ({
+  ...state,
+  data: { ...state.data, deliveryDate: action.deliveryDate }
+})
+
 const fetchOrder = (state, action) => {
   return state
 }
@@ -69,15 +85,6 @@ const createOrderError = (state, action) => ({
   error: action.error
 })
 
-const initialState = {
-  data: {
-    id: null,
-    items: [],
-    clientId: null
-  },
-  loading: false,
-  error: null
-}
 const order = createReducer((state = initialState), {
   ['FETCH_ORDER']: fetchOrder,
   ['ADD_ITEM']: addToOrder,
@@ -85,6 +92,7 @@ const order = createReducer((state = initialState), {
   ['UPDATE_ORDER']: updateOrder,
   ['SET_ORDER']: setOrder,
   ['SET_CLIENT']: setClient,
+  ['SET_DELIVERY_DATE']: setDeliveryDate,
   ['REMOVE_ITEMS']: removeItems,
   ['CREATE_ORDER_REQUEST']: createOrderRequest,
   ['CREATE_ORDER_SUCCESS']: createOrderSuccess,
