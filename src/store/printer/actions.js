@@ -48,7 +48,6 @@ export const printOrdersError = error => ({
 export const printOrders = orders => async dispatch => {
   try {
     dispatch(printOrdersRequest())
-    console.log(orders)
     let { data } = await printerService.printOrders(orders)
     dispatch(checkPrinterStatus(data))
     dispatch(updatePrintedOrders(orders))

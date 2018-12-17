@@ -1,5 +1,11 @@
 import createReducer from '../createReducer'
 
+const initialState = {
+  data: [],
+  loading: false,
+  error: null
+}
+
 const fetchProductsRequest = (state, action) => ({
   ...state,
   loading: true
@@ -20,12 +26,6 @@ const fetchProductsError = (state, action) => ({
 const fetchSkus = (state, action) => MemoryMapSkus()
 
 const fetchSkusByProducts = (state, action) => MemoryMapSkus()
-
-const initialState = {
-  data: [],
-  loading: false,
-  error: null
-}
 
 const products = createReducer((state = initialState), {
   ['FETCH_PRODUCTS_REQUEST']: fetchProductsRequest,

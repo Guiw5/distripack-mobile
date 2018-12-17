@@ -44,10 +44,11 @@ export default class ToPrint extends React.PureComponent {
     <CheckItem
       title={item.client.nick}
       subtitle={item.client.mail}
-      checked={this.state.items[item.id] || this.state.all}
+      checked={this.state.items[item.id]}
       onPress={this.onPress(item)}
       onCheck={this.onCheck(item)}
-      containerStyle={{ borderBottomWidth: 0, paddingVertical: 10 }}
+      bottomDivider
+      containerStyle={{ paddingVertical: 5 }}
     />
   )
 
@@ -58,7 +59,7 @@ export default class ToPrint extends React.PureComponent {
 
   onCheckAll = () => {
     this.setState(prevState => ({
-      items: {},
+      items: prevState.all ? {} : this.orderIdsMap(),
       all: !prevState.all
     }))
   }
@@ -67,24 +68,27 @@ export default class ToPrint extends React.PureComponent {
     this.props.clearStatus(key)
   }
 
+  orderIdsMap = () => {
+    return this.props.orders.reduce((items, order) => {
+      items[order.id] = true
+      return items
+    }, {})
+  }
+
   getOrdersToPrint() {
-    let orders = this.props.orders
-    if (!this.state.all) {
-      let selected = Object.keys(this.state.items).filter(
-        id => this.state.items[id]
-      )
-      console.log('selects', selected)
-      orders = this.props.orders.filter(o => selected.includes(`${o.id}`))
-    }
-    return orders
+    let unselected = Object.values(this.state.items).some(selected => !selected)
+    if (this.state.all && !unselected) return this.props.orders
+
+    let selected = Object.keys(this.state.items).filter(
+      id => this.state.items[id]
+    )
+    return this.props.orders.filter(o => selected.includes(`${o.id}`))
   }
 
   render() {
     console.log('son muchos renders?')
     return (
       <Select
-        onRefresh={this.loadData}
-        refreshing={this.props.loadingOrders || this.props.loadingClients}
         autoFocus={false}
         keyExtractor={item => item.client.mail}
         placeholder="Escriba alias o mail del cliente"
@@ -96,9 +100,7 @@ export default class ToPrint extends React.PureComponent {
           <SelectAll onPress={this.onCheckAll} checked={this.state.all} />
         }
         button={{
-          disabled:
-            !Object.values(this.state.items).some(selected => selected) &&
-            !this.state.all,
+          disabled: !Object.values(this.state.items).some(selected => selected),
           title: 'Imprimir',
           onPress: this.printOrders,
           loading: this.props.printing

@@ -12,12 +12,12 @@ export const getOrdersCreated = state =>
 
 export const getOrdersMap = createSelector(
   getOrdersCreated,
-  orders => {
-    return orders.reduce((dict, order) => {
+  orders => ({
+    ordersMap: orders.reduce((dict, order) => {
       dict[order.clientId] = order
       return dict
     }, {})
-  }
+  })
 )
 
 export const getClientsFromOrders = createSelector(
