@@ -1,6 +1,6 @@
 import printerService from '../../services/PrinterService'
-import { http } from '../../http/client'
-import { ErrorCodes } from '../../lib/types'
+import { printOrders } from '../orders/actions'
+import { ErrorCodes, ASB_PRINT_SUCCESS } from '../../lib/types'
 
 export const checkStatusRequest = () => ({
   type: 'CHECK_STATUS_REQUEST'
@@ -21,6 +21,19 @@ export const clearStatus = key => ({
   key
 })
 
+export const printRequest = () => ({
+  type: 'PRINT_REQUEST'
+})
+
+export const printSuccess = () => ({
+  type: 'PRINT_SUCCESS'
+})
+
+export const printError = error => ({
+  type: 'PRINT_ERROR',
+  error
+})
+
 export const checkPrinterStatus = (data = null) => async dispatch => {
   try {
     dispatch(checkStatusRequest())
@@ -31,37 +44,24 @@ export const checkPrinterStatus = (data = null) => async dispatch => {
   }
 }
 
-export const printOrdersRequest = () => ({
-  type: 'PRINT_ORDERS_REQUEST'
-})
-
-export const printOrdersSuccess = data => ({
-  type: 'PRINT_ORDERS_SUCCESS',
-  data
-})
-
-export const printOrdersError = error => ({
-  type: 'PRINT_ORDERS_ERROR',
-  error
-})
-
-export const printOrders = orders => async dispatch => {
+export const print = orders => async dispatch => {
   try {
-    dispatch(printOrdersRequest())
+    dispatch(printRequest())
     let { data } = await printerService.printOrders(orders)
-    dispatch(checkPrinterStatus(data))
-    dispatch(updatePrintedOrders(orders))
-    dispatch(printOrdersSuccess(data))
+    if (isOk(data)) {
+      dispatch(printOrders(orders.map(o => o.id)))
+      dispatch(printSuccess())
+    } else {
+      dispatch(checkPrinterStatus(data))
+      dispatch(printError())
+    }
   } catch (error) {
-    dispatch(printOrdersError(error))
+    console.log('error??', error)
+    dispatch(printError(error))
   }
 }
 
-export const updatePrintedOrders = orders => async dispatch => {
-  try {
-    let orderIds = orders.map(o => o.id)
-    await http.put('orders/print', orderIds)
-  } catch (error) {
-    console.log('Error updating printed orders', error)
-  }
+const isOk = data => {
+  let { success, status } = printerService.extract(data)
+  return success && Boolean(status & ASB_PRINT_SUCCESS)
 }

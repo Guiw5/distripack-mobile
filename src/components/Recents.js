@@ -1,10 +1,12 @@
 import React from 'react'
+import { Alert } from 'react-native'
 
 import Select from './Select'
 import SelectAll from './SelectAll'
 import CheckItem from './CheckItem'
+import moment from 'moment'
 
-export default class ToPrint extends React.PureComponent {
+export default class Recents extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = { items: {}, all: false }
@@ -14,20 +16,36 @@ export default class ToPrint extends React.PureComponent {
     await this.loadData()
   }
 
+  componentDidUpdate() {
+    console.log('pasamos por aca??', this.props.printState)
+    if (this.props.printState === 'ok') {
+      Alert.alert('Excelente', 'Los pedidos fueron impresos correctamente')
+    }
+
+    if (this.props.printState === 'notok') {
+      Alert.alert('Ups', 'No se ha podido imprimir, intente de nuevo')
+    }
+  }
+
   loadData = async () => {
     await this.props.loadClients()
     await this.props.loadOrders()
+    await this.props.checkPrinterStatus()
   }
 
   filter = text => item =>
+    item.id.toString().includes(text) ||
     item.client.mail.toLowerCase().includes(text.toLowerCase()) ||
     item.client.nick.toLowerCase().includes(text.toLowerCase())
 
   onPress = order => () => {
+    let { id, items, deliveryDate, clientId, createdAt } = order
     this.props.setOrder({
-      id: order.id,
-      items: order.items,
-      clientId: order.clientId
+      id,
+      items,
+      clientId,
+      deliveryDate,
+      createdAt
     })
     this.props.navigation.navigate('Order')
   }
@@ -42,6 +60,8 @@ export default class ToPrint extends React.PureComponent {
 
   renderItem = ({ item }) => (
     <CheckItem
+      rightTitle={`Nro:  ${item.id}`}
+      rightSubtitle={moment(item.deliveryDate).format('DD-MM')}
       title={item.client.nick}
       subtitle={item.client.mail}
       checked={this.state.items[item.id]}
@@ -52,24 +72,15 @@ export default class ToPrint extends React.PureComponent {
     />
   )
 
-  printOrders = async () => {
-    let orders = this.getOrdersToPrint()
-    await this.props.printOrders(orders)
-  }
-
   onCheckAll = () => {
     this.setState(prevState => ({
-      items: prevState.all ? {} : this.orderIdsMap(),
+      items: prevState.all ? {} : this.orderIdsMap(this.props.orders),
       all: !prevState.all
     }))
   }
 
-  onStatusPress = key => {
-    this.props.clearStatus(key)
-  }
-
-  orderIdsMap = () => {
-    return this.props.orders.reduce((items, order) => {
+  orderIdsMap = orders => {
+    return orders.reduce((items, order) => {
       items[order.id] = true
       return items
     }, {})
@@ -85,13 +96,18 @@ export default class ToPrint extends React.PureComponent {
     return this.props.orders.filter(o => selected.includes(`${o.id}`))
   }
 
+  printOrders = async () => {
+    let orders = this.getOrdersToPrint()
+    await this.props.printOrders(orders)
+  }
+
   render() {
-    console.log('son muchos renders?')
+    console.log('son muchos renders?', this.props.printState)
     return (
       <Select
         autoFocus={false}
         keyExtractor={item => item.client.mail}
-        placeholder="Escriba alias o mail del cliente"
+        placeholder="Escriba N° de control, alias o mail del cliente"
         filter={this.filter}
         data={this.props.orders}
         extraData={this.state.items}

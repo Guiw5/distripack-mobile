@@ -31,11 +31,6 @@ export const getOrder = () => ({
   type: 'FETCH_ORDER'
 })
 
-export const modifyOrder = order => ({
-  type: 'UPDATE_ORDER',
-  order
-})
-
 export const setDeliveryDate = deliveryDate => ({
   type: 'SET_DELIVERY_DATE',
   deliveryDate
@@ -55,10 +50,26 @@ export const createOrderError = error => ({
   error
 })
 
+export const modifyOrderRequest = () => ({
+  type: 'MODIFY_ORDER_REQUEST'
+})
+
+export const modifyOrderSuccess = order => ({
+  type: 'MODIFY_ORDER_SUCCESS',
+  order
+})
+
+export const modifyOrderError = error => ({
+  type: 'MODIFY_ORDER_ERROR',
+  error
+})
+
 export const createOrder = order => async dispatch => {
   try {
     dispatch(createOrderRequest())
-    order.createdAt = new Date()
+    let today = new Date().toLocaleString()
+    order.createdAt = today
+    if (!order.deliveryDate) order.deliveryDate = today
     let { data } = await http.post('/orders', order)
     dispatch(createOrderSuccess(data))
   } catch (error) {
@@ -67,9 +78,10 @@ export const createOrder = order => async dispatch => {
   }
 }
 
-export const updateOrder = order => async dispatch => {
+export const modifyOrder = order => async dispatch => {
   try {
     dispatch(modifyOrderRequest())
+    console.log('update order', order)
     let { data } = await http.put('/orders', order)
     dispatch(modifyOrderSuccess(data))
   } catch (error) {

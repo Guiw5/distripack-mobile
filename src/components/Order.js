@@ -74,7 +74,7 @@ export default class Order extends Component {
   Subtotal = () => (
     <View style={styles.subtotalContainer}>
       <Text style={styles.subtotal}>{`$${this.getSubtotal().toFixed(2)}`}</Text>
-      <Text>Subtotal </Text>
+      <Text>Total </Text>
     </View>
   )
 
@@ -92,6 +92,7 @@ export default class Order extends Component {
           ListFooterComponent={this.Subtotal()}
         />
         <OrderFooter
+          today={new Date()}
           addProducts={this.goToProducts}
           addDeliveryDate={this.props.setDeliveryDate}
           selectedDate={this.props.order.deliveryDate}

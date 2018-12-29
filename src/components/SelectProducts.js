@@ -17,7 +17,7 @@ export default class SelectProducts extends React.PureComponent {
   }
 
   filter = text => item => {
-    if (text.length < 1) return true
+    if (text.length < 2) return true
     let name = item.name.toLowerCase()
     let nick = item.nick.replace('/', ' ').toLowerCase()
     let query = text.replace('/', ' ').toLowerCase()

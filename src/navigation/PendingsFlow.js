@@ -3,14 +3,14 @@ import { createStackNavigator } from 'react-navigation'
 
 import MenuButton from './MenuButton'
 import OrderScreen from './screens/OrderScreen'
-import LastOrdersScreen from './screens/LastOrdersScreen'
+import PendingsScreen from './screens/PendingsScreen'
 
 export default createStackNavigator(
   {
-    LastOrders: {
-      screen: LastOrdersScreen,
+    Pendings: {
+      screen: PendingsScreen,
       navigationOptions: props => ({
-        title: 'Ultimas Ventas',
+        title: 'Pendientes',
         headerLeft: <MenuButton {...props} />
       })
     },

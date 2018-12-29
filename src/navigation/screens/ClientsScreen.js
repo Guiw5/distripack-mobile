@@ -1,5 +1,5 @@
 import React from 'react'
-import SelectClientContainer from '../../containers/SelectClientContainer'
+import ClientsContainer from '../../containers/ClientsContainer'
 
 export default class ClientsScreen extends React.Component {
   constructor(props) {
@@ -7,6 +7,6 @@ export default class ClientsScreen extends React.Component {
   }
 
   render() {
-    return <SelectClientContainer navigation={this.props.navigation} />
+    return <ClientsContainer navigation={this.props.navigation} />
   }
 }

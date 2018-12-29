@@ -28,7 +28,7 @@ class StatusScreen extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  status: selectors.getPrintStatus(state)
+  status: selectors.getPrinterStatus(state)
 })
 
 const mapDispatchToProps = dispatch => ({

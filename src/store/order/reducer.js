@@ -63,9 +63,7 @@ const setDeliveryDate = (state, action) => ({
   data: { ...state.data, deliveryDate: action.deliveryDate }
 })
 
-const fetchOrder = (state, action) => {
-  return state
-}
+const fetchOrder = (state, action) => ({ ...state })
 
 const createOrderRequest = (state, action) => ({
   ...state,
@@ -85,6 +83,24 @@ const createOrderError = (state, action) => ({
   error: action.error
 })
 
+const modifyOrderRequest = (state, action) => ({
+  ...state,
+  loading: true,
+  error: null
+})
+
+const modifyOrderSuccess = (state, action) => ({
+  ...state,
+  data: initialState.data,
+  loading: false
+})
+
+const modifyOrderError = (state, action) => ({
+  ...state,
+  loading: false,
+  error: action.error
+})
+
 const order = createReducer((state = initialState), {
   ['FETCH_ORDER']: fetchOrder,
   ['ADD_ITEM']: addToOrder,
@@ -96,7 +112,10 @@ const order = createReducer((state = initialState), {
   ['REMOVE_ITEMS']: removeItems,
   ['CREATE_ORDER_REQUEST']: createOrderRequest,
   ['CREATE_ORDER_SUCCESS']: createOrderSuccess,
-  ['CREATE_ORDER_ERROR']: createOrderError
+  ['CREATE_ORDER_ERROR']: createOrderError,
+  ['MODIFY_ORDER_REQUEST']: modifyOrderRequest,
+  ['MODIFY_ORDER_SUCCESS']: modifyOrderSuccess,
+  ['MODIFY_ORDER_ERROR']: modifyOrderError
 })
 
 export default order

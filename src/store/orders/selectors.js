@@ -7,29 +7,61 @@ export const getOrdersError = state => state.orders.error
 
 export const getOrdersLoading = state => state.orders.loading
 
-export const getOrdersCreated = state =>
-  state.orders.data.filter(o => o.state === 'Created')
+export const getOrdersCreated = state => state.orders.data.created
 
-export const getOrdersMap = createSelector(
+export const getOrdersPending = state => state.orders.data.pending
+
+export const getOrdersDelivered = state => state.orders.data.delivered
+
+export const getOrdersCreatedMap = createSelector(
   getOrdersCreated,
-  orders => ({
-    ordersMap: orders.reduce((dict, order) => {
+  orders => {
+    return orders.reduce((dict, order) => {
       dict[order.clientId] = order
       return dict
     }, {})
-  })
+  }
 )
 
-export const getClientsFromOrders = createSelector(
+export const getOrdersPendingMap = createSelector(
+  getOrdersPending,
+  orders => {
+    return orders.reduce((dict, order) => {
+      dict[order.clientId] = order
+      return dict
+    }, {})
+  }
+)
+
+export const getClientsFromOrdersPending = createSelector(
+  getOrdersPending,
   getClientsMap,
-  getOrders,
-  (clientsMap, orders) => {
+  (orders, clientsMap) => {
     return orders.map(o => clientsMap[o.clientId])
   }
 )
 
-export const getOrdersWithClients = createSelector(
+export const getClientsFromOrdersCreated = createSelector(
   getOrdersCreated,
+  getClientsMap,
+  (orders, clientsMap) => {
+    return orders.map(o => clientsMap[o.clientId])
+  }
+)
+
+export const getOrdersCreatedWithClients = createSelector(
+  getOrdersCreated,
+  getClientsMap,
+  (orders, clientsMap) => {
+    return orders.map(order => ({
+      ...order,
+      client: clientsMap[order.clientId]
+    }))
+  }
+)
+
+export const getOrdersPendingWithClients = createSelector(
+  getOrdersPending,
   getClientsMap,
   (orders, clientsMap) => {
     return orders.map(order => ({

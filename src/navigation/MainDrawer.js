@@ -4,8 +4,8 @@ import { Icon } from 'react-native-elements'
 import { createDrawerNavigator, DrawerItems } from 'react-navigation'
 
 import OrderFlow from './OrderFlow'
-import ToPrintFlow from './ToPrintFlow'
-import LastOrdersFlow from './LastOrdersFlow'
+import RecentsFlow from './RecentsFlow'
+import PendingsFlow from './PendingsFlow'
 
 export default createDrawerNavigator(
   {
@@ -24,21 +24,36 @@ export default createDrawerNavigator(
         )
       }
     },
-    ToPrint: {
-      screen: ToPrintFlow,
+    Recents: {
+      screen: RecentsFlow,
       navigationOptions: {
-        title: 'Para Imprimir',
-        drawerLabel: 'Para Imprimir',
+        title: 'Recientes',
+        drawerLabel: 'Recientes',
         drawerIcon: ({ tintColor }) => (
           <Icon name="print" size={20} color={tintColor} />
         )
       }
     },
-    LastOrders: {
-      screen: LastOrdersFlow,
+    Pendings: {
+      screen: PendingsFlow,
       navigationOptions: {
-        title: 'Ultimas Ventas',
-        drawerLabel: 'Ultimas Ventas',
+        title: 'Pendientes',
+        drawerLabel: 'Pendientes',
+        drawerIcon: ({ tintColor }) => (
+          <Icon
+            type="material-community"
+            name="format-list-checks"
+            size={20}
+            color={tintColor}
+          />
+        )
+      }
+    },
+    Delivered: {
+      screen: PendingsFlow,
+      navigationOptions: {
+        title: 'Ultimas Entregas',
+        drawerLabel: 'Ultimas Entregas',
         drawerIcon: ({ tintColor }) => (
           <Icon
             type="material-community"
@@ -62,7 +77,7 @@ export default createDrawerNavigator(
         opacity: 1
       }
     },
-    initialRouteName: 'ToPrint'
+    initialRouteName: 'Recents'
   }
 )
 

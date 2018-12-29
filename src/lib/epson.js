@@ -1129,6 +1129,7 @@ function getEnumIntAttr(name, value, regex, min, max) {
 
 export function ePOSPrint(ip, devId, timeout) {
   this.address = `http://${ip}/cgi-bin/epos/service.cgi?devid=${devId}`
+  this.timeout = timeout
   this.http = axios.create({
     baseURL: this.address,
     timeout,
@@ -1142,37 +1143,26 @@ export function ePOSPrint(ip, devId, timeout) {
 }
 
 ePOSPrint.prototype.constructor = ePOSPrint
-ePOSPrint.prototype.getPrintJobStatus = async function(printjobid) {
-  await this.print(printjobid)
-}
-ePOSPrint.prototype.print = async function(request, printjobid) {
-  let args = arguments.length
 
-  if (!/^<epos/.test(request)) {
-    if (args < 2) {
-      printjobid = request
-      request = new ePOSBuilder().toString()
-    } else {
-      address = request
-      request = printjobid
-      printjobid = arguments[2]
-    }
-  }
-
+ePOSPrint.prototype.print = async function(
+  printjobid = null,
+  data = new ePOSBuilder().toString(),
+  timeout = this.timeout
+) {
   let soap =
     `<?xml version="1.0" encoding="utf-8"?>
         <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">` +
     (printjobid
       ? `<s:Header>
             <parameter xmlns="http://www.epson-pos.com/schemas/2011/03/epos-print">
-              <printjobid>${printjobid}</printjobid>              
+              <printjobid>${printjobid}</printjobid>                           
             </parameter>
         </s:Header>`
       : '') +
-    `<s:Body>${request}</s:Body>
+    `<s:Body>${data}</s:Body>
         </s:Envelope>`
 
-  return await this.http.post(this.address, soap)
+  return await this.http.post(this.address, soap, { timeout })
 }
 
 ePOSPrint.prototype.extract = function(data) {
@@ -1188,7 +1178,7 @@ ePOSPrint.prototype.extract = function(data) {
 }
 
 ePOSPrint.prototype.checkStatus = function(ok, status, code) {
-  let error = code ? [ErrorCodes[code]] : []
+  let errors = code ? [ErrorCodes[code]] : []
 
   let warnings = Object.keys(WarningCodes)
     .filter(asb => status & asb)
@@ -1199,5 +1189,5 @@ ePOSPrint.prototype.checkStatus = function(ok, status, code) {
       ? [SuccessCode[ASB_PRINT_SUCCESS]]
       : []
 
-  return [...error, ...warnings, ...success]
+  return [...errors, ...warnings, ...success]
 }

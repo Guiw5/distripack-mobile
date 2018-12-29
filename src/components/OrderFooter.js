@@ -51,7 +51,6 @@ LocaleConfig.defaultLocale = 'ar'
 export default class OrderFooter extends React.Component {
   constructor(props) {
     super(props)
-    this.today = XDate.today()
     this.state = { showCalendar: false, showNotes: false }
   }
 
@@ -63,8 +62,8 @@ export default class OrderFooter extends React.Component {
 
   dayString = selectedDate => {
     let selected = this.getSelected(selectedDate)
-    let diffMonths = selected.month - (this.today.getMonth() + 1)
-    let diffDays = selected.day - this.today.getDate()
+    let diffMonths = selected.month - (this.props.today.getMonth() + 1)
+    let diffDays = selected.day - this.props.today.getDate()
     let date = XDate(selected.dateString)
 
     if (diffMonths === 0) {
@@ -83,10 +82,9 @@ export default class OrderFooter extends React.Component {
     this.toogleCalendar()
   }
 
-  getSelected = selectedDate => {
-    if (!selectedDate) selectedDate = new Date()
-    let selected = xdateToData(XDate(selectedDate, true))
-    return selected
+  getSelected = selected => {
+    if (!selected) selected = new Date()
+    return xdateToData(XDate(selected, true))
   }
 
   render() {
@@ -114,8 +112,8 @@ export default class OrderFooter extends React.Component {
         >
           <Calendar
             style={{ marginTop: 100, height: 500 }}
-            current={this.today}
-            minDate={this.today}
+            current={this.props.today}
+            minDate={this.props.today}
             onDayPress={this.onDayPress}
             markedDates={{
               [this.getSelected(this.props.selectedDate).dateString]: {

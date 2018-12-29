@@ -9,6 +9,8 @@ export default class CheckItem extends PureComponent {
   render() {
     return (
       <ListItem
+        rightTitle={this.props.rightTitle ? this.props.rightTitle : ''}
+        rightSubtitle={this.props.rightSubtitle ? this.props.rightSubtitle : ''}
         title={this.props.title}
         subtitle={this.props.subtitle}
         subtitleStyle={{ fontSize: 12 }}

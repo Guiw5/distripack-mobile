@@ -57,7 +57,7 @@ class PrinterIcon extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
-  total: selectors.getPrintStatus(state).length
+  total: selectors.getPrinterStatus(state).length
 })
 const mapDispatchToProps = dispatch => ({
   checkPrinterStatus: () => dispatch(actions.checkPrinterStatus())

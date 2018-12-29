@@ -1,7 +1,8 @@
 import { ePOSBuilder, ePOSPrint } from '../lib/epson'
+import { delay } from '../lib/commons'
 
 class PrinterService {
-  constructor(ip = '192.168.0.3', devId = 'local_printer', timeout = 6000) {
+  constructor(ip = '192.168.0.3', devId = 'local_printer', timeout = 3000) {
     this.builder = new ePOSBuilder()
     this.epos = new ePOSPrint(ip, devId, timeout)
   }
@@ -15,12 +16,19 @@ class PrinterService {
   }
 
   checkStatus = data => {
-    let { success, status, code } = this.epos.extract(data)
+    let { success, status, code } = this.extract(data)
     return this.epos.checkStatus(success, status, code)
+  }
+
+  extract = data => {
+    return this.epos.extract(data)
   }
 
   printOrders = async orders => {
     this.builder.build(orders)
+    let content = this.builder.toString()
+    this.builder.clean()
+
     let date = new Date()
     let printJobId =
       `${date.getHours()}` +
@@ -28,10 +36,8 @@ class PrinterService {
       `${date.getSeconds()}` +
       `${date.getMilliseconds()}`
 
-    let data = await this.epos.print(this.builder.toString(), printJobId)
-    console.log('response orders', data)
-    this.builder.clean()
-    return data
+    let timeout = (orders.length + 1) * 1.5 * 1000
+    return await this.epos.print(printJobId, content, timeout)
   }
 }
 let printerService = new PrinterService()

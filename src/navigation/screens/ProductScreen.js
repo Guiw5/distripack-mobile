@@ -1,8 +1,8 @@
 import React from 'react'
-import SelectProductsContainer from '../../containers/SelectProductsContainer'
+import ProductsContainer from '../../containers/ProductsContainer'
 
 export default class ProductScreen extends React.Component {
   render() {
-    return <SelectProductsContainer navigation={this.props.navigation} />
+    return <ProductsContainer navigation={this.props.navigation} />
   }
 }
