@@ -1,9 +1,9 @@
 import React from 'react'
+import moment from 'moment'
 
 import Select from './Select'
-import SelectAll from './SelectAll'
+import CheckAll from './CheckAll'
 import CheckItem from './CheckItem'
-import moment from 'moment'
 
 export default class Pendings extends React.Component {
   constructor(props) {
@@ -42,7 +42,7 @@ export default class Pendings extends React.Component {
 
   renderItem = ({ item }) => (
     <CheckItem
-      rightTitle={`Nro:  ${item.id}`}
+      rightTitle={`${item.id}`}
       rightSubtitle={moment(item.deliveryDate).format('DD-MM')}
       title={item.client.nick}
       subtitle={item.client.mail}
@@ -93,7 +93,7 @@ export default class Pendings extends React.Component {
         extraData={this.state.items}
         renderItem={this.renderItem}
         headerComponent={
-          <SelectAll onPress={this.onCheckAll} checked={this.state.all} />
+          <CheckAll onPress={this.onCheckAll} checked={this.state.all} />
         }
         button={{
           disabled: !Object.values(this.state.items).some(selected => selected),

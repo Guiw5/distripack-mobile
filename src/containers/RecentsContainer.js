@@ -15,6 +15,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   checkPrinterStatus: () => dispatch(actions.checkPrinterStatus()),
   printOrders: orders => dispatch(actions.print(orders)),
+  deleteOrders: orders => dispatch(actions.deleteOrders(orders)),
   setOrder: order => dispatch(actions.setOrder(order)),
   loadOrders: () => dispatch(actions.fetchOrdersCreated()),
   loadClients: () => dispatch(actions.fetchClients())

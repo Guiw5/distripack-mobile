@@ -15,24 +15,38 @@ export default class CheckItem extends PureComponent {
         subtitle={this.props.subtitle}
         subtitleStyle={{ fontSize: 12 }}
         onPress={this.props.onPress}
+        onLongPress={this.props.onLongPress}
         bottomDivider={this.props.bottomDivider}
         containerStyle={[
-          this.props.checked && { backgroundColor: '#42adb320' },
+          this.props.checked && {
+            backgroundColor: this.props.isDeletion ? '#db383820' : '#42adb320'
+          },
           this.props.containerStyle
         ]}
         leftElement={
-          <CheckBox
-            checked={this.props.checked}
-            onPress={this.props.onCheck}
-            iconType="material"
-            uncheckedIcon="check"
-            checkedIcon="check"
-            checkedColor={
-              this.props.checkedColor ? this.props.checkedColor : '#42adb3'
-            }
-            textStyle={styles.checkText}
-            containerStyle={styles.checkContainer}
-          />
+          this.props.isDeletion ? (
+            <CheckBox
+              checked={this.props.checked}
+              onPress={this.props.onCheck}
+              iconType="material"
+              uncheckedIcon={'close'}
+              checkedIcon={'close'}
+              checkedColor={'#db3838'}
+              textStyle={styles.checkText}
+              containerStyle={styles.checkContainer}
+            />
+          ) : (
+            <CheckBox
+              checked={this.props.checked}
+              onPress={this.props.onCheck}
+              iconType="material"
+              uncheckedIcon={'check'}
+              checkedIcon={'check'}
+              checkedColor={'#42adb3'}
+              textStyle={styles.checkText}
+              containerStyle={styles.checkContainer}
+            />
+          )
         }
       />
     )

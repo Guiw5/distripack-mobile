@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text } from 'react-native-elements'
-import memoize from 'lodash/memoize'
+
 import { ListView as OrderItems } from './ListView'
 import OrderItem from './OrderItem'
 import ButtonFooter from './ButtonFooter'
@@ -12,21 +12,18 @@ export default class Order extends Component {
   constructor(props) {
     super(props)
     this.state = { deleteMap: {} }
-    this.onCheck = memoize(id => () => this.onCheckItem(id))
-    this.onPress = memoize(item => () => this.goToDetails(item))
   }
 
-  onCheckItem = skuId => {
+  toDelete = skuId => !!this.state.deleteMap[skuId]
+
+  onCheck = skuId => () => {
     this.setState(prevState => {
       let deleteMap = { ...prevState.deleteMap }
       deleteMap[skuId] = !prevState.deleteMap[skuId]
       return { deleteMap }
     })
   }
-
-  toDelete = skuId => !!this.state.deleteMap[skuId]
-
-  goToDetails = item => {
+  onPress = item => () => {
     this.props.navigation.navigate('Details', {
       skuId: item.skuId
     })
@@ -39,6 +36,7 @@ export default class Order extends Component {
         checked={this.toDelete(item.skuId)}
         onCheck={this.onCheck(item.skuId)}
         onPress={this.onPress(item)}
+        onLongPress={this.onCheck(item.skuId)}
       />
     )
   }
@@ -81,7 +79,7 @@ export default class Order extends Component {
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: '#FFF' }}>
-        <OrderTitle title={this.getNick()} />
+        <OrderTitle title={this.getNick()} nro={this.props.order.id} />
         <OrderItems
           containerStyle={{ flex: 0.7 }}
           initialNumToRender={this.props.order.items.length}
@@ -113,7 +111,7 @@ export default class Order extends Component {
     if (hasSelected) {
       return (
         <ButtonFooter
-          title="Eliminar Seleccionados"
+          title="Eliminar Items"
           buttonStyle={{ backgroundColor: '#db3838' }}
           onPress={this.removeItems}
         />

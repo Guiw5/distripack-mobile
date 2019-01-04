@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native'
 import { colors } from 'react-native-elements/src/config'
 import CheckItem from './CheckItem'
 
-export default class SelectAll extends PureComponent {
+export default class CheckAll extends PureComponent {
   constructor(props) {
     super(props)
   }

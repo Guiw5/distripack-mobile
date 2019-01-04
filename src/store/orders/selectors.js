@@ -13,11 +13,12 @@ export const getOrdersPending = state => state.orders.data.pending
 
 export const getOrdersDelivered = state => state.orders.data.delivered
 
-export const getOrdersCreatedMap = createSelector(
+export const getOrdersCreatedByClient = createSelector(
   getOrdersCreated,
   orders => {
     return orders.reduce((dict, order) => {
-      dict[order.clientId] = order
+      if (!dict[order.clientId]) dict[order.clientId] = [order]
+      else dict[order.clientId] = dict[order.clientId].concat(order)
       return dict
     }, {})
   }

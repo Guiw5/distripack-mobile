@@ -1,9 +1,11 @@
 import axios from 'axios'
+import moment from 'moment'
+import 'moment/locale/es'
+
 import {
   ErrorCodes,
   WarningCodes,
   ASB_PRINT_SUCCESS,
-  ASB_NO_RESPONSE,
   SuccessCode
 } from './types'
 
@@ -154,23 +156,39 @@ const months = new Array(
   'DIC'
 )
 
+function getDateString(date, withHours = true) {
+  moment.locale('es')
+
+  let string = withHours
+    ? moment(date).format('DD/MMM/YY, kk:mm') + 'hs'
+    : moment(date).format('DD/MMM/YY')
+
+  return string
+  // return (date.getDate() < 10 ? '0' : '') +
+  //   `${date.getDate()}` +
+  //   '/' +
+  //   `${months[date.getMonth()]}` +
+  //   '/' +
+  //   `${date.getFullYear()}` +
+  //   withHours
+  //   ? `, ${date.getHours()}:` +
+  //       (date.getMinutes() < 10 ? '0' : '') +
+  //       `${date.getMinutes()}` +
+  //       'hs'
+  //   : ''
+}
+
 ePOSBuilder.prototype.buildOrder = function(order) {
   //get client nick, and date
-  let date = new Date(order.createdAt)
-  let dateString =
-    (date.getDate() < 10 ? '0' : '') +
-    `${date.getDate()}` +
-    '/' +
-    `${months[date.getMonth()]}` +
-    '/' +
-    `${date.getFullYear()}` +
-    ', ' +
-    `${date.getHours()}` +
-    ':' +
-    `${date.getMinutes()}` +
-    'hs'
+  let dateCreatedString = getDateString(order.createdAt)
+  let dateDeliveryString = getDateString(order.deliveryDate, false)
 
-  this.buildOrderHeader(order.client.nick, dateString)
+  this.buildOrderHeader(
+    order.client.nick,
+    order.id,
+    dateCreatedString,
+    dateDeliveryString
+  )
   let subtotal = 0
   order.items.forEach(item => {
     this.buildItemLine(item)
@@ -180,15 +198,23 @@ ePOSBuilder.prototype.buildOrder = function(order) {
   return this
 }
 
-ePOSBuilder.prototype.buildOrderHeader = function(clientNick, date) {
+ePOSBuilder.prototype.buildOrderHeader = function(
+  clientNick,
+  nro,
+  dateCreated,
+  dateDelivery
+) {
   this.addTextFont(this.FONT_A)
+  this.addTextAlign(this.ALIGN_RIGHT)
+  this.addText('nro: ' + nro)
+  this.addFeed()
   this.addTextAlign(this.ALIGN_CENTER)
   this.addText(clientNick)
   this.addFeed()
   this.addText('-'.repeat(16))
   this.addTextFont(this.FONT_B)
   this.addFeedLine(1)
-  this.addText('Fecha: ' + date + '\n')
+  this.addText('Creado: ' + dateCreated + '  Entregar: ' + dateDelivery + '\n')
   this.addFeed()
   this.addText('-'.repeat(56))
   this.addText('Cant  Descripcion                       Precio Importe  ')

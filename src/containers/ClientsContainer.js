@@ -5,7 +5,7 @@ import SelectClient from '../components/SelectClient'
 
 const mapStateToProps = state => ({
   clients: selectors.getClients(state),
-  ordersMap: selectors.getOrdersCreatedMap(state)
+  ordersByClient: selectors.getOrdersCreatedByClient(state)
 })
 
 const mapDispatchToProps = dispatch => ({

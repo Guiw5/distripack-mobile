@@ -10,9 +10,19 @@ const initialState = {
   error: null
 }
 
-const addToOrders = order => ({
+const addToCreated = (state, action) => ({
   ...state,
-  data: [...data, order]
+  data: { ...state.data, created: [...state.data.created, action.order] }
+})
+
+const updateCreated = (state, action) => ({
+  ...state,
+  data: {
+    ...state.data,
+    created: state.data.created.map(o =>
+      o.id !== action.order.id ? o : action.order
+    )
+  }
 })
 
 const fetchCreatedRequest = (state, action) => ({
@@ -106,8 +116,28 @@ const deliverOrdersError = (state, action) => ({
   loading: false
 })
 
+const deleteOrdersRequest = (state, action) => ({
+  ...state,
+  loading: true
+})
+
+const deleteOrdersSuccess = (state, action) => ({
+  ...state,
+  data: {
+    ...state.data,
+    created: state.data.created.filter(o => action.orderIds.includes(o.id))
+  },
+  loading: false
+})
+
+const deleteOrdersError = (state, action) => ({
+  ...state,
+  error: action.error,
+  loading: false
+})
 const orders = createReducer((state = initialState), {
-  ['ADD_TO_ORDERS']: addToOrders,
+  ['ADD_TO_ORDERS']: addToCreated,
+  ['UPDATE_IN_CREATED']: updateCreated,
   ['FETCH_ORDERS_CREATED_REQUEST']: fetchCreatedRequest,
   ['FETCH_ORDERS_CREATED_SUCCESS']: fetchCreatedSuccess,
   ['FETCH_ORDERS_CREATED_ERROR']: fetchCreatedError,
@@ -122,7 +152,10 @@ const orders = createReducer((state = initialState), {
   ['PRINT_ORDERS_ERROR']: printOrdersError,
   ['DELIVER_ORDERS_REQUEST']: deliverOrdersRequest,
   ['DELIVER_ORDERS_SUCCESS']: deliverOrdersSuccess,
-  ['DELIVER_ORDERS_ERROR']: deliverOrdersError
+  ['DELIVER_ORDERS_ERROR']: deliverOrdersError,
+  ['DELETE_ORDERS_REQUEST']: deleteOrdersRequest,
+  ['DELETE_ORDERS_SUCCESS']: deleteOrdersSuccess,
+  ['DELETE_ORDERS_ERROR']: deleteOrdersError
 })
 
 export default orders

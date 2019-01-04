@@ -1,6 +1,8 @@
 import React from 'react'
+import { Alert } from 'react-native'
 import { ListItem } from 'react-native-elements'
 import memoize from 'lodash/memoize'
+import moment from 'moment'
 
 import Select from './Select'
 
@@ -19,13 +21,39 @@ export default class SelectClient extends React.PureComponent {
     item.nick.toLowerCase().includes(text.toLowerCase())
 
   goToProducts = client => {
-    let order = this.props.ordersMap[client.id]
-    if (order) {
-      this.props.setOrder(order)
-      this.props.navigation.navigate('Order')
-    } else {
+    let orders = this.props.ordersByClient[client.id]
+    if (!orders) {
       this.props.setClient(client.id)
       this.props.navigation.navigate('Products')
+    } else {
+      Alert.alert(
+        'Pepitoo',
+        `Ya existe` +
+          `${orders.length > 1 ? 'n' : ' un'} pedido` +
+          `${orders.length > 1 ? 's' : ''} reciente` +
+          `${orders.length > 1 ? 's' : ''} para:` +
+          `\n\n${client.nick}`,
+        [
+          ...orders.map(o => {
+            return {
+              text:
+                `Modificar pedido` +
+                `${moment(o.deliveryDate).format('DD-MM HH:mm')}hs`,
+              onPress: () => {
+                this.props.setOrder(o)
+                this.props.navigation.navigate('Order')
+              }
+            }
+          }),
+          {
+            text: 'Crear Pedido Nuevo',
+            onPress: () => {
+              this.props.setClient(client.id)
+              this.props.navigation.navigate('Products')
+            }
+          }
+        ]
+      )
     }
   }
 

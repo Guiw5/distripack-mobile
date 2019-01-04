@@ -105,7 +105,6 @@ const order = createReducer((state = initialState), {
   ['FETCH_ORDER']: fetchOrder,
   ['ADD_ITEM']: addToOrder,
   ['UPDATE_ITEM']: updateItem,
-  ['UPDATE_ORDER']: updateOrder,
   ['SET_ORDER']: setOrder,
   ['SET_CLIENT']: setClient,
   ['SET_DELIVERY_DATE']: setDeliveryDate,

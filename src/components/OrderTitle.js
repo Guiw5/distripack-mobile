@@ -11,7 +11,16 @@ export default class OrderTitle extends React.PureComponent {
   render() {
     return (
       <View style={{ backgroundColor: '#fff' }}>
-        <Text style={styles.title}>{this.props.title.capitalize()}</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'baseline'
+          }}
+        >
+          <Text style={styles.title}>{this.props.title.capitalize()}</Text>
+          <Text style={styles.titleRight}>Nro: {this.props.nro} </Text>
+        </View>
         <Separator />
       </View>
     )
@@ -26,5 +35,11 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 5,
     paddingLeft: 10
+  },
+  titleRight: {
+    fontFamily: 'sans-serif-light',
+    fontSize: 16,
+    paddingLeft: 5,
+    paddingBottom: 5
   }
 })

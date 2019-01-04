@@ -1,7 +1,7 @@
 import React from 'react'
 import { Keyboard } from 'react-native'
 import { ListItem } from 'react-native-elements'
-import ListView from './ListView'
+import { ListView } from './ListView'
 import memoize from 'lodash/memoize'
 
 export default class SelectSkus extends React.PureComponent {

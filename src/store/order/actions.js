@@ -1,4 +1,6 @@
 import { http } from '../../http/client'
+import { addToCreated, updateCreated } from '../orders/actions'
+import moment from 'moment'
 
 let itemId = 0
 export const addItem = item => ({
@@ -67,11 +69,12 @@ export const modifyOrderError = error => ({
 export const createOrder = order => async dispatch => {
   try {
     dispatch(createOrderRequest())
-    let today = new Date().toLocaleString()
+    let today = moment().format()
     order.createdAt = today
     if (!order.deliveryDate) order.deliveryDate = today
     let { data } = await http.post('/orders', order)
     dispatch(createOrderSuccess(data))
+    dispatch(addToCreated(data))
   } catch (error) {
     console.log(error)
     dispatch(createOrderError(error))
@@ -84,6 +87,7 @@ export const modifyOrder = order => async dispatch => {
     console.log('update order', order)
     let { data } = await http.put('/orders', order)
     dispatch(modifyOrderSuccess(data))
+    dispatch(updateCreated(data))
   } catch (error) {
     dispatch(modifyOrderError(error))
   }

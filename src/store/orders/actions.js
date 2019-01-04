@@ -1,7 +1,12 @@
 import { http } from '../../http/client'
 
-export const addToOrders = order => ({
-  type: 'ADD_TO_ORDERS',
+export const addToCreated = order => ({
+  type: 'ADD_TO_CREATED',
+  order
+})
+
+export const updateCreated = order => ({
+  type: 'UPDATE_IN_CREATED',
   order
 })
 
@@ -75,6 +80,20 @@ export const deliverOrdersError = error => ({
   error
 })
 
+export const deleteOrdersRequest = () => ({
+  type: 'DELETE_ORDERS_REQUEST'
+})
+
+export const deleteOrdersSuccess = orderIds => ({
+  type: 'DELETE_ORDERS_SUCCESS',
+  orderIds
+})
+
+export const deleteOrdersError = error => ({
+  type: 'DELETE_ORDERS_ERROR',
+  error
+})
+
 export const fetchOrdersCreated = () => async dispatch => {
   try {
     dispatch(fetchCreatedRequest())
@@ -125,5 +144,16 @@ export const deliverOrders = orderIds => async dispatch => {
   } catch (error) {
     console.log('upa', error)
     dispatch(deliverOrdersError(error))
+  }
+}
+
+export const deleteOrders = orderIds => async dispatch => {
+  try {
+    dispatch(deleteOrdersRequest())
+    await http.delete('orders', { data: orderIds })
+    dispatch(deleteOrdersSuccess(orderIds))
+  } catch (error) {
+    console.log('delete error', error.message)
+    dispatch(deleteOrdersError())
   }
 }

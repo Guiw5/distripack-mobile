@@ -44,13 +44,19 @@ const printRequest = state => ({
 
 const printSuccess = (state, action) => ({
   ...state,
-  state: 'ok',
+  data: {
+    ...state.data,
+    state: 'ok'
+  },
   loading: false
 })
 
 const printError = (state, action) => ({
   ...state,
-  state: 'notok',
+  data: {
+    ...state.data,
+    state: 'notok'
+  },
   error: action.error,
   loading: false
 })
