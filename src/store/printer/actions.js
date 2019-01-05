@@ -34,6 +34,10 @@ export const printError = error => ({
   error
 })
 
+export const clearState = () => ({
+  type: 'CLEAR_STATE'
+})
+
 export const checkPrinterStatus = (data = null) => async dispatch => {
   try {
     dispatch(checkStatusRequest())

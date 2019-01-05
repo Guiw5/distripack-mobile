@@ -12,23 +12,32 @@ export default class Recents extends React.PureComponent {
     this.state = { items: {}, all: false, delete: {} }
   }
 
-  async componentDidMount() {
-    await this.props.loadClients()
+  componentDidMount() {
     this.loadData()
   }
 
   componentDidUpdate() {
-    console.log('pasamos por aca??', this.props.printState)
     if (this.props.printState === 'ok') {
-      Alert.alert('Excelente', 'Los pedidos fueron impresos correctamente')
+      Alert.alert('Excelente', 'Los pedidos fueron impresos correctamente', [
+        {
+          text: 'Ok',
+          onPress: () => this.props.clearState()
+        }
+      ])
     }
 
     if (this.props.printState === 'notok') {
-      Alert.alert('Ups', 'No se ha podido imprimir, intente de nuevo')
+      Alert.alert('Ups', 'No se ha podido imprimir, intente de nuevo', [
+        {
+          text: 'Ok',
+          onPress: () => this.props.clearState()
+        }
+      ])
     }
   }
 
-  loadData = () => {
+  loadData = async () => {
+    await this.props.loadClients()
     Promise.all([this.props.loadOrders(), this.props.checkPrinterStatus()])
   }
 
@@ -134,10 +143,11 @@ export default class Recents extends React.PureComponent {
   }
 
   deleteOrders = async () => {
-    orderIds = Object.keys(this.state.delete).filter(
+    let orderIds = Object.keys(this.state.delete).filter(
       id => this.state.delete[id]
     )
     await this.props.deleteOrders(orderIds)
+    this.setState({ delete: {} })
   }
 
   render() {

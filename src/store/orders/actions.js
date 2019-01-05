@@ -140,7 +140,7 @@ export const deliverOrders = orderIds => async dispatch => {
   try {
     dispatch(deliverOrdersRequest())
     await http.put('orders/deliver', orderIds)
-    dispatch(deliverOrderSuccess(orderIds))
+    dispatch(deliverOrdersSuccess(orderIds))
   } catch (error) {
     console.log('upa', error)
     dispatch(deliverOrdersError(error))
@@ -154,6 +154,6 @@ export const deleteOrders = orderIds => async dispatch => {
     dispatch(deleteOrdersSuccess(orderIds))
   } catch (error) {
     console.log('delete error', error.message)
-    dispatch(deleteOrdersError())
+    dispatch(deleteOrdersError(error))
   }
 }

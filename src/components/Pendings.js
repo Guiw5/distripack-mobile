@@ -5,14 +5,14 @@ import Select from './Select'
 import CheckAll from './CheckAll'
 import CheckItem from './CheckItem'
 
-export default class Pendings extends React.Component {
+export default class Pendings extends React.PureComponent {
   constructor(props) {
     super(props)
-    this.state = { items: {}, all: false }
+    this.state = { items: {}, all: false, delete: {} }
   }
 
-  componentDidMount() {
-    this.props.loadOrders()
+  async componentDidMount() {
+    await this.props.loadOrders()
   }
 
   filter = text => item =>
@@ -36,9 +36,27 @@ export default class Pendings extends React.Component {
     this.setState(prevState => {
       let newState = { ...prevState.items }
       newState[item.id] = !prevState.items[item.id]
-      return { ...prevState, items: newState }
+      return { ...prevState, items: newState, delete: {} }
     })
   }
+
+  onCheckDelete = item => () => {
+    this.setState(prevState => {
+      let newState = { ...prevState.delete }
+      newState[item.id] = !prevState.delete[item.id]
+      return { ...prevState, delete: newState, items: {} }
+    })
+  }
+
+  onLongPress = item => () => {
+    this.setState(prevState => {
+      let newState = { ...prevState.delete }
+      newState[item.id] = !prevState.delete[item.id]
+      return { ...prevState, delete: newState, items: {}, all: false }
+    })
+  }
+
+  isDelete = id => this.state.delete[id]
 
   renderItem = ({ item }) => (
     <CheckItem
@@ -46,16 +64,31 @@ export default class Pendings extends React.Component {
       rightSubtitle={moment(item.deliveryDate).format('DD-MM')}
       title={item.client.nick}
       subtitle={item.client.mail}
-      checked={this.state.items[item.id]}
+      checked={
+        this.anyToDelete()
+          ? this.state.delete[item.id]
+          : this.state.items[item.id]
+      }
       onPress={this.onPress(item)}
-      onCheck={this.onCheck(item)}
+      onLongPress={this.onLongPress(item)}
+      isDeletion={this.isDelete(item.id)}
+      onCheck={
+        this.anyToDelete() ? this.onCheckDelete(item) : this.onCheck(item)
+      }
       bottomDivider
       containerStyle={{ paddingVertical: 5 }}
     />
   )
 
+  /**
+   * if exists any order checked to delete,
+   * there's no functionality for checkAll
+   */
   onCheckAll = () => {
+    if (this.anyToDelete()) return
+
     this.setState(prevState => ({
+      ...prevState,
       items: prevState.all ? {} : this.orderIdsMap(this.props.orders),
       all: !prevState.all
     }))
@@ -68,40 +101,50 @@ export default class Pendings extends React.Component {
     }, {})
   }
 
-  getOrdersToDeliver() {
-    let unselected = Object.values(this.state.items).some(selected => !selected)
-    if (this.state.all && !unselected) return this.props.orders.map(o => o.id)
-
-    let selected = Object.keys(this.state.items).filter(
+  deliverOrders = async () => {
+    let orderIds = Object.keys(this.state.items).filter(
       id => this.state.items[id]
     )
-    return selected
+    await this.props.deliverOrders(orderIds)
   }
 
-  deliverOrders = async () => {
-    let orders = this.getOrdersToDeliver()
-    await this.props.deliverOrders(orders)
+  deleteOrders = async () => {
+    let orderIds = Object.keys(this.state.delete).filter(
+      id => this.state.delete[id]
+    )
+    await this.props.deleteOrders(orderIds)
+    this.setState({ delete: {} })
   }
 
   render() {
     return (
       <Select
+        autoFocus={false}
         keyExtractor={item => `${item.id}`}
         placeholder="Escriba N° de control, alias o mail del cliente"
         filter={this.filter}
         data={this.props.orders}
-        extraData={this.state.items}
+        extraData={this.state}
         renderItem={this.renderItem}
         headerComponent={
           <CheckAll onPress={this.onCheckAll} checked={this.state.all} />
         }
         button={{
-          disabled: !Object.values(this.state.items).some(selected => selected),
-          title: 'Entregar',
-          onPress: this.deliverOrders,
+          buttonStyle: this.anyToDelete()
+            ? { backgroundColor: '#db3838' }
+            : null,
+          disabled: !this.anyToDeliver() && !this.anyToDelete(),
+          title: this.anyToDelete() ? 'Anular Pedido' : 'Entregar',
+          onPress: this.anyToDelete() ? this.deleteOrders : this.deliverOrders,
           loading: this.props.loading
         }}
       />
     )
   }
+
+  anyToDelete = () =>
+    Object.values(this.state.delete).some(selected => selected)
+
+  anyToDeliver = () =>
+    Object.values(this.state.items).some(selected => selected)
 }

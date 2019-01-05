@@ -37,12 +37,20 @@ const clearStatus = (state, action) => ({
   }
 })
 
+const clearState = state => ({
+  ...state,
+  data: {
+    ...state.data,
+    state: null
+  }
+})
+
 const printRequest = state => ({
   ...state,
   loading: true
 })
 
-const printSuccess = (state, action) => ({
+const printSuccess = state => ({
   ...state,
   data: {
     ...state.data,
@@ -63,6 +71,7 @@ const printError = (state, action) => ({
 
 const printer = createReducer((state = initialState), {
   ['CLEAR_STATUS']: clearStatus,
+  ['CLEAR_STATE']: clearState,
   ['CHECK_STATUS_REQUEST']: checkStatusRequest,
   ['CHECK_STATUS_SUCCESS']: checkStatusSuccess,
   ['CHECK_STATUS_ERROR']: checkStatusError,

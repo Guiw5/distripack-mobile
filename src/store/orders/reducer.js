@@ -85,7 +85,9 @@ const printOrdersSuccess = (state, action) => ({
   ...state,
   data: {
     ...state.data,
-    created: state.data.created.filter(o => !action.orderIds.includes(o.id))
+    created: state.data.created.filter(
+      o => !action.orderIds.includes(`${o.id}`)
+    )
   },
   loading: false
 })
@@ -105,7 +107,9 @@ const deliverOrdersSuccess = (state, action) => ({
   ...state,
   data: {
     ...state.data,
-    pending: state.data.pending.filter(o => !action.orderIds.includes(o.id))
+    pending: state.data.pending.filter(
+      o => !action.orderIds.includes(`${o.id}`)
+    )
   },
   loading: false
 })
@@ -125,7 +129,15 @@ const deleteOrdersSuccess = (state, action) => ({
   ...state,
   data: {
     ...state.data,
-    created: state.data.created.filter(o => action.orderIds.includes(o.id))
+    created: state.data.created.filter(
+      o => !action.orderIds.includes(`${o.id}`)
+    ),
+    pending: state.data.pending.filter(
+      o => !action.orderIds.includes(`${o.id}`)
+    ),
+    delivered: state.data.delivered.filter(
+      o => !action.orderIds.includes(`${o.id}`)
+    )
   },
   loading: false
 })
