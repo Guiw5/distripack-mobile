@@ -1,10 +1,10 @@
 {
   "expo": {
     "name": "distripack-mobile",
-    "description": "An empty new project",
+    "description": "Best Project Ever",
     "slug": "distripack-mobile",
     "privacy": "public",
-    "sdkVersion": "23.0.0",
+    "sdkVersion": "31.0.0",
     "version": "1.0.0",
     "orientation": "portrait",
     "primaryColor": "#cccccc",

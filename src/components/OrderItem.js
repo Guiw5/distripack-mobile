@@ -1,0 +1,76 @@
+import React from 'react'
+import { StyleSheet } from 'react-native'
+import { ListItem, CheckBox } from 'react-native-elements'
+
+export default class OrderItem extends React.PureComponent {
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    let { item } = this.props
+    let { price, quantity, skuNick } = item
+    let subtotal = price * quantity
+    return (
+      <ListItem
+        title={skuNick}
+        titleStyle={{ fontSize: 13 }}
+        onPress={this.props.onPress}
+        contentContainerStyle={styles.listContent}
+        containerStyle={[
+          styles.listContainer,
+          this.props.checked && { backgroundColor: '#db383820' }
+        ]}
+        leftElement={
+          <CheckBox
+            title={`${item.quantity}`}
+            checked={this.props.checked}
+            onPress={this.props.onCheck}
+            iconType="material"
+            uncheckedIcon="close"
+            checkedIcon="close"
+            checkedColor="#db3838"
+            textStyle={styles.checkText}
+            containerStyle={styles.checkContainer}
+          />
+        }
+        rightContentContainerStyle={{ flex: 0.4 }}
+        rightSubtitle={`$${subtotal.toFixed(2)}`}
+        rightSubtitleStyle={{ color: '#42adb3' }}
+      />
+    )
+  }
+}
+const styles = StyleSheet.create({
+  listContainer: {
+    borderBottomWidth: 1,
+    marginLeft: 0,
+    paddingLeft: 0,
+    paddingRight: 10,
+    paddingTop: 4,
+    paddingBottom: 4,
+    marginTop: 0,
+    marginBottom: 0,
+    height: 50
+  },
+  checkText: {
+    marginLeft: 0,
+    paddingLeft: 4,
+    marginRight: 0,
+    paddingRight: 0
+  },
+  checkContainer: {
+    justifyContent: 'flex-start',
+    marginLeft: -13,
+    marginRight: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    borderWidth: 0,
+    width: 60,
+    backgroundColor: 'transparent'
+  },
+  listContent: {
+    paddingLeft: 0,
+    marginLeft: 0
+  }
+})

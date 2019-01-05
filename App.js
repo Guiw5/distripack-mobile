@@ -1,40 +1,31 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { StackNavigator, TabNavigator } from 'react-navigation';
-import ClientScreen from './screens/ClientScreen';
-import OrderScreen from './screens/OrderScreen';
-import ProductScreen from './screens/ProductScreen';
+import React from 'react'
+import { StyleSheet, View } from 'react-native'
+import { Provider } from 'react-redux'
+import { configureStore } from './src/store/configureStore'
 
-const SimpleApp = StackNavigator({
-  Client: { 
-    screen: ClientScreen, 
-    navigationOptions: {
-      title: 'Seleccione Cliente',
-      headerStyle: {paddingTop:25}
-    } 
-  },
-  Products: { 
-    screen: ProductScreen,
-    navigationOptions: {
-      title: 'Seleccione Productos',
-      headerStyle: {paddingTop:25}
-    }
-  },
-  Order: { screen: OrderScreen,
-    navigationOptions: {      
-      headerStyle: {paddingTop:25}
-    }
-  }  
-});
+import Drawer from './src/navigation/MainDrawer'
+
+const store = configureStore()
 
 export default class App extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+
   render() {
-    return <SimpleApp style={{marginTop:20}} />;
+    return (
+      <Provider store={store}>
+        <View style={styles.Container}>
+          <Drawer />
+        </View>
+      </Provider>
+    )
   }
 }
 
 const styles = StyleSheet.create({
-   SimpleApp: {
-    paddingTop: 100
+  Container: {
+    flex: 1,
+    backgroundColor: '#fff'
   }
- });
+})
