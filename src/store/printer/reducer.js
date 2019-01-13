@@ -10,23 +10,31 @@ const initialState = {
 }
 
 const checkStatusRequest = state => ({
-  ...state
+  ...state,
+  loading: true
 })
 
 const checkStatusSuccess = (state, action) => ({
   ...state,
   data: {
     ...state.data,
-    status: action.status
-  }
+    status: [
+      ...state.data.status.filter(
+        s => !action.status.some(as => as.key === s.key)
+      ),
+      ...action.status
+    ]
+  },
+  loading: false
 })
 
 const checkStatusError = (state, action) => ({
   ...state,
   data: {
     ...state.data,
-    status: action.error
-  }
+    status: [...state.data.status, action.error]
+  },
+  loading: false
 })
 
 const clearStatus = (state, action) => ({

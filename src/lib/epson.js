@@ -1,6 +1,7 @@
 import axios from 'axios'
 import moment from 'moment'
 import 'moment/locale/es'
+import Config from '../../config.json'
 
 import {
   ErrorCodes,
@@ -156,39 +157,16 @@ const months = new Array(
   'DIC'
 )
 
-function getDateString(date, withHours = true) {
+function getDateString(date) {
   moment.locale('es')
-
-  let string = withHours
-    ? moment(date).format('DD/MMM/YY, kk:mm') + 'hs'
-    : moment(date).format('DD/MMM/YY')
-
-  return string
-  // return (date.getDate() < 10 ? '0' : '') +
-  //   `${date.getDate()}` +
-  //   '/' +
-  //   `${months[date.getMonth()]}` +
-  //   '/' +
-  //   `${date.getFullYear()}` +
-  //   withHours
-  //   ? `, ${date.getHours()}:` +
-  //       (date.getMinutes() < 10 ? '0' : '') +
-  //       `${date.getMinutes()}` +
-  //       'hs'
-  //   : ''
+  return moment(date).format('DD/MMM/YY, kk:mm') + 'hs'
 }
 
 ePOSBuilder.prototype.buildOrder = function(order) {
   //get client nick, and date
   let dateCreatedString = getDateString(order.createdAt)
-  let dateDeliveryString = getDateString(order.deliveryDate, false)
 
-  this.buildOrderHeader(
-    order.client.nick,
-    order.id,
-    dateCreatedString,
-    dateDeliveryString
-  )
+  this.buildOrderHeader(order.client.nick, order.id, dateCreatedString)
   let subtotal = 0
   order.items.forEach(item => {
     this.buildItemLine(item)
@@ -201,8 +179,7 @@ ePOSBuilder.prototype.buildOrder = function(order) {
 ePOSBuilder.prototype.buildOrderHeader = function(
   clientNick,
   nro,
-  dateCreated,
-  dateDelivery
+  dateCreated
 ) {
   this.addTextFont(this.FONT_A)
   this.addTextAlign(this.ALIGN_RIGHT)
@@ -214,7 +191,7 @@ ePOSBuilder.prototype.buildOrderHeader = function(
   this.addText('-'.repeat(16))
   this.addTextFont(this.FONT_B)
   this.addFeedLine(1)
-  this.addText('Creado: ' + dateCreated + '  Entregar: ' + dateDelivery + '\n')
+  this.addText('Creado: ' + dateCreated + '\n')
   this.addFeed()
   this.addText('-'.repeat(56))
   this.addText('Cant  Descripcion                       Precio Importe  ')
@@ -238,7 +215,7 @@ ePOSBuilder.prototype.buildOrderFooter = function(subtotal) {
   this.addText('-'.repeat(16))
   this.addFeed()
   this.addText(' '.repeat(30))
-  this.addText('Subtotal  $' + subtotal.toFixed(2))
+  this.addText('Total  $' + subtotal.toFixed(2))
   this.addFeed()
   this.addFeed()
   this.addTextAlign(this.ALIGN_CENTER)
@@ -1153,19 +1130,8 @@ function getEnumIntAttr(name, value, regex, min, max) {
   return ' ' + name + '="' + value + '"'
 }
 
-export function ePOSPrint(ip, devId, timeout) {
-  this.address = `http://${ip}/cgi-bin/epos/service.cgi?devid=${devId}`
-  this.timeout = timeout
-  this.http = axios.create({
-    baseURL: this.address,
-    timeout,
-    responseType: 'text',
-    headers: {
-      'Content-Type': 'text/xml;charset=utf-8',
-      'If-Modified-Since': 'Thu, 01 Jan 1970 00:00:00 GMT',
-      SOAPAction: '""'
-    }
-  })
+export function ePOSPrint(printer) {
+  this.printer = printer
 }
 
 ePOSPrint.prototype.constructor = ePOSPrint
@@ -1173,7 +1139,7 @@ ePOSPrint.prototype.constructor = ePOSPrint
 ePOSPrint.prototype.print = async function(
   printjobid = null,
   data = new ePOSBuilder().toString(),
-  timeout = this.timeout
+  timeout = Config.printer.timeout
 ) {
   let soap =
     `<?xml version="1.0" encoding="utf-8"?>
@@ -1188,7 +1154,9 @@ ePOSPrint.prototype.print = async function(
     `<s:Body>${data}</s:Body>
         </s:Envelope>`
 
-  return await this.http.post(this.address, soap, { timeout })
+  return await this.printer.post(Config.printer.address, soap, {
+    timeout
+  })
 }
 
 ePOSPrint.prototype.extract = function(data) {
@@ -1204,16 +1172,20 @@ ePOSPrint.prototype.extract = function(data) {
 }
 
 ePOSPrint.prototype.checkStatus = function(ok, status, code) {
-  let errors = code ? [ErrorCodes[code]] : []
+  let success =
+    ok && Boolean(status & ASB_PRINT_SUCCESS)
+      ? [{ ...SuccessCode[ASB_PRINT_SUCCESS], timestamp: +moment() }]
+      : []
 
   let warnings = Object.keys(WarningCodes)
     .filter(asb => status & asb)
-    .map(k => WarningCodes[k])
+    .map(k => ({
+      ...WarningCodes[k],
+      timestamp: +moment()
+    }))
 
-  let success =
-    ok && Boolean(status & ASB_PRINT_SUCCESS)
-      ? [SuccessCode[ASB_PRINT_SUCCESS]]
-      : []
+  let errors = code ? [{ ...ErrorCodes[code], timestamp: +moment() }] : []
 
-  return [...errors, ...warnings, ...success]
+  let statusArray = [...errors, ...warnings, ...success]
+  return statusArray
 }
