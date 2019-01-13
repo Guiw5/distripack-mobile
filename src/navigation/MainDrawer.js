@@ -48,22 +48,22 @@ export default createDrawerNavigator(
           />
         )
       }
-    },
-    Delivered: {
-      screen: PendingsFlow,
-      navigationOptions: {
-        title: 'Ultimas Entregas',
-        drawerLabel: 'Ultimas Entregas',
-        drawerIcon: ({ tintColor }) => (
-          <Icon
-            type="material-community"
-            name="format-list-checks"
-            size={20}
-            color={tintColor}
-          />
-        )
-      }
     }
+    // Delivered: {
+    //   screen: PendingsFlow,
+    //   navigationOptions: {
+    //     title: 'Ultimas Entregas',
+    //     drawerLabel: 'Ultimas Entregas',
+    //     drawerIcon: ({ tintColor }) => (
+    //       <Icon
+    //         type="material-community"
+    //         name="format-list-checks"
+    //         size={20}
+    //         color={tintColor}
+    //       />
+    //     )
+    //   }
+    //}
   },
   {
     contentComponent: props => (

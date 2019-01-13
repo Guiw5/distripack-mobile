@@ -4,6 +4,7 @@ import actions from '../store/actions'
 import Recents from '../components/Recents'
 
 const mapStateToProps = state => ({
+  clients: selectors.getClients(state),
   orders: selectors.getOrdersCreatedWithClients(state),
   printState: selectors.getPrintJobStatus(state),
   printing: selectors.getPrintLoading(state),

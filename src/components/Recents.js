@@ -16,29 +16,17 @@ export default class Recents extends React.PureComponent {
     this.loadData()
   }
 
-  componentDidUpdate() {
-    if (this.props.printState === 'ok') {
-      Alert.alert('Excelente', 'Los pedidos fueron impresos correctamente', [
-        {
-          text: 'Ok',
-          onPress: () => this.props.clearState()
-        }
-      ])
-    }
-
-    if (this.props.printState === 'notok') {
-      Alert.alert('Ups', 'No se ha podido imprimir, intente de nuevo', [
-        {
-          text: 'Ok',
-          onPress: () => this.props.clearState()
-        }
-      ])
-    }
-  }
-
-  loadData = async () => {
-    await this.props.loadClients()
-    Promise.all([this.props.loadOrders(), this.props.checkPrinterStatus()])
+  loadData = () => {
+    if (!this.props.loadingClients && this.props.clients.length === 0)
+      this.props.loadClients()
+    if (!this.props.loadingOrders && this.props.orders.length === 0)
+      this.props.loadOrders()
+    if (
+      !this.props.printing &&
+      this.props.clients.length > 0 &&
+      this.props.orders.length > 0
+    )
+      this.props.checkPrinterStatus()
   }
 
   filter = text => item =>
