@@ -4,6 +4,7 @@ import { View, StyleSheet, Alert } from 'react-native'
 import { Input } from 'react-native-elements'
 import KeyboardSpacer from 'react-native-keyboard-spacer'
 import ButtonFooter from './ButtonFooter'
+import moment from 'moment'
 
 export default class NewClient extends React.Component {
   constructor(props) {
@@ -11,9 +12,34 @@ export default class NewClient extends React.Component {
   }
 
   onSubmit = client => {
+    if (!client.mail) {
+      client.mail = `${+moment()}@gmail.com`
+    }
     if (this.props.emails.includes(client.mail)) {
       Alert.alert('Pepitooo', 'El email ingresado ya se encuentra asociado')
-    } else this.props.createClient(client)
+    } else {
+      let ct = client.cuit
+      if (ct) {
+        ct.split('-').join()
+        client.cuit = ct.replace(/^(\d{2})(\d{8})(\d{1}).*/, '$1-$2-$3')
+      }
+      this.props.createClient(client)
+    }
+  }
+
+  componentWillUpdate(nextProps) {
+    if (this.props.isLoading && !nextProps.isLoading) {
+      if (!nextProps.clientError) {
+        Alert.alert('Pepitooo', 'El cliente ha sido creado correctamente', [
+          { text: 'ok', onPress: () => this.props.navigation.goBack() }
+        ])
+      } else {
+        Alert.alert(
+          'Ups',
+          'El cliente no se pudo crear, intente de nuevo mas tarde'
+        )
+      }
+    }
   }
 
   renderNick = ({ input, label, type, meta: { touched, error, warning } }) => {
@@ -50,6 +76,7 @@ export default class NewClient extends React.Component {
         keyboardType="numeric"
         placeholder="Ingrese cuit: 22-88888888-1"
         errorMessage={touched && error ? error : null}
+        required={false}
       />
     )
   }

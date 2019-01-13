@@ -85,9 +85,7 @@ const printOrdersSuccess = (state, action) => ({
   ...state,
   data: {
     ...state.data,
-    created: state.data.created.filter(
-      o => !action.orderIds.includes(`${o.id}`)
-    )
+    created: state.data.created.filter(o => !action.orderIds.includes(o.id))
   },
   loading: false
 })

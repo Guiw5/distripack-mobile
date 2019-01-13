@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import NewClient from '../components/NewClient'
 
 const mapStateToProps = state => ({
-  error: selectors.getClientsError(state),
+  clientError: selectors.getClientsError(state),
   isLoading: selectors.getClientsLoading(state),
   emails: selectors.getClientEmails(state)
 })
@@ -34,25 +34,26 @@ const validate = values => {
     ct = ''
   }
 
-  if (!ema.includes('@') && ema !== '') {
-    error.mail = 'Ingrese un Email válido'
+  if (ema) {
+    let regex = new RegExp(/\S+@\S+\.\S+/)
+    if (!regex.test(ema) && ema !== '') {
+      error.mail = 'Ingrese un Email válido'
+    }
   }
 
-  let regex = new RegExp(/\S+@\S+\.\S+/)
-  if (!regex.test(ema) && ema !== '') {
-    error.mail = 'Ingrese un Email válido'
-  }
-
+  /* 
   if (!ema) {
     error.mail = 'El campo Email es obligatorio'
-  }
+  } 
+   */
 
   if (!nk) {
     error.nick = 'El campo Alias es obligatorio'
   }
-  if (ct.split('-').join('').length !== 11)
-    error.cuit = 'El Cuit debe contenter 11 digitos'
-
+  if (ct) {
+    if (ct.split('-').join('').length !== 11)
+      error.cuit = 'El Cuit debe contenter 11 digitos'
+  }
   return error
 }
 

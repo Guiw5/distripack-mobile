@@ -33,7 +33,6 @@ const createClientSuccess = (state, action) => ({
 
 const createClientError = (state, action) => ({
   ...state,
-  data: [],
   loading: false,
   error: action.error
 })
