@@ -146,7 +146,7 @@ const deleteOrdersError = (state, action) => ({
   loading: false
 })
 const orders = createReducer((state = initialState), {
-  ['ADD_TO_ORDERS']: addToCreated,
+  ['ADD_TO_CREATED']: addToCreated,
   ['UPDATE_IN_CREATED']: updateCreated,
   ['FETCH_ORDERS_CREATED_REQUEST']: fetchCreatedRequest,
   ['FETCH_ORDERS_CREATED_SUCCESS']: fetchCreatedSuccess,
