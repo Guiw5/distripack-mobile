@@ -3,7 +3,7 @@ import { colors } from 'react-native-elements'
 import { connect } from 'react-redux'
 import actions from '../store/actions'
 import selectors from '../store/selectors'
-import Details from '../components/Details'
+import SkuDetails from '../components/SkuDetails'
 
 const editIconProps = {
   type: 'materialIcons',
@@ -29,4 +29,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Details)
+)(SkuDetails)
