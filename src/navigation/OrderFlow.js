@@ -1,11 +1,10 @@
 import React from 'react'
 import { createStackNavigator } from 'react-navigation'
 
-import ClientsScreen from './screens/ClientsScreen'
+import OrderClientsScreen from './screens/OrderClientsScreen'
 import ClientScreen from './screens/ClientScreen'
 import ProductScreen from './screens/ProductScreen'
 import SkuScreen from './screens/SkuScreen'
-import DetailScreen from './screens/SkuDetailsScreen'
 import OrderScreen from './screens/OrderScreen'
 import MenuButton from './MenuButton'
 import SkuDetailsScreen from './screens/SkuDetailsScreen'
@@ -13,7 +12,7 @@ import SkuDetailsScreen from './screens/SkuDetailsScreen'
 export default createStackNavigator(
   {
     Clients: {
-      screen: ClientsScreen,
+      screen: OrderClientsScreen,
       navigationOptions: props => ({
         title: 'Seleccione Cliente',
         headerLeft: <MenuButton {...props} />

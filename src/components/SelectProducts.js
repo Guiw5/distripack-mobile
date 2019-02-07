@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import { Keyboard } from 'react-native'
 import { ListItem } from 'react-native-elements'
 import memoize from 'lodash/memoize'
 
 import Select from './Select'
 
-export default class SelectProducts extends React.PureComponent {
+export default class SelectProducts extends PureComponent {
   constructor(props) {
     super(props)
     this.onPress = memoize(item => () => this.goToDetails(item))
