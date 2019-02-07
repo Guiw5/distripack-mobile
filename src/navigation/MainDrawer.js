@@ -6,6 +6,7 @@ import { createDrawerNavigator, DrawerItems } from 'react-navigation'
 import OrderFlow from './OrderFlow'
 import RecentsFlow from './RecentsFlow'
 import PendingsFlow from './PendingsFlow'
+import ClientsFlow from './ClientsFlow'
 
 export default createDrawerNavigator(
   {
@@ -46,6 +47,16 @@ export default createDrawerNavigator(
             size={20}
             color={tintColor}
           />
+        )
+      }
+    },
+    Customers: {
+      screen: ClientsFlow,
+      navigationOptions: {
+        title: 'Clientes',
+        drawerLabel: 'Clientes',
+        drawerIcon: ({ tintColor }) => (
+          <Icon name="people" size={20} color={tintColor} />
         )
       }
     }
