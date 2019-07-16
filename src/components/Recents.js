@@ -6,27 +6,41 @@ import Select from './Select'
 import CheckAll from './CheckAll'
 import CheckItem from './CheckItem'
 
-export default class Recents extends React.PureComponent {
+export default class Recents extends React.Component {
   constructor(props) {
     super(props)
     this.state = { items: {}, all: false, delete: {} }
   }
 
-  componentDidMount() {
-    this.loadData()
+  async componentDidMount() {
+    await this.loadData()
   }
 
-  loadData = () => {
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.orders.length > 0 && this.props.orders.length === 0)
+      return true
+
+    if (nextProps.clients.length > 0 && this.props.clients.length === 0)
+      return true
+
+    if (this.props.printing && !nextProps.printing) return true
+
+    if (this.state !== nextState) return true
+
+    return false
+  }
+
+  loadData = async () => {
     if (!this.props.loadingClients && this.props.clients.length === 0)
-      this.props.loadClients()
+      await this.props.loadClients()
     if (!this.props.loadingOrders && this.props.orders.length === 0)
-      this.props.loadOrders()
+      await this.props.loadOrders()
     if (
       !this.props.printing &&
       this.props.clients.length > 0 &&
       this.props.orders.length > 0
     )
-      this.props.checkPrinterStatus()
+      await this.props.checkPrinterStatus()
   }
 
   filter = text => item =>
@@ -139,7 +153,6 @@ export default class Recents extends React.PureComponent {
   }
 
   render() {
-    console.log('son muchos renders?', this.props.printState)
     return (
       <Select
         autoFocus={false}
