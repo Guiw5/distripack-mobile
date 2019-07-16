@@ -1,10 +1,10 @@
 {
-  "apiUrl": "http://172.20.1.4:3005/api",
+  "apiUrl": "http://192.168.0.9:3006/api",
   "apiUrl2": "http://ec2-18-220-58-115.us-east-2.compute.amazonaws.com/api",
   "printer": {
     "productive": true,
     "baseUrl": "",
-    "address": "http://190.18.190.21:55431/cgi-bin/epos/service.cgi?devid=local_printer",
+    "address": "http://181.164.91.65:55431/cgi-bin/epos/service.cgi?devid=local_printer",
     "timeout": 3000
   }
 }
