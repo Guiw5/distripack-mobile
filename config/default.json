@@ -1,5 +1,5 @@
 {
-  "apiUrl": "http://192.168.0.9:3006/api",
+  "apiUrl": "http://192.168.0.140:3006/api",
   "apiUrl2": "http://ec2-18-220-58-115.us-east-2.compute.amazonaws.com/api",
   "printer": {
     "productive": true,

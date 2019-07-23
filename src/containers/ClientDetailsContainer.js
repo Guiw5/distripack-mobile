@@ -11,10 +11,13 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  getClient: id => dispatch(actions.fetchClient(id)),
-  getHistory: id => dispatch(actions.fetchHistory(id))
-})
+const mapDispatchToProps = (dispatch, ownProps) => {
+  let id = ownProps.navigation.getParam('clientId')
+  return {
+    getClient: () => dispatch(actions.fetchClient(id)),
+    getHistory: () => dispatch(actions.fetchHistory(id))
+  }
+}
 
 const mergeProps = (state, dispatch, ownProps) => {
   let { navigation, ...myOwnProps } = ownProps

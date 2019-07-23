@@ -10,10 +10,8 @@ class DetailsTab extends PureComponent {
   }
 
   componentDidMount() {
-    if (this.props.screenProps.client == null) {
-      let id = this.props.screenProps.rootNavigation.getParam('clientId')
-      this.props.screenProps.getClient(id)
-    }
+    let { client, getClient } = this.props.screenProps
+    if (client == null) getClient()
   }
 
   handleWhatsapp = phone => async () => {
@@ -102,13 +100,12 @@ class HistoryTab extends PureComponent {
   }
 
   componentDidMount() {
-    if (this.props.screenProps.history == null)
-      this.props.screenProps.getHistory(
-        this.props.screenProps.rootNavigation.getParam('clientId')
-      )
+    let { history, getHistory } = this.props.screenProps
+    if (history == null) getHistory()
   }
 
   render() {
+    console.log('history', this.props.screenProps.history)
     return <View />
   }
 }
