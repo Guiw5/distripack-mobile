@@ -6,11 +6,12 @@ import SkuScreen from './screens/SkuScreen'
 import OrderScreen from './screens/OrderScreen'
 import MenuButton from './MenuButton'
 import RecentlyOrdersScreen from './screens/RecentlyOrdersScreen'
+import ClientsScreen from './screens/ClientsScreen'
 
 export default createStackNavigator(
   {
     Clients: {
-      screen: OrderClientsScreen,
+      screen: ClientsScreen,
       navigationOptions: props => ({
         title: 'Seleccione Cliente',
         headerLeft: <MenuButton {...props} />
