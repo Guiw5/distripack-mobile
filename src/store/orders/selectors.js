@@ -24,6 +24,28 @@ export const getOrdersCreatedByClient = createSelector(
   }
 )
 
+export const getOrdersPendingByClient = createSelector(
+  getOrdersPending,
+  orders => {
+    return orders.reduce((dict, order) => {
+      if (!dict[order.clientId]) dict[order.clientId] = [order]
+      else dict[order.clientId] = dict[order.clientId].concat(order)
+      return dict
+    }, {})
+  }
+)
+
+export const getOrdersDeliveredByClient = createSelector(
+  getOrdersDelivered,
+  orders => {
+    return orders.reduce((dict, order) => {
+      if (!dict[order.clientId]) dict[order.clientId] = [order]
+      else dict[order.clientId] = dict[order.clientId].concat(order)
+      return dict
+    }, {})
+  }
+)
+
 export const getOrdersPendingMap = createSelector(
   getOrdersPending,
   orders => {
@@ -54,6 +76,19 @@ export const getOrdersCreatedWithClients = createSelector(
   getOrdersCreated,
   getClientsMap,
   (orders, clientsMap) => {
+    const map = orders.map(order => ({
+      ...order,
+      client: clientsMap[order.clientId]
+    }))
+    console.log('createdWithClients', map)
+    return map
+  }
+)
+
+export const getOrdersPendingWithClients = createSelector(
+  getOrdersPending,
+  getClientsMap,
+  (orders, clientsMap) => {
     return orders.map(order => ({
       ...order,
       client: clientsMap[order.clientId]
@@ -61,8 +96,8 @@ export const getOrdersCreatedWithClients = createSelector(
   }
 )
 
-export const getOrdersPendingWithClients = createSelector(
-  getOrdersPending,
+export const getOrdersDeliveredWithClients = createSelector(
+  getOrdersDelivered,
   getClientsMap,
   (orders, clientsMap) => {
     return orders.map(order => ({

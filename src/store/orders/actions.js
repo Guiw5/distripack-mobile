@@ -6,7 +6,12 @@ export const addToCreated = order => ({
 })
 
 export const updateCreated = order => ({
-  type: 'UPDATE_IN_CREATED',
+  type: 'UPDATE_ORDERS_CREATED',
+  order
+})
+
+export const updatePendings = order => ({
+  type: 'UPDATE_ORDERS_PENDINGS',
   order
 })
 
@@ -38,16 +43,16 @@ export const fetchPendingsError = error => ({
   error
 })
 
-export const fetchDeliverdRequest = () => ({
+export const fetchDeliveredRequest = () => ({
   type: 'FETCH_ORDERS_DELIVERED_REQUEST'
 })
 
-export const fetchDeliverdSuccess = orders => ({
+export const fetchDeliveredSuccess = orders => ({
   type: 'FETCH_ORDERS_DELIVERED_SUCCESS',
   orders
 })
 
-export const fetchDeliverdError = error => ({
+export const fetchDeliveredError = error => ({
   type: 'FETCH_ORDERS_DELIVERED_ERROR',
   error
 })
@@ -56,9 +61,9 @@ export const printOrdersRequest = () => ({
   type: 'PRINT_ORDERS_REQUEST'
 })
 
-export const printOrdersSuccess = orderIds => ({
+export const printOrdersSuccess = orders => ({
   type: 'PRINT_ORDERS_SUCCESS',
-  orderIds
+  orders
 })
 
 export const printOrdersError = error => ({
@@ -70,9 +75,9 @@ export const deliverOrdersRequest = () => ({
   type: 'DELIVER_ORDERS_REQUEST'
 })
 
-export const deliverOrdersSuccess = orderIds => ({
+export const deliverOrdersSuccess = orders => ({
   type: 'DELIVER_ORDERS_SUCCESS',
-  orderIds
+  orders
 })
 
 export const deliverOrdersError = error => ({
@@ -94,15 +99,29 @@ export const deleteOrdersError = error => ({
   error
 })
 
+export const updateOrders = order => dispatch => {
+  if (order.state.toLowerCase() === 'created') dispatch(updateCreated(order))
+  if (order.state.toLowerCase() === 'printed') dispatch(updatePendings(order))
+}
+
+export const fetchRecentlyOrders = () => dispatch => {
+  Promise.all([
+    dispatch(fetchOrdersCreated()),
+    dispatch(fetchOrdersPending()),
+    dispatch(fetchOrdersDelivered())
+  ])
+}
+
 export const fetchOrdersCreated = () => async dispatch => {
   try {
     dispatch(fetchCreatedRequest())
-    let { data } = await http.get('/orders')
+    let { data } = await http.get('/orders/created')
     dispatch(fetchCreatedSuccess(data))
   } catch (error) {
     dispatch(fetchCreatedError(error))
   }
 }
+
 /**
  *  fetch orders with status = "printed"
  */
@@ -116,6 +135,9 @@ export const fetchOrdersPending = () => async dispatch => {
   }
 }
 
+/**
+ *  fetch orders with status = "delivered"
+ */
 export const fetchOrdersDelivered = () => async dispatch => {
   try {
     dispatch(fetchDeliveredRequest())
@@ -129,9 +151,10 @@ export const fetchOrdersDelivered = () => async dispatch => {
 export const printOrders = orderIds => async dispatch => {
   try {
     dispatch(printOrdersRequest())
-    await http.put('orders/print', orderIds)
-    dispatch(printOrdersSuccess(orderIds))
+    const { data } = await http.put('orders/print', orderIds)
+    dispatch(printOrdersSuccess(data))
   } catch (error) {
+    console.log('printed errors', error)
     dispatch(printOrdersError(error))
   }
 }
@@ -139,8 +162,8 @@ export const printOrders = orderIds => async dispatch => {
 export const deliverOrders = orderIds => async dispatch => {
   try {
     dispatch(deliverOrdersRequest())
-    await http.put('orders/deliver', orderIds)
-    dispatch(deliverOrdersSuccess(orderIds))
+    const { data } = await http.put('orders/deliver', orderIds)
+    dispatch(deliverOrdersSuccess(data))
   } catch (error) {
     console.log('upa', error)
     dispatch(deliverOrdersError(error))
@@ -150,8 +173,8 @@ export const deliverOrders = orderIds => async dispatch => {
 export const deleteOrders = orderIds => async dispatch => {
   try {
     dispatch(deleteOrdersRequest())
-    await http.delete('orders', { data: orderIds })
-    dispatch(deleteOrdersSuccess(orderIds))
+    const { data } = await http.delete('orders', { data: orderIds })
+    dispatch(deleteOrdersSuccess(data))
   } catch (error) {
     console.log('delete error', error.message)
     dispatch(deleteOrdersError(error))
