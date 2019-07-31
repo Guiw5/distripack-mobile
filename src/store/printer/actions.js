@@ -1,20 +1,32 @@
 import printerService from '../../services/PrinterService'
 import { printOrders } from '../orders/actions'
-import { ErrorCodes, ASB_PRINT_SUCCESS } from '../../lib/types'
-import { Alert } from 'react-native'
-import Config from '../../../config.json'
+import { ErrorCodes } from '../../lib/types'
 
-export const checkStatusRequest = () => ({
-  type: 'CHECK_STATUS_REQUEST'
+export const getResultsRequest = () => ({
+  type: 'CHECK_RESULTS_REQUEST'
 })
 
-export const checkStatusSuccess = status => ({
-  type: 'CHECK_STATUS_SUCCESS',
+export const getResultsSuccess = status => ({
+  type: 'CHECK_RESULTS_SUCCESS',
   status
 })
 
-export const checkStatusError = error => ({
-  type: 'CHECK_STATUS_ERROR',
+export const getResultsError = error => ({
+  type: 'CHECK_RESULTS_ERROR',
+  error
+})
+
+export const getStatusRequest = () => ({
+  type: 'GET_STATUS_REQUEST'
+})
+
+export const getStatusSuccess = status => ({
+  type: 'GET_STATUS_SUCCESS',
+  status
+})
+
+export const getStatusError = error => ({
+  type: 'GET_STATUS_ERROR',
   error
 })
 
@@ -40,59 +52,39 @@ export const clearState = () => ({
   type: 'CLEAR_STATE'
 })
 
-export const checkPrinterStatus = (data = null) => async dispatch => {
+export const status = () => async dispatch => {
   try {
-    dispatch(checkStatusRequest())
-    let status = await printerService.status(data)
-    dispatch(checkStatusSuccess(status))
+    dispatch(getStatusRequest())
+    let status = await printerService.status()
+    dispatch(getStatusSuccess(status))
   } catch (error) {
-    dispatch(checkStatusError(ErrorCodes[error.message]))
+    dispatch(getStatusError(ErrorCodes[error.message]))
+  }
+}
+
+export const results = data => async dispatch => {
+  try {
+    dispatch(getResultsRequest())
+    let status = await printerService.results(data)
+    dispatch(getResultsSuccess(status))
+  } catch (error) {
+    dispatch(getResultsError(ErrorCodes[error.message]))
   }
 }
 
 export const print = orders => async dispatch => {
   try {
     dispatch(printRequest())
-    if (Config.printer.productive) {
-      let { data } = await printerService.printOrders(orders)
-      if (isOk(data)) {
-        dispatch(printOrders(orders.map(o => o.id)))
-        dispatch(printSuccess())
-      } else {
-        dispatch(checkPrinterStatus(data))
-        dispatch(printError())
-      }
-      dispatch(alert(isOk(data)))
-    } else {
+    const { data } = await printerService.print(orders)
+    const ok = printerService.isOk(data)
+    if (ok) {
+      dispatch(printOrders(orders.map(o => o.id)))
       dispatch(printSuccess())
-      dispatch(alert('ok'))
+    } else {
+      dispatch(results(data))
+      dispatch(printError())
     }
   } catch (error) {
     dispatch(printError(error))
-  }
-}
-
-const isOk = data => {
-  let { success, status } = printerService.extract(data)
-  return success && Boolean(status & ASB_PRINT_SUCCESS)
-}
-
-export const alert = ok => async dispatch => {
-  if (ok === 'ok') {
-    Alert.alert('Excelente', 'Los pedidos fueron impresos correctamente', [
-      {
-        text: 'Ok',
-        onPress: () => dispatch(clearState())
-      }
-    ])
-  }
-
-  if (ok === 'notok') {
-    Alert.alert('Ups', 'No se ha podido imprimir, intente de nuevo', [
-      {
-        text: 'Ok',
-        onPress: () => () => dispatch(clearState())
-      }
-    ])
   }
 }
