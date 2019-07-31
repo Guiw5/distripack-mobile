@@ -7,14 +7,14 @@ import CheckItem from './CheckItem'
 import { myColors } from '../lib/commons'
 import ResultsPrintAlert from './ResultsPrintAlert'
 
-export default class Recents extends React.PureComponent {
+export default class Recents extends React.Component {
   constructor(props) {
     super(props)
     this.state = { items: {}, all: false, delete: {} }
   }
 
-  componentDidMount() {
-    this.loadData()
+  async componentDidMount() {
+    await this.loadData()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -63,9 +63,9 @@ export default class Recents extends React.PureComponent {
 
   loadData = async () => {
     if (!this.props.loadingClients && this.props.clients.length === 0)
-      this.props.loadClients()
+      await this.props.loadClients()
     if (!this.props.loadingOrders && this.props.orders.length === 0)
-      this.props.loadOrders()
+      await this.props.loadOrders()
     if (
       !this.props.printing &&
       this.props.clients.length > 0 &&

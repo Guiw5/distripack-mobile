@@ -12,8 +12,8 @@ export default class NewClient extends React.Component {
   }
 
   onSubmit = client => {
-    if (!client.mail) {
-      client.mail = `${+moment()}@gmail.com`
+    if (!client.email) {
+      client.email = `${+moment()}@gmail.com`
     }
     if (this.props.emails.includes(client.mail)) {
       Alert.alert('Pepitooo', 'El email ingresado ya se encuentra asociado')
@@ -54,7 +54,7 @@ export default class NewClient extends React.Component {
     )
   }
 
-  renderMail = ({ input, label, type, meta: { touched, error, warning } }) => {
+  renderEmail = ({ input, label, type, meta: { touched, error, warning } }) => {
     return (
       <Input
         {...input}
@@ -85,7 +85,7 @@ export default class NewClient extends React.Component {
     return (
       <View style={styles.container}>
         <Field name="nick" component={this.renderNick} />
-        <Field name="mail" component={this.renderMail} />
+        <Field name="email" component={this.renderEmail} />
         <Field name="cuit" component={this.renderCuit} />
         <ButtonFooter
           title="Crear Cliente"

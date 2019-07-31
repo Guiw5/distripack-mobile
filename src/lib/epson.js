@@ -1,4 +1,3 @@
-import axios from 'axios'
 import moment from 'moment'
 import 'moment/locale/es'
 import Config from '../../config.json'
@@ -1136,11 +1135,11 @@ export function ePOSPrint(printer) {
 
 ePOSPrint.prototype.constructor = ePOSPrint
 
-ePOSPrint.prototype.print = async function(
-  printjobid = null,
-  data = new ePOSBuilder().toString(),
-  timeout = Config.printer.timeout
-) {
+ePOSPrint.prototype.status = async function() {
+  return await this.print(null, new ePOSBuilder().toString(), 100)
+}
+
+ePOSPrint.prototype.print = async function(printjobid, data, timeout) {
   let soap =
     `<?xml version="1.0" encoding="utf-8"?>
         <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">` +
@@ -1154,9 +1153,11 @@ ePOSPrint.prototype.print = async function(
     `<s:Body>${data}</s:Body>
         </s:Envelope>`
 
-  return await this.printer.post(Config.printer.address, soap, {
-    timeout
-  })
+  return await this.printer.post(
+    Config.printer.address,
+    soap,
+    timeout ? { timeout } : null
+  )
 }
 
 ePOSPrint.prototype.extract = function(data) {
@@ -1171,7 +1172,8 @@ ePOSPrint.prototype.extract = function(data) {
   return { success, status, code, battery, printjobid }
 }
 
-ePOSPrint.prototype.checkStatus = function(ok, status, code) {
+ePOSPrint.prototype.results = function(info) {
+  let { ok, status, code } = this.epos.extract(info)
   let success =
     ok && Boolean(status & ASB_PRINT_SUCCESS)
       ? [{ ...SuccessCode[ASB_PRINT_SUCCESS], timestamp: +moment() }]

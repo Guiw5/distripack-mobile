@@ -13,8 +13,6 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-  setOrder: order => dispatch(actions.setOrder(order)),
-  setClient: id => dispatch(actions.setClient(id)),
   loadClients: () => dispatch(actions.fetchClients())
 })
 

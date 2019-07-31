@@ -2,10 +2,12 @@ import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Provider } from 'react-redux'
 import { configureStore } from './src/store/configureStore'
+import { initApp } from './src/store/actions'
 
 import Drawer from './src/navigation/MainDrawer'
 
 const store = configureStore()
+store.dispatch(initApp())
 
 export default class App extends React.Component {
   constructor(props) {

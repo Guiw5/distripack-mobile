@@ -11,7 +11,7 @@ const editIconProps = {
   size: 20
 }
 
-export default class Details extends React.Component {
+export default class SkuDetails extends React.Component {
   constructor(props) {
     super(props)
     let { quantity, price } = this.props.item

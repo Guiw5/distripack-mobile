@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import actions from '../store/actions'
 import selectors from '../store/selectors'
-import Details from '../components/Details'
+import SkuDetails from '../components/SkuDetails'
 
 const mapStateToProps = (state, ownProps) => {
   let skuId = ownProps.navigation.getParam('skuId')
@@ -22,4 +22,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Details)
+)(SkuDetails)
