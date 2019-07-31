@@ -7,6 +7,15 @@ import * as history from './history/actions'
 import * as printer from './printer/actions'
 
 // export all actions as modules
+
+export const initApp = () => dispatch => {
+  Promise.all([
+    dispatch(products.loadProducts()),
+    dispatch(clients.fetchClients()),
+    dispatch(orders.fetchRecentlyOrders())
+  ])
+}
+
 export default {
   ...products,
   ...order,
