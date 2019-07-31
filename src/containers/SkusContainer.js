@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import selectors from '../store/selectors'
-import SelectSkus from '../components/SelectSkus'
+import Skus from '../components/Skus'
 
 const mapStateToProps = (state, ownProps) => {
   let productId = ownProps.navigation.getParam('productId')
@@ -10,7 +10,4 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  null
-)(SelectSkus)
+export default connect(mapStateToProps)(Skus)

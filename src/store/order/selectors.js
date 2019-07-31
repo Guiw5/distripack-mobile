@@ -3,6 +3,8 @@ import { getClients } from '../clients/selectors'
 
 export const getOrder = state => state.order.data
 
+export const getOrderLoading = state => state.order.loading
+
 export const getOrderError = state => state.order.error
 
 export const getClientFromOrder = createSelector(
@@ -18,5 +20,7 @@ export const getItemFromOrder = (state, skuId) =>
 
 export const isOrderUpdate = createSelector(
   getOrder,
-  order => order.createdAt
+  order => order.createdAt && order.state
 )
+
+export const isOrderUpdated = state => state.order.isUpdated

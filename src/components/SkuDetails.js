@@ -1,12 +1,13 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { ListItem, colors } from 'react-native-elements'
+import { ListItem, Text, Input } from 'react-native-elements'
 import ButtonFooter from './ButtonFooter'
+import { myColors } from '../lib/commons'
 
 const editIconProps = {
   type: 'materialIcons',
   name: 'edit',
-  color: colors.primary,
+  color: myColors.primary,
   size: 20
 }
 
@@ -30,7 +31,7 @@ export default class SkuDetails extends React.Component {
     if (price !== this.state.price || quantity !== this.state.quantity)
       await this.props.modify({ skuId, ...this.state })
 
-    navigate('Products')
+    navigate('Order')
   }
 
   quantityChanged = event => {
@@ -46,62 +47,68 @@ export default class SkuDetails extends React.Component {
   }
 
   render() {
+    if (this.props.isLoading) return <View />
+
     const { sku, isUpdate } = this.props
     const { nick, description, quantity: skuQuantity } = sku
     const { price, quantity } = this.state
     const subtotal = price * quantity
-
     return (
       <View style={styles.containerStyle}>
+        <View
+          style={{
+            flex: 1,
+            alignContent: 'center',
+            justifyContent: 'space-between',
+            flexDirection: 'column'
+          }}
+        >
+          <Text>Alias:</Text>
+          <Input value={nick} />
+        </View>
         <ListItem
-          title={nick}
+          title={`Alias: ${nick}`}
           containerStyle={styles.containerList}
           input={{
             ref: ref => (this.priceInput = ref),
             defaultValue: `$${this.state.price.toFixed(2)}`,
             onEndEditing: this.priceChanged,
             selectTextOnFocus: true,
-            inputStyle: { fontSize: 14, color: colors.primary },
+            inputStyle: { fontSize: 14, color: myColors.primary },
             keyboardType: 'numeric',
             containerStyle: { flex: 0.3 }
           }}
           rightIcon={editIconProps}
           onPress={() => this.priceInput.focus()}
         />
-        <ListItem title={description.toProperCase()} />
+        <ListItem title={`Descripción: ${description.toProperCase()}`} />
         <ListItem
-          title={'Cantidad por bulto: ' + skuQuantity}
+          title={'Unidades por bulto: ' + skuQuantity}
           titleStyle={{ fontSize: 12 }}
         />
         <ListItem
-          title="Indique cuantos bultos"
-          titleStyle={{ fontSize: 14 }}
-          containerStyle={{
-            borderRadius: 10,
-            borderColor: colors.primary,
-            borderWidth: 1
-          }}
+          title="Cantidad de bultos"
+          titleStyle={{ fontSize: 14, color: myColors.primary }}
           input={{
             ref: ref => (this.quantInput = ref),
             onEndEditing: this.quantityChanged,
             defaultValue: '' + this.state.quantity,
-            placeholderTextColor: colors.primary,
+            placeholderTextColor: myColors.primary,
             selectTextOnFocus: true,
             containerStyle: { flex: 0.3 },
-            inputStyle: { fontSize: 14, color: colors.primary },
+            inputStyle: { fontSize: 14, color: myColors.primary },
             keyboardType: 'numeric'
           }}
           rightIcon={editIconProps}
           onPress={() => this.quantInput.focus()}
         />
-
         <ListItem
           title="Subtotal"
           rightSubtitle={`$${subtotal.toFixed(2)}`}
           titleStyle={{ fontSize: 14 }}
         />
         {isUpdate ? (
-          <ButtonFooter title="Modificar" onPress={this.modify} />
+          <ButtonFooter title="Modificar Item" onPress={this.modify} />
         ) : (
           <ButtonFooter title="Agregar al pedido" onPress={this.add} />
         )}

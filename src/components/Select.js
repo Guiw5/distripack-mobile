@@ -19,7 +19,7 @@ export default class Select extends React.Component {
     this.setState({ query: query || '' })
   }
 
-  filterData = () => this.props.data.filter(this.filterCriteria)
+  filterData = () => this.props.data.filter(this.filterCriteria).slice(0, 50)
 
   render() {
     return (
@@ -31,15 +31,17 @@ export default class Select extends React.Component {
           onChangeText={this.onChangeText}
           value={this.state.query}
         />
-        <SearchList
-          onRefresh={this.props.onRefresh}
-          refreshing={this.props.refreshing}
-          ListHeaderComponent={this.props.headerComponent}
-          keyExtractor={this.props.keyExtractor}
-          renderItem={this.props.renderItem}
-          data={this.filterData()}
-        />
-        {this.props.button ? <ButtonFooter {...this.props.button} /> : null}
+        {this.props.data && (
+          <SearchList
+            onRefresh={this.props.onRefresh}
+            refreshing={this.props.refreshing}
+            ListHeaderComponent={this.props.headerComponent}
+            keyExtractor={this.props.keyExtractor}
+            renderItem={this.props.renderItem}
+            data={this.filterData()}
+          />
+        )}
+        {this.props.button && <ButtonFooter {...this.props.button} />}
       </View>
     )
   }

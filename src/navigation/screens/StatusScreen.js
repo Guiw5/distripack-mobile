@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 
 import Notification from '../../components/Notification'
@@ -15,20 +15,13 @@ class StatusScreen extends React.PureComponent {
   render() {
     if (this.props.status.length === 0)
       return (
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: '#fff',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
+        <View style={styles.notificationList}>
           <Text>No tiene notificaciones recientes</Text>
         </View>
       )
 
     return (
-      <View style={{ flex: 1, backgroundColor: '#fff' }}>
+      <View style={styles.notificationList}>
         {this.props.status.map(item => {
           return (
             <Notification
@@ -42,6 +35,15 @@ class StatusScreen extends React.PureComponent {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  notificationList: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
+})
 
 const mapStateToProps = state => ({
   status: selectors.getPrinterStatus(state)

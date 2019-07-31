@@ -4,7 +4,7 @@ import { ListItem } from 'react-native-elements'
 import { ListView } from './ListView'
 import memoize from 'lodash/memoize'
 
-export default class SelectSkus extends React.PureComponent {
+export default class Skus extends React.PureComponent {
   constructor(props) {
     super(props)
     this.onPress = memoize(item => () => this.goToDetails(item))
@@ -25,7 +25,7 @@ export default class SelectSkus extends React.PureComponent {
         title={item.nick.toProperCase()}
         subtitle={item.description.toProperCase()}
         subtitleStyle={{ fontSize: 12 }}
-        rightSubtitle={`${item.price.toFixed(2)}`}
+        rightSubtitle={`$${item.price.toFixed(2)}`}
         bottomDivider
         containerStyle={{ paddingVertical: 15 }}
         onPress={this.onPress(item)}

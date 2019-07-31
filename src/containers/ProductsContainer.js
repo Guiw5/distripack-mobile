@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import actions from '../store/actions'
 import selectors from '../store/selectors'
-import SelectProducts from '../components/SelectProducts'
+import Products from '../components/Products'
 
 const mapStateToProps = state => ({
   products: selectors.getProducts(state),
@@ -15,4 +15,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(SelectProducts)
+)(Products)

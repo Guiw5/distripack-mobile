@@ -5,7 +5,7 @@ import memoize from 'lodash/memoize'
 
 import Select from './Select'
 
-export default class SelectProducts extends PureComponent {
+export default class Products extends PureComponent {
   constructor(props) {
     super(props)
     this.onPress = memoize(item => () => this.goToDetails(item))

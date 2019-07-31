@@ -4,6 +4,7 @@ import moment from 'moment'
 import Select from './Select'
 import CheckAll from './CheckAll'
 import CheckItem from './CheckItem'
+import { myColors } from '../lib/commons'
 
 export default class Pendings extends React.PureComponent {
   constructor(props) {
@@ -20,15 +21,9 @@ export default class Pendings extends React.PureComponent {
     item.client.mail.toLowerCase().includes(text.toLowerCase()) ||
     item.client.nick.toLowerCase().includes(text.toLowerCase())
 
-  onPress = order => () => {
-    let { id, items, deliveryDate, clientId, createdAt } = order
-    this.props.setOrder({
-      id,
-      items,
-      clientId,
-      deliveryDate,
-      createdAt
-    })
+  onPress = item => () => {
+    const { client, ...order } = item
+    this.props.setOrder(order)
     this.props.navigation.navigate('Order')
   }
 
@@ -131,10 +126,10 @@ export default class Pendings extends React.PureComponent {
         }
         button={{
           buttonStyle: this.anyToDelete()
-            ? { backgroundColor: '#db3838' }
+            ? { backgroundColor: myColors.danger }
             : null,
           disabled: !this.anyToDeliver() && !this.anyToDelete(),
-          title: this.anyToDelete() ? 'Anular Pedido' : 'Entregar',
+          title: this.anyToDelete() ? 'Anular Pedido' : 'Entregado',
           onPress: this.anyToDelete() ? this.deleteOrders : this.deliverOrders,
           loading: this.props.loading
         }}

@@ -25,6 +25,17 @@ const updateCreated = (state, action) => ({
   }
 })
 
+const updatePendings = (state, action) => ({
+  ...state,
+  data: {
+    ...state.data,
+    created: state.data.created.filter(o => o.id !== action.order.id),
+    pending: state.data.pending.map(o =>
+      o.id !== action.order.id ? o : action.order
+    )
+  }
+})
+
 const fetchCreatedRequest = (state, action) => ({
   ...state,
   loading: true
@@ -85,7 +96,10 @@ const printOrdersSuccess = (state, action) => ({
   ...state,
   data: {
     ...state.data,
-    created: state.data.created.filter(o => !action.orderIds.includes(o.id))
+    pending: [...state.data.pending, ...action.orders],
+    created: state.data.created.filter(
+      c => !action.orders.map(o => o.id).includes(c.id)
+    )
   },
   loading: false
 })
@@ -105,8 +119,9 @@ const deliverOrdersSuccess = (state, action) => ({
   ...state,
   data: {
     ...state.data,
+    delivered: [...state.data.delivered, ...action.orders],
     pending: state.data.pending.filter(
-      o => !action.orderIds.includes(`${o.id}`)
+      p => !action.orders.map(o => o.id).includes(p.id)
     )
   },
   loading: false
@@ -147,7 +162,8 @@ const deleteOrdersError = (state, action) => ({
 })
 const orders = createReducer((state = initialState), {
   ['ADD_TO_CREATED']: addToCreated,
-  ['UPDATE_IN_CREATED']: updateCreated,
+  ['UPDATE_ORDERS_CREATED']: updateCreated,
+  ['UPDATE_ORDERS_PENDINGS']: updatePendings,
   ['FETCH_ORDERS_CREATED_REQUEST']: fetchCreatedRequest,
   ['FETCH_ORDERS_CREATED_SUCCESS']: fetchCreatedSuccess,
   ['FETCH_ORDERS_CREATED_ERROR']: fetchCreatedError,

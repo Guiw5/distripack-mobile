@@ -22,7 +22,6 @@ export default class Notification extends PureComponent {
           borderRadius: 15,
           borderWidth: 0
         }}
-        key={this.props.key}
         title={this.props.msg}
         titleStyle={{ color: '#000', fontFamily: 'sans-serif-light' }}
         onPress={this.props.onPress}
