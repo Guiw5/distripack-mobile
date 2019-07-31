@@ -37,8 +37,8 @@ export default createDrawerNavigator(
     Pendings: {
       screen: PendingsFlow,
       navigationOptions: {
-        title: 'Pendientes',
-        drawerLabel: 'Pendientes',
+        title: 'En Reparto',
+        drawerLabel: 'En Reparto',
         drawerIcon: ({ tintColor }) => (
           <Icon
             type="material-community"

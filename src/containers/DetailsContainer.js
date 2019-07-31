@@ -1,24 +1,17 @@
-import React from 'react'
-import { colors } from 'react-native-elements'
 import { connect } from 'react-redux'
 import actions from '../store/actions'
 import selectors from '../store/selectors'
 import Details from '../components/Details'
 
-const editIconProps = {
-  type: 'materialIcons',
-  name: 'edit',
-  color: colors.primary,
-  size: 20
-}
-
 const mapStateToProps = (state, ownProps) => {
   let skuId = ownProps.navigation.getParam('skuId')
-  let isUpdate = selectors.getItemFromOrder(state, skuId)
-  let skus = selectors.getSkusMap(state)
-  let sku = skus[skuId]
-  let item = isUpdate ? isUpdate : { skuId, quantity: 1, price: sku.price }
-  return { isUpdate, sku, item }
+  let sku = selectors.getSkusMap(state)[skuId]
+  let isLoading = selectors.getProductsLoading(state)
+  let isUpdate = ownProps.navigation.getParam('isUpdate')
+  let item = isUpdate
+    ? selectors.getItemFromOrder(state, skuId)
+    : { skuId, quantity: 1, price: sku.price }
+  return { isUpdate, sku, item, isLoading }
 }
 
 const mapDispatchToProps = dispatch => ({

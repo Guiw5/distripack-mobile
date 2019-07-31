@@ -6,6 +6,7 @@ import OrderScreen from './screens/OrderScreen'
 import PrinterIcon from '../components/PrinterIcon'
 import StatusScreen from './screens/StatusScreen'
 import RecentsScreen from './screens/RecentsScreen'
+import SkuDetailsScreen from './screens/SkuDetailsScreen'
 
 export default createStackNavigator(
   {
@@ -21,6 +22,12 @@ export default createStackNavigator(
       screen: OrderScreen,
       navigationOptions: {
         title: 'Orden de Compra'
+      }
+    },
+    Details: {
+      screen: SkuDetailsScreen,
+      navigationOptions: {
+        title: 'Detalle'
       }
     },
     Status: {
