@@ -5,8 +5,12 @@ const initialState = {
     id: null,
     items: [],
     clientId: null,
-    deliveryDate: null
+    deliveryDate: null,
+    deliveredAt: null,
+    createdAt: null,
+    state: null
   },
+  isUpdated: false,
   loading: false,
   error: null
 }
@@ -15,8 +19,9 @@ const addToOrder = (state, action) => ({
   ...state,
   data: {
     ...state.data,
-    items: [...state.data.items, { id: action.id, ...action.item }]
-  }
+    items: [...state.data.items, action.item]
+  },
+  isUpdated: !!state.data.createdAt
 })
 
 const removeItems = (state, action) => ({
@@ -24,7 +29,8 @@ const removeItems = (state, action) => ({
   data: {
     ...state.data,
     items: state.data.items.filter(item => !action.items[item.skuId])
-  }
+  },
+  isUpdated: !!state.data.createdAt
 })
 
 const updateItem = (state, action) => ({
@@ -40,7 +46,8 @@ const updateItem = (state, action) => ({
             quantity: action.item.quantity
           }
     )
-  }
+  },
+  isUpdated: !!state.data.createdAt
 })
 
 const updateOrder = (state, action) => ({
@@ -60,7 +67,8 @@ const setClient = (state, action) => ({
 
 const setDeliveryDate = (state, action) => ({
   ...state,
-  data: { ...state.data, deliveryDate: action.deliveryDate }
+  data: { ...state.data, deliveryDate: action.deliveryDate },
+  isUpdated: !!state.data.createdAt
 })
 
 const fetchOrder = (state, action) => ({ ...state })
@@ -72,9 +80,7 @@ const createOrderRequest = (state, action) => ({
 })
 
 const createOrderSuccess = (state, action) => ({
-  ...state,
-  data: initialState.data,
-  loading: false
+  ...initialState
 })
 
 const createOrderError = (state, action) => ({
@@ -90,9 +96,7 @@ const modifyOrderRequest = (state, action) => ({
 })
 
 const modifyOrderSuccess = (state, action) => ({
-  ...state,
-  data: initialState.data,
-  loading: false
+  ...initialState
 })
 
 const modifyOrderError = (state, action) => ({

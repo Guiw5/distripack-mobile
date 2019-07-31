@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { ListItem, CheckBox } from 'react-native-elements'
+import { myColors } from '../lib/commons'
 
 export default class OrderItem extends React.PureComponent {
   constructor(props) {
@@ -15,28 +16,42 @@ export default class OrderItem extends React.PureComponent {
       <ListItem
         title={skuNick}
         titleStyle={{ fontSize: 13 }}
-        onPress={this.props.onPress}
+        onPress={this.props.onlyRead ? null : this.props.onPress}
         contentContainerStyle={styles.listContent}
         containerStyle={[
           styles.listContainer,
-          this.props.checked && { backgroundColor: '#db383820' }
+          this.props.checked && { backgroundColor: myColors.dangerBg }
         ]}
         leftElement={
-          <CheckBox
-            title={`${item.quantity}`}
-            checked={this.props.checked}
-            onPress={this.props.onCheck}
-            iconType="material"
-            uncheckedIcon="close"
-            checkedIcon="close"
-            checkedColor="#db3838"
-            textStyle={styles.checkText}
-            containerStyle={styles.checkContainer}
-          />
+          (this.props.onlyRead && (
+            <CheckBox
+              checked={true}
+              onPress={null}
+              title={`${item.quantity}`}
+              iconType="material"
+              checkedIcon="chevron-right"
+              textStyle={styles.checkText}
+              checkedColor={myColors.primary}
+              containerStyle={styles.checkContainer}
+            />
+          )) ||
+          (!this.props.onlyRead && (
+            <CheckBox
+              title={`${item.quantity}`}
+              checked={this.props.checked}
+              onPress={this.props.onCheck}
+              iconType="material"
+              uncheckedIcon="close"
+              checkedIcon="close"
+              checkedColor={myColors.danger}
+              textStyle={styles.checkText}
+              containerStyle={styles.checkContainer}
+            />
+          ))
         }
         rightContentContainerStyle={{ flex: 0.4 }}
         rightSubtitle={`$${subtotal.toFixed(2)}`}
-        rightSubtitleStyle={{ color: '#42adb3' }}
+        rightSubtitleStyle={{ color: myColors.green }}
       />
     )
   }
