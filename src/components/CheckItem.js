@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import { StyleSheet } from 'react-native'
 import { ListItem, CheckBox } from 'react-native-elements'
+import { myColors } from '../lib/commons'
 
 export default class CheckItem extends PureComponent {
   constructor(props) {
@@ -19,7 +20,9 @@ export default class CheckItem extends PureComponent {
         bottomDivider={this.props.bottomDivider}
         containerStyle={[
           this.props.checked && {
-            backgroundColor: this.props.isDeletion ? '#db383820' : '#42adb320'
+            backgroundColor: this.props.isDeletion
+              ? myColors.dangerBg
+              : myColors.greenBg
           },
           this.props.containerStyle
         ]}
@@ -31,7 +34,7 @@ export default class CheckItem extends PureComponent {
               iconType="material"
               uncheckedIcon={'close'}
               checkedIcon={'close'}
-              checkedColor={'#db3838'}
+              checkedColor={myColors.danger}
               textStyle={styles.checkText}
               containerStyle={styles.checkContainer}
             />
@@ -42,7 +45,7 @@ export default class CheckItem extends PureComponent {
               iconType="material"
               uncheckedIcon={'check'}
               checkedIcon={'check'}
-              checkedColor={'#42adb3'}
+              checkedColor={myColors.green}
               textStyle={styles.checkText}
               containerStyle={styles.checkContainer}
             />

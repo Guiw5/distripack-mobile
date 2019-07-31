@@ -3,6 +3,7 @@ import { View, ScrollView, StyleSheet, Linking } from 'react-native'
 import { createBottomTabNavigator } from 'react-navigation'
 import { Icon } from 'react-native-elements'
 import IconCard from './IconCard'
+import { myColors } from '../lib/commons'
 
 class DetailsTab extends PureComponent {
   constructor(props) {
@@ -53,7 +54,7 @@ class DetailsTab extends PureComponent {
           ]}
           iconProps={{
             name: 'home',
-            color: '#42adb3'
+            color: myColors.green
           }}
         />
         <IconCard
@@ -86,7 +87,7 @@ class DetailsTab extends PureComponent {
           ]}
           iconProps={{
             name: 'person',
-            color: '#42adb3'
+            color: myColors.green
           }}
         />
       </ScrollView>
@@ -140,17 +141,17 @@ export default createBottomTabNavigator(
       }
     }),
     tabBarOptions: {
-      activeTintColor: '#42adb3',
+      activeTintColor: myColors.green,
       inactiveTintColor: 'gray',
-      activeBackgroundColor: '#42adb320',
+      activeBackgroundColor: myColors.greenBg,
       inactiveBackgroundColor: '#fff',
       showIcon: true,
       showLabel: false,
-      indicatorStyle: { backgroundColor: '#42adb3' }
+      indicatorStyle: { backgroundColor: myColors.green }
     }
   }
 )
 
 const styles = StyleSheet.create({
-  scrollContainer: { backgroundColor: '#42adb320' }
+  scrollContainer: { backgroundColor: myColors.greenBg }
 })
