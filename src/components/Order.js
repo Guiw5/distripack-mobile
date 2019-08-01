@@ -18,36 +18,43 @@ export default class Order extends Component {
     this.state = { deleteMap: {} }
   }
 
+  // shouldComponentUpdate(nextProps) {
+  //   //if the order was cleaned
+  //   if (this.props.order && !nextProps.order) return false
+  //   return true
+  // }
+
   componentWillReceiveProps(nextProps) {
     //check if was printing and the status was OK
     ResultsPrintAlert(nextProps.results, this.props.clearState)
   }
 
-  toDelete = skuId => !!this.state.deleteMap[skuId]
+  toDelete = index => !!this.state.deleteMap[index]
 
-  onCheck = skuId => () => {
+  onCheck = index => () => {
     this.setState(prevState => {
       let deleteMap = { ...prevState.deleteMap }
-      deleteMap[skuId] = !prevState.deleteMap[skuId]
+      deleteMap[index] = !prevState.deleteMap[index]
       return { deleteMap }
     })
   }
-  onPress = item => () => {
+
+  onPress = ({ skuId, price, quantity }, index) => () => {
     this.props.navigation.navigate('Details', {
-      skuId: item.skuId,
+      item: { skuId, price, quantity, index },
       isUpdate: true
     })
   }
 
-  renderItem = ({ item }) => {
+  renderItem = ({ item, index }) => {
     return (
       <OrderItem
         onlyRead={this.props.order.deliveredAt}
         item={item}
-        checked={this.toDelete(item.skuId)}
-        onCheck={this.onCheck(item.skuId)}
-        onPress={this.onPress(item)}
-        onLongPress={this.onCheck(item.skuId)}
+        checked={this.toDelete(index)}
+        onCheck={this.onCheck(index)}
+        onPress={this.onPress(item, index)}
+        onLongPress={this.onCheck(index)}
       />
     )
   }
@@ -66,17 +73,25 @@ export default class Order extends Component {
 
   goBack = () => this.props.navigation.goBack()
 
-  goToClients = () => this.props.navigation.navigate('Clients')
+  goTo = state => {
+    console.log('state', state)
+    if (state === 'Created') this.props.navigation.navigate('Recents')
 
-  create = async () => {
-    await this.props.create(this.props.order)
-    if (!this.props.error) this.goToClients()
+    if (state === 'Printed') this.props.navigation.navigate('Pendings')
+
+    if (state === 'Delivered') this.props.navigation.navigate('Delivered')
   }
 
-  modify = async () => {
-    await this.props.modify(this.props.order)
-    if (!this.props.error) this.goBack()
-    else console.log(this.props.error)
+  goToClients = () => this.props.navigation.navigate('Clients')
+
+  create = order => async () => {
+    await this.props.create(order)
+    this.goToClients()
+  }
+
+  modify = order => async () => {
+    await this.props.modify(order)
+    this.goTo(order.state)
   }
 
   getNick = () => (this.props.client ? this.props.client.nick : '')
@@ -92,12 +107,7 @@ export default class Order extends Component {
 
   render() {
     return (
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: '#FFF'
-        }}
-      >
+      <View style={{ flex: 1, backgroundColor: '#FFF' }}>
         <OrderTitle title={this.getNick()} nro={this.getNumber()} />
         <OrderItems
           containerStyle={{ flex: 0.7 }}
@@ -189,7 +199,7 @@ export default class Order extends Component {
         <ButtonFooter
           title="Modificar Pedido"
           titleStyle={{ fontWeight: '600' }}
-          onPress={this.modify}
+          onPress={this.modify(this.props.order)}
           loading={loading}
         />
       )
@@ -199,7 +209,7 @@ export default class Order extends Component {
       <ButtonFooter
         title="Confirmar Pedido"
         loading={loading}
-        onPress={this.create}
+        onPress={this.create(this.props.order)}
       />
     )
   }

@@ -18,13 +18,13 @@ const mapDispatchToProps = dispatch => ({
 
 const validate = values => {
   const error = {}
-  error.mail = ''
+  error.email = ''
   error.nick = ''
   error.cuit = ''
-  var ema = values.mail
+  var ema = values.email
   var nk = values.nick
   var ct = values.cuit
-  if (values.mail === undefined) {
+  if (values.email === undefined) {
     ema = ''
   }
   if (values.nick === undefined) {
@@ -37,13 +37,13 @@ const validate = values => {
   if (ema) {
     let regex = new RegExp(/\S+@\S+\.\S+/)
     if (!regex.test(ema) && ema !== '') {
-      error.mail = 'Ingrese un Email válido'
+      error.email = 'Ingrese un Email válido'
     }
   }
 
   /* 
   if (!ema) {
-    error.mail = 'El campo Email es obligatorio'
+    error.email = 'El campo Email es obligatorio'
   } 
    */
 

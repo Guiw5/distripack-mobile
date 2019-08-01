@@ -80,9 +80,9 @@ class DetailsTab extends PureComponent {
             },
             {
               name: 'E-Mail',
-              value: client.mail,
+              value: client.email,
               icon: { name: 'email' },
-              onPress: this.handleEmail(client.mail)
+              onPress: this.handleEmail(client.email)
             }
           ]}
           iconProps={{

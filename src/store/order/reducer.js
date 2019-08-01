@@ -28,7 +28,7 @@ const removeItems = (state, action) => ({
   ...state,
   data: {
     ...state.data,
-    items: state.data.items.filter(item => !action.items[item.skuId])
+    items: state.data.items.filter((item, index) => !action.items[index])
   },
   isUpdated: !!state.data.createdAt
 })
@@ -37,8 +37,8 @@ const updateItem = (state, action) => ({
   ...state,
   data: {
     ...state.data,
-    items: state.data.items.map(item =>
-      item.skuId !== action.item.skuId
+    items: state.data.items.map((item, index) =>
+      index !== action.item.index
         ? item
         : {
             ...item,
@@ -50,14 +50,9 @@ const updateItem = (state, action) => ({
   isUpdated: !!state.data.createdAt
 })
 
-const updateOrder = (state, action) => ({
-  ...state,
-  data: { ...action.order }
-})
-
 const setOrder = (state, action) => ({
   ...state,
-  data: { ...action.order }
+  data: action.order
 })
 
 const setClient = (state, action) => ({

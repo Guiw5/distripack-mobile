@@ -7,6 +7,7 @@ import OrderScreen from './screens/OrderScreen'
 import MenuButton from './MenuButton'
 import RecentlyOrdersScreen from './screens/RecentlyOrdersScreen'
 import ClientsScreen from './screens/ClientsScreen'
+import SkuDetailsScreen from './screens/SkuDetailsScreen'
 
 export default createStackNavigator(
   {

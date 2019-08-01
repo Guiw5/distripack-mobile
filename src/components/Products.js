@@ -34,8 +34,9 @@ export default class Products extends PureComponent {
     if (product.skus.length > 1)
       this.props.navigation.navigate('Skus', { productId: product.id })
     else {
-      let skuId = product.skus[0].id
-      this.props.navigation.navigate('Details', { skuId })
+      const { id, price } = product.skus[0]
+      const item = { skuId: id, price, quantity: 1 }
+      this.props.navigation.navigate('Details', { item })
     }
   }
 

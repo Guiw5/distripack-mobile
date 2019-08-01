@@ -1,17 +1,13 @@
 import { connect } from 'react-redux'
 import actions from '../store/actions'
-import selectors from '../store/selectors'
 import SkuDetails from '../components/SkuDetails'
+import selectors from '../store/selectors'
 
 const mapStateToProps = (state, ownProps) => {
-  let skuId = ownProps.navigation.getParam('skuId')
-  let sku = selectors.getSkusMap(state)[skuId]
-  let isLoading = selectors.getProductsLoading(state)
+  let item = ownProps.navigation.getParam('item')
   let isUpdate = ownProps.navigation.getParam('isUpdate')
-  let item = isUpdate
-    ? selectors.getItemFromOrder(state, skuId)
-    : { skuId, quantity: 1, price: sku.price }
-  return { isUpdate, sku, item, isLoading }
+  let sku = selectors.getSkusMap(state)[item.skuId]
+  return { isUpdate, item, sku }
 }
 
 const mapDispatchToProps = dispatch => ({

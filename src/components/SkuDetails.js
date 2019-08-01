@@ -27,9 +27,9 @@ export default class SkuDetails extends React.Component {
 
   modify = async () => {
     let { navigate } = this.props.navigation
-    let { skuId, price, quantity } = this.props.item
+    let { index, skuId, price, quantity } = this.props.item
     if (price !== this.state.price || quantity !== this.state.quantity)
-      await this.props.modify({ skuId, ...this.state })
+      await this.props.modify({ index, skuId, ...this.state })
 
     navigate('Order')
   }
@@ -55,17 +55,6 @@ export default class SkuDetails extends React.Component {
     const subtotal = price * quantity
     return (
       <View style={styles.containerStyle}>
-        <View
-          style={{
-            flex: 1,
-            alignContent: 'center',
-            justifyContent: 'space-between',
-            flexDirection: 'column'
-          }}
-        >
-          <Text>Alias:</Text>
-          <Input value={nick} />
-        </View>
         <ListItem
           title={`Alias: ${nick}`}
           containerStyle={styles.containerList}

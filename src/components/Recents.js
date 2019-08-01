@@ -36,27 +36,26 @@ export default class Recents extends React.Component {
       return true
 
     //updated ones
-    if (
-      nextProps.orders.length > 0 &&
-      this.props.orders.length > 0 &&
-      nextProps.orders.length !== this.props.orders.length
-    )
-      return true
+    if (nextProps.orders.length > 0 && this.props.orders.length > 0) {
+      if (nextProps.orders.length !== this.props.orders.length) return true
 
-    let hasItemUpdates = this.props.orders.some(o => {
-      let nextOrder = nextProps.orders.find(n => n.id === o.id)
-      return (
-        o.deliveryDate !== nextOrder.deliveryDate ||
-        o.items.some(item => {
-          let nextItem = nextOrder.items.find(n => n.id === item.id)
-          return (
-            nextItem.price !== item.price || nextItem.quantity !== item.quantity
-          )
-        })
-      )
-    })
-
-    if (hasItemUpdates) return true
+      let hasItemUpdates = this.props.orders.some(o => {
+        let nextOrder = nextProps.orders.find(n => n.id === o.id)
+        return (
+          o.deliveryDate !== nextOrder.deliveryDate ||
+          o.items.length !== nextOrder.items.length ||
+          o.items.some(item => {
+            let nextItem = nextOrder.items.find(n => n.id === item.id)
+            if (!nextItem) return true
+            return (
+              nextItem.price !== item.price ||
+              nextItem.quantity !== item.quantity
+            )
+          })
+        )
+      })
+      if (hasItemUpdates) return true
+    }
 
     return false
   }
@@ -76,7 +75,7 @@ export default class Recents extends React.Component {
 
   filter = text => item =>
     item.id.toString().includes(text) ||
-    item.client.mail.toLowerCase().includes(text.toLowerCase()) ||
+    item.client.email.toLowerCase().includes(text.toLowerCase()) ||
     item.client.nick.toLowerCase().includes(text.toLowerCase())
 
   onPress = item => () => {
@@ -116,7 +115,7 @@ export default class Recents extends React.Component {
       rightTitle={`${item.id}`}
       rightSubtitle={moment(item.deliveryDate).format('DD-MM')}
       title={item.client.nick}
-      subtitle={item.client.mail}
+      subtitle={item.client.email}
       checked={
         this.anyToDelete()
           ? this.state.delete[item.id]
@@ -183,7 +182,7 @@ export default class Recents extends React.Component {
       <Select
         autoFocus={false}
         keyExtractor={item => `${item.id}`}
-        placeholder="Escriba N° de control, alias o mail del cliente"
+        placeholder="Escriba N° de control, alias o email del cliente"
         filter={this.filter}
         data={this.props.orders}
         extraData={this.state}

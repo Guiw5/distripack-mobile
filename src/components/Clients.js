@@ -52,13 +52,13 @@ export default class Clients extends React.PureComponent {
   goToClient = () => this.props.navigation.navigate('Client')
 
   filter = text => item =>
-    item.mail.toLowerCase().includes(text.toLowerCase()) ||
+    item.email.toLowerCase().includes(text.toLowerCase()) ||
     item.nick.toLowerCase().includes(text.toLowerCase())
 
   renderItem = ({ item }) => (
     <ListItem
       title={item.nick}
-      subtitle={item.mail}
+      subtitle={item.email}
       bottomDivider
       subtitleStyle={{ fontSize: 12 }}
       containerStyle={{ paddingVertical: 15 }}
@@ -69,8 +69,8 @@ export default class Clients extends React.PureComponent {
   render() {
     return (
       <Select
-        keyExtractor={item => item.mail}
-        placeholder="Escriba alias o mail del cliente"
+        keyExtractor={item => item.email}
+        placeholder="Escriba alias o email del cliente"
         filter={this.filter}
         data={this.props.clients}
         renderItem={this.renderItem}

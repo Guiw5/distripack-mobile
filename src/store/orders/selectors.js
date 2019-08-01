@@ -76,12 +76,12 @@ export const getOrdersCreatedWithClients = createSelector(
   getOrdersCreated,
   getClientsMap,
   (orders, clientsMap) => {
-    const map = orders.map(order => ({
+    if (!clientsMap) return []
+
+    return orders.map(order => ({
       ...order,
       client: clientsMap[order.clientId]
     }))
-    console.log('createdWithClients', map)
-    return map
   }
 )
 
@@ -89,6 +89,7 @@ export const getOrdersPendingWithClients = createSelector(
   getOrdersPending,
   getClientsMap,
   (orders, clientsMap) => {
+    if (!clientsMap) return []
     return orders.map(order => ({
       ...order,
       client: clientsMap[order.clientId]
@@ -100,6 +101,7 @@ export const getOrdersDeliveredWithClients = createSelector(
   getOrdersDelivered,
   getClientsMap,
   (orders, clientsMap) => {
+    if (!clientsMap) return []
     return orders.map(order => ({
       ...order,
       client: clientsMap[order.clientId]

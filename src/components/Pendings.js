@@ -18,7 +18,7 @@ export default class Pendings extends React.PureComponent {
 
   filter = text => item =>
     item.id.toString().includes(text) ||
-    item.client.mail.toLowerCase().includes(text.toLowerCase()) ||
+    item.client.email.toLowerCase().includes(text.toLowerCase()) ||
     item.client.nick.toLowerCase().includes(text.toLowerCase())
 
   onPress = item => () => {
@@ -58,7 +58,7 @@ export default class Pendings extends React.PureComponent {
       rightTitle={`${item.id}`}
       rightSubtitle={moment(item.deliveryDate).format('DD-MM')}
       title={item.client.nick}
-      subtitle={item.client.mail}
+      subtitle={item.client.email}
       checked={
         this.anyToDelete()
           ? this.state.delete[item.id]
@@ -116,7 +116,7 @@ export default class Pendings extends React.PureComponent {
       <Select
         autoFocus={false}
         keyExtractor={item => `${item.id}`}
-        placeholder="Escriba N° de control, alias o mail del cliente"
+        placeholder="Escriba N° de control, alias o email del cliente"
         filter={this.filter}
         data={this.props.orders}
         extraData={this.state}
