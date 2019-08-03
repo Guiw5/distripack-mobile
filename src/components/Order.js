@@ -40,9 +40,10 @@ export default class Order extends Component {
   }
 
   onPress = ({ skuId, price, quantity }, index) => () => {
-    this.props.navigation.navigate('Details', {
-      item: { skuId, price, quantity, index },
-      isUpdate: true
+    let item = { skuId, price, quantity, index }
+    this.props.navigation.navigate({
+      routeName: 'Details',
+      params: { item, isUpdate: true }
     })
   }
 

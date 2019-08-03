@@ -6,8 +6,13 @@ import selectors from '../store/selectors'
 const mapStateToProps = (state, ownProps) => {
   let item = ownProps.navigation.getParam('item')
   let isUpdate = ownProps.navigation.getParam('isUpdate')
-  let sku = selectors.getSkusMap(state)[item.skuId]
-  return { isUpdate, item, sku }
+  console.log('not getting item', item, isUpdate)
+  return {
+    item,
+    isUpdate,
+    isLoading: selectors.getProductsLoading(state),
+    sku: selectors.getSkusMap(state)[item.skuId]
+  }
 }
 
 const mapDispatchToProps = dispatch => ({

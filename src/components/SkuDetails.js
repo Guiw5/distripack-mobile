@@ -1,15 +1,8 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { ListItem, Text, Input } from 'react-native-elements'
+import { Text, ButtonGroup } from 'react-native-elements'
 import ButtonFooter from './ButtonFooter'
 import { myColors } from '../lib/commons'
-
-const editIconProps = {
-  type: 'materialIcons',
-  name: 'edit',
-  color: myColors.primary,
-  size: 20
-}
 
 export default class SkuDetails extends React.Component {
   constructor(props) {
@@ -47,15 +40,20 @@ export default class SkuDetails extends React.Component {
   }
 
   render() {
-    if (this.props.isLoading) return <View />
+    if (this.props.isLoading) return null
 
     const { sku, isUpdate } = this.props
-    const { nick, description, quantity: skuQuantity } = sku
+    const brand = 'Cellpack',
+      measures = '20x30',
+      capacity = '1kg',
+      color = 'amarillo'
+
+    const { nick, price: skuPrice, description, quantity: skuQuantity } = sku
     const { price, quantity } = this.state
     const subtotal = price * quantity
     return (
       <View style={styles.containerStyle}>
-        <ListItem
+        {/* <ListItem
           title={`Alias: ${nick}`}
           containerStyle={styles.containerList}
           input={{
@@ -90,12 +88,106 @@ export default class SkuDetails extends React.Component {
           }}
           rightIcon={editIconProps}
           onPress={() => this.quantInput.focus()}
-        />
-        <ListItem
-          title="Subtotal"
-          rightSubtitle={`$${subtotal.toFixed(2)}`}
-          titleStyle={{ fontSize: 14 }}
-        />
+        /> */}
+        <View style={{ alignItems: 'center' }}>
+          <Text style={{ fontSize: 18, fontWeight: '800' }}>{nick}</Text>
+          <Text h4>{`$${skuPrice.toFixed(2)}`}</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            height: 100
+          }}
+        >
+          <View
+            style={{
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              justifyContent: 'space-between'
+            }}
+          >
+            <Text style={{ fontWeight: 'bold' }}>{'Descripción: '}</Text>
+            <Text>{description}</Text>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between'
+            }}
+          >
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={{ fontWeight: 'bold' }}>{'Marca: '}</Text>
+              <Text>{brand ? brand : 'NS/NC'}</Text>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={{ fontWeight: 'bold' }}>{'Medidas: '}</Text>
+              <Text>{measures ? measures : 'NS/NC'}</Text>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={{ fontWeight: 'bold' }}>{'Capacidad: '}</Text>
+              <Text>{capacity ? capacity : 'NS/NC'}</Text>
+            </View>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between'
+            }}
+          >
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={{ fontWeight: 'bold' }}>{'Color: '}</Text>
+              <Text>{color ? color : 'NS/NC'}</Text>
+            </View>
+            <View>
+              <Text>{`Un bulto incluye ${skuQuantity} ${
+                skuQuantity === 1 ? 'unidad' : 'unidades'
+              }`}</Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}
+        >
+          <Text style={{ fontWeight: 'bold' }}>
+            {'Indique cantidad de bultos:'}
+          </Text>
+          <ButtonGroup buttons={['-', '5', '+']} />
+        </View>
+        <View
+          style={{
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}
+        >
+          <Text style={{ fontWeight: 'bold' }}>{'Indique el precio:'}</Text>
+          <ButtonGroup buttons={['-', '5', '+']} />
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            marginBottom: 80
+          }}
+        >
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              minWidth: 150
+            }}
+          >
+            <Text style={{ fontSize: 16 }}>{'Subtotal:'}</Text>
+            <Text style={{ fontSize: 16, color: myColors.green }}>
+              {`$${subtotal.toFixed(2)}`}
+            </Text>
+          </View>
+        </View>
         {isUpdate ? (
           <ButtonFooter title="Modificar Item" onPress={this.modify} />
         ) : (
@@ -107,14 +199,13 @@ export default class SkuDetails extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  containerList: {
-    borderBottomWidth: 1,
-    justifyContent: 'space-around'
-  },
   containerStyle: {
     flex: 1,
-    alignContent: 'center',
-    backgroundColor: '#FFF'
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    justifyContent: 'space-around',
+    paddingHorizontal: 10,
+    backgroundColor: '#fff'
   },
   button: {
     width: 300,
