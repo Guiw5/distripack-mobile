@@ -2,17 +2,16 @@ import React from 'react'
 import { Keyboard } from 'react-native'
 import { ListItem } from 'react-native-elements'
 import { ListView } from './ListView'
-import memoize from 'lodash/memoize'
 
-export default class SelectSkus extends React.PureComponent {
+export default class Skus extends React.PureComponent {
   constructor(props) {
     super(props)
-    this.onPress = memoize(item => () => this.goToDetails(item))
   }
 
-  goToDetails = sku => {
+  goToDetails = ({ id, price }) => () => {
     Keyboard.dismiss()
-    this.props.navigation.navigate('Details', { skuId: sku.id })
+    const item = { skuId: id, price, quantity: 1 }
+    this.props.navigation.navigate('Details', { item })
   }
 
   goToOrder = () => {
@@ -25,10 +24,10 @@ export default class SelectSkus extends React.PureComponent {
         title={item.nick.toProperCase()}
         subtitle={item.description.toProperCase()}
         subtitleStyle={{ fontSize: 12 }}
-        rightSubtitle={`${item.price.toFixed(2)}`}
+        rightSubtitle={`$${item.price.toFixed(2)}`}
         bottomDivider
         containerStyle={{ paddingVertical: 15 }}
-        onPress={this.onPress(item)}
+        onPress={this.goToDetails(item)}
       />
     )
   }
@@ -36,7 +35,7 @@ export default class SelectSkus extends React.PureComponent {
   render() {
     return (
       <ListView
-        keyExtractor={item => item.code}
+        keyExtractor={item => `${item.id}`}
         renderItem={this.renderItem}
         data={this.props.skus}
       />

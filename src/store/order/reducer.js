@@ -5,8 +5,12 @@ const initialState = {
     id: null,
     items: [],
     clientId: null,
-    deliveryDate: null
+    deliveryDate: null,
+    deliveredAt: null,
+    createdAt: null,
+    state: null
   },
+  isUpdated: false,
   loading: false,
   error: null
 }
@@ -15,24 +19,26 @@ const addToOrder = (state, action) => ({
   ...state,
   data: {
     ...state.data,
-    items: [...state.data.items, { id: action.id, ...action.item }]
-  }
+    items: [...state.data.items, action.item]
+  },
+  isUpdated: !!state.data.createdAt
 })
 
 const removeItems = (state, action) => ({
   ...state,
   data: {
     ...state.data,
-    items: state.data.items.filter(item => !action.items[item.skuId])
-  }
+    items: state.data.items.filter((item, index) => !action.items[index])
+  },
+  isUpdated: !!state.data.createdAt
 })
 
 const updateItem = (state, action) => ({
   ...state,
   data: {
     ...state.data,
-    items: state.data.items.map(item =>
-      item.skuId !== action.item.skuId
+    items: state.data.items.map((item, index) =>
+      index !== action.item.index
         ? item
         : {
             ...item,
@@ -40,17 +46,13 @@ const updateItem = (state, action) => ({
             quantity: action.item.quantity
           }
     )
-  }
-})
-
-const updateOrder = (state, action) => ({
-  ...state,
-  data: { ...action.order }
+  },
+  isUpdated: !!state.data.createdAt
 })
 
 const setOrder = (state, action) => ({
   ...state,
-  data: { ...action.order }
+  data: action.order
 })
 
 const setClient = (state, action) => ({
@@ -60,7 +62,8 @@ const setClient = (state, action) => ({
 
 const setDeliveryDate = (state, action) => ({
   ...state,
-  data: { ...state.data, deliveryDate: action.deliveryDate }
+  data: { ...state.data, deliveryDate: action.deliveryDate },
+  isUpdated: !!state.data.createdAt
 })
 
 const fetchOrder = (state, action) => ({ ...state })
@@ -72,9 +75,7 @@ const createOrderRequest = (state, action) => ({
 })
 
 const createOrderSuccess = (state, action) => ({
-  ...state,
-  data: initialState.data,
-  loading: false
+  ...initialState
 })
 
 const createOrderError = (state, action) => ({
@@ -90,9 +91,7 @@ const modifyOrderRequest = (state, action) => ({
 })
 
 const modifyOrderSuccess = (state, action) => ({
-  ...state,
-  data: initialState.data,
-  loading: false
+  ...initialState
 })
 
 const modifyOrderError = (state, action) => ({

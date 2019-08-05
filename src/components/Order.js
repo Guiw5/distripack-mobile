@@ -1,12 +1,16 @@
 import React, { Component } from 'react'
 import { View, StyleSheet } from 'react-native'
-import { Text } from 'react-native-elements'
+import { Text, Button } from 'react-native-elements'
 
 import { ListView as OrderItems } from './ListView'
 import OrderItem from './OrderItem'
 import ButtonFooter from './ButtonFooter'
 import OrderFooter from './OrderFooter'
 import OrderTitle from './OrderTitle'
+import DeliveredNote from './DeliveredNote'
+import ResultsPrintAlert from './ResultsPrintAlert'
+
+import { myColors } from '../lib/commons'
 
 export default class Order extends Component {
   constructor(props) {
@@ -14,29 +18,44 @@ export default class Order extends Component {
     this.state = { deleteMap: {} }
   }
 
-  toDelete = skuId => !!this.state.deleteMap[skuId]
+  shouldComponentUpdate(nextProps) {
+    //if the order was cleaned
+    if (this.props.order && !nextProps.order) return false
+    return true
+  }
 
-  onCheck = skuId => () => {
+  componentWillReceiveProps(nextProps) {
+    //check if was printing and the status was OK
+    ResultsPrintAlert(nextProps.results, this.props.clearState)
+  }
+
+  toDelete = index => !!this.state.deleteMap[index]
+
+  onCheck = index => () => {
     this.setState(prevState => {
       let deleteMap = { ...prevState.deleteMap }
-      deleteMap[skuId] = !prevState.deleteMap[skuId]
+      deleteMap[index] = !prevState.deleteMap[index]
       return { deleteMap }
     })
   }
-  onPress = item => () => {
-    this.props.navigation.navigate('Details', {
-      skuId: item.skuId
+
+  onPress = ({ skuId, price, quantity }, index) => () => {
+    let item = { skuId, price, quantity, index }
+    this.props.navigation.navigate({
+      routeName: 'Details',
+      params: { item, isUpdate: true }
     })
   }
 
-  renderItem = ({ item }) => {
+  renderItem = ({ item, index }) => {
     return (
       <OrderItem
+        onlyRead={this.props.order.deliveredAt}
         item={item}
-        checked={this.toDelete(item.skuId)}
-        onCheck={this.onCheck(item.skuId)}
-        onPress={this.onPress(item)}
-        onLongPress={this.onCheck(item.skuId)}
+        checked={this.toDelete(index)}
+        onCheck={this.onCheck(index)}
+        onPress={this.onPress(item, index)}
+        onLongPress={this.onCheck(index)}
       />
     )
   }
@@ -55,19 +74,30 @@ export default class Order extends Component {
 
   goBack = () => this.props.navigation.goBack()
 
-  goToClients = () => this.props.navigation.navigate('Clients')
+  goTo = state => {
+    console.log('state', state)
+    if (state === 'Created') this.props.navigation.navigate('Recents')
 
-  create = async () => {
-    await this.props.create(this.props.order)
-    if (!this.props.error) this.goToClients()
+    if (state === 'Printed') this.props.navigation.navigate('Pendings')
+
+    if (state === 'Delivered') this.props.navigation.navigate('Delivered')
   }
 
-  modify = async () => {
-    await this.props.modify(this.props.order)
-    if (!this.props.error) this.goBack()
+  goToClients = () => this.props.navigation.navigate('Clients')
+
+  create = order => async () => {
+    await this.props.create(order)
+    this.goToClients()
+  }
+
+  modify = order => async () => {
+    await this.props.modify(order)
+    this.goTo(order.state)
   }
 
   getNick = () => (this.props.client ? this.props.client.nick : '')
+
+  getNumber = () => (this.props.order.id ? this.props.order.id : '-')
 
   Subtotal = () => (
     <View style={styles.subtotalContainer}>
@@ -79,62 +109,133 @@ export default class Order extends Component {
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: '#FFF' }}>
-        <OrderTitle title={this.getNick()} nro={this.props.order.id} />
+        <OrderTitle title={this.getNick()} nro={this.getNumber()} />
         <OrderItems
           containerStyle={{ flex: 0.7 }}
           initialNumToRender={this.props.order.items.length}
           data={this.props.order.items}
           extraData={this.state.deleteMap}
-          keyExtractor={item => `${item.skuId}`}
+          keyExtractor={(item, index) => `${index}`}
           renderItem={this.renderItem}
           ListFooterComponent={this.Subtotal()}
         />
-        <OrderFooter
-          today={new Date()}
-          addProducts={this.goToProducts}
-          addDeliveryDate={this.props.setDeliveryDate}
-          selectedDate={this.props.order.deliveryDate}
-        />
+        {this.renderFooter(this.props.order.deliveredAt)}
         {this.renderButton(
-          this.hasSelected(),
+          this.props.order.deliveredAt,
+          this.hasSelected(this.state.deleteMap),
           this.props.isUpdate,
+          this.props.isUpdated,
+          this.props.loading,
           this.props.order.items.length > 0
         )}
       </View>
     )
   }
 
-  hasSelected = () =>
-    Object.values(this.state.deleteMap).some(selected => selected)
+  print = () => this.props.print(this.props.order)
 
-  renderButton = (hasSelected, isUpdate, hasItems) => {
+  renderFooter = deliveredAt => {
+    if (deliveredAt) return <DeliveredNote deliveredAt />
+
+    return (
+      <View>
+        <OrderFooter
+          today={new Date()}
+          addProducts={this.goToProducts}
+          addDeliveryDate={this.props.setDeliveryDate}
+          selectedDate={this.props.order.deliveryDate}
+        />
+        {this.props.isUpdate && (
+          <Button
+            title={
+              this.props.order.state === 'Created' ? 'Imprimir' : 'Reimprimir'
+            }
+            loading={this.props.printing}
+            onPress={this.print}
+            titleStyle={styles.btnTitle}
+            buttonStyle={styles.btnProducts}
+            containerStyle={{
+              paddingTop: 10,
+              alignItems: 'center'
+            }}
+          />
+        )}
+      </View>
+    )
+  }
+
+  hasSelected = map => Object.values(map).some(selected => selected)
+
+  /**
+   * Tendria que checkear order.state ==="printed" => btnVolver
+   * Y habria que agregar un btn de Saldo Anterior?? y Entregado?
+   */
+  renderButton = (
+    deliveredAt,
+    hasSelected,
+    isUpdate,
+    isUpdated,
+    loading,
+    hasItems
+  ) => {
+    //Si hay items para eliminar => btn de eliminar
     if (hasSelected) {
       return (
         <ButtonFooter
           title="Eliminar Items"
-          buttonStyle={{ backgroundColor: '#db3838' }}
+          buttonStyle={{
+            backgroundColor: myColors.danger
+          }}
           onPress={this.removeItems}
         />
       )
     }
-    if (!hasItems) return <ButtonFooter title="Volver" onPress={this.goBack} />
+    //Si la orden no tiene items, ya se ha entregado, o no se ha modificado aun => volver
+    if (!hasItems || deliveredAt || (isUpdate && !isUpdated))
+      return <ButtonFooter title="Volver" onPress={this.goBack} />
 
-    if (isUpdate) {
-      return <ButtonFooter title="Modificar Pedido" onPress={this.modify} />
-    }
+    //Si la orden se ha modificado => Modificar
+    if (isUpdate && isUpdated)
+      return (
+        <ButtonFooter
+          title="Modificar Pedido"
+          titleStyle={{ fontWeight: '600' }}
+          onPress={this.modify(this.props.order)}
+          loading={loading}
+        />
+      )
 
-    return <ButtonFooter title="Confirmar Pedido" onPress={this.create} />
+    //Si no es ninguna de la anteriores entonces hay items, y aun no se creó la orden
+    return (
+      <ButtonFooter
+        title="Confirmar Pedido"
+        loading={loading}
+        onPress={this.create(this.props.order)}
+      />
+    )
   }
 }
 
 const styles = StyleSheet.create({
+  btnProducts: {
+    width: 300,
+    height: 45,
+    backgroundColor: '#FFF',
+    borderColor: myColors.primary,
+    borderWidth: 1,
+    borderRadius: 5
+  },
+  btnTitle: {
+    color: myColors.primary,
+    fontFamily: 'sans-serif-light'
+  },
   subtotalContainer: {
     flexDirection: 'row-reverse',
     paddingVertical: 15,
     paddingRight: 10
   },
   subtotal: {
-    color: '#42adb3',
+    color: myColors.green,
     paddingHorizontal: 15,
     marginRight: 0
   }

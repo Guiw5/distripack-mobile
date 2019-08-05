@@ -1,13 +1,13 @@
 import React from 'react'
 import { createStackNavigator } from 'react-navigation'
-
-import ClientsScreen from './screens/ClientsScreen'
 import ClientScreen from './screens/ClientScreen'
 import ProductScreen from './screens/ProductScreen'
 import SkuScreen from './screens/SkuScreen'
-import DetailScreen from './screens/DetailScreen'
 import OrderScreen from './screens/OrderScreen'
 import MenuButton from './MenuButton'
+import RecentlyOrdersScreen from './screens/RecentlyOrdersScreen'
+import ClientsScreen from './screens/ClientsScreen'
+import SkuDetailsScreen from './screens/SkuDetailsScreen'
 
 export default createStackNavigator(
   {
@@ -24,6 +24,12 @@ export default createStackNavigator(
         title: 'Nuevo Cliente'
       }
     },
+    RecentlyOrders: {
+      screen: RecentlyOrdersScreen,
+      navigationOptions: ({ navigation }) => ({
+        title: `Pedidos ${navigation.getParam('nick')}`
+      })
+    },
     Products: {
       screen: ProductScreen,
       navigationOptions: {
@@ -37,7 +43,7 @@ export default createStackNavigator(
       }
     },
     Details: {
-      screen: DetailScreen,
+      screen: SkuDetailsScreen,
       navigationOptions: {
         title: 'Detalle'
       }

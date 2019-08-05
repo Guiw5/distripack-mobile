@@ -4,15 +4,16 @@ import actions from '../store/actions'
 import Recents from '../components/Recents'
 
 const mapStateToProps = state => ({
+  clients: selectors.getClients(state),
   orders: selectors.getOrdersCreatedWithClients(state),
-  printState: selectors.getPrintJobStatus(state),
+  printStatus: selectors.getPrintJobState(state),
   printing: selectors.getPrintLoading(state),
   loadingOrders: selectors.getOrdersLoading(state),
   loadingClients: selectors.getClientsLoading(state)
 })
 
 const mapDispatchToProps = dispatch => ({
-  checkPrinterStatus: () => dispatch(actions.checkPrinterStatus()),
+  getStatus: () => dispatch(actions.status()),
   printOrders: orders => dispatch(actions.print(orders)),
   deleteOrders: orders => dispatch(actions.deleteOrders(orders)),
   setOrder: order => dispatch(actions.setOrder(order)),

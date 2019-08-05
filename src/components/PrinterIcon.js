@@ -32,7 +32,7 @@ class PrinterIcon extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.props.checkPrinterStatus()
+    this.props.getStatus()
   }
 
   onPress = () => {
@@ -57,10 +57,12 @@ class PrinterIcon extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
-  total: selectors.getPrinterStatus(state).length
+  total: selectors.getPrinterStatus(state)
+    ? selectors.getPrinterStatus(state).length
+    : 0
 })
 const mapDispatchToProps = dispatch => ({
-  checkPrinterStatus: () => dispatch(actions.checkPrinterStatus())
+  getStatus: () => dispatch(actions.status())
 })
 
 export default connect(

@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import { Keyboard } from 'react-native'
 import { ListItem } from 'react-native-elements'
 import memoize from 'lodash/memoize'
 
 import Select from './Select'
 
-export default class SelectProducts extends React.PureComponent {
+export default class Products extends PureComponent {
   constructor(props) {
     super(props)
     this.onPress = memoize(item => () => this.goToDetails(item))
@@ -34,8 +34,9 @@ export default class SelectProducts extends React.PureComponent {
     if (product.skus.length > 1)
       this.props.navigation.navigate('Skus', { productId: product.id })
     else {
-      let skuId = product.skus[0].id
-      this.props.navigation.navigate('Details', { skuId })
+      const { id, price } = product.skus[0]
+      const item = { skuId: id, price, quantity: 1 }
+      this.props.navigation.navigate('Details', { item })
     }
   }
 

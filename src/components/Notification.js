@@ -11,7 +11,8 @@ export default class Notification extends PureComponent {
         containerStyle={{
           flex: 0.1,
           alignItems: 'center',
-          margin: 0
+          margin: 0,
+          marginTop: 15
         }}
         buttonStyle={{
           alignContent: 'center',

@@ -6,6 +6,7 @@ import { createDrawerNavigator, DrawerItems } from 'react-navigation'
 import OrderFlow from './OrderFlow'
 import RecentsFlow from './RecentsFlow'
 import PendingsFlow from './PendingsFlow'
+import ClientsFlow from './ClientsFlow'
 
 export default createDrawerNavigator(
   {
@@ -37,8 +38,8 @@ export default createDrawerNavigator(
     Pendings: {
       screen: PendingsFlow,
       navigationOptions: {
-        title: 'Pendientes',
-        drawerLabel: 'Pendientes',
+        title: 'En Reparto',
+        drawerLabel: 'En Reparto',
         drawerIcon: ({ tintColor }) => (
           <Icon
             type="material-community"
@@ -49,21 +50,31 @@ export default createDrawerNavigator(
         )
       }
     },
-    Delivered: {
-      screen: PendingsFlow,
+    Customers: {
+      screen: ClientsFlow,
       navigationOptions: {
-        title: 'Ultimas Entregas',
-        drawerLabel: 'Ultimas Entregas',
+        title: 'Clientes',
+        drawerLabel: 'Clientes',
         drawerIcon: ({ tintColor }) => (
-          <Icon
-            type="material-community"
-            name="format-list-checks"
-            size={20}
-            color={tintColor}
-          />
+          <Icon name="people" size={20} color={tintColor} />
         )
       }
     }
+    // Delivered: {
+    //   screen: PendingsFlow,
+    //   navigationOptions: {
+    //     title: 'Ultimas Entregas',
+    //     drawerLabel: 'Ultimas Entregas',
+    //     drawerIcon: ({ tintColor }) => (
+    //       <Icon
+    //         type="material-community"
+    //         name="format-list-checks"
+    //         size={20}
+    //         color={tintColor}
+    //       />
+    //     )
+    //   }
+    //}
   },
   {
     contentComponent: props => (

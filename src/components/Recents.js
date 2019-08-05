@@ -1,60 +1,86 @@
 import React from 'react'
-import { Alert } from 'react-native'
 import moment from 'moment'
 
 import Select from './Select'
 import CheckAll from './CheckAll'
 import CheckItem from './CheckItem'
+import { myColors } from '../lib/commons'
+import ResultsPrintAlert from './ResultsPrintAlert'
 
-export default class Recents extends React.PureComponent {
+export default class Recents extends React.Component {
   constructor(props) {
     super(props)
     this.state = { items: {}, all: false, delete: {} }
   }
 
-  componentDidMount() {
-    this.loadData()
+  async componentDidMount() {
+    await this.loadData()
   }
 
-  componentDidUpdate() {
-    if (this.props.printState === 'ok') {
-      Alert.alert('Excelente', 'Los pedidos fueron impresos correctamente', [
-        {
-          text: 'Ok',
-          onPress: () => this.props.clearState()
-        }
-      ])
+  componentWillReceiveProps(nextProps) {
+    //check if was printing and the status was OK
+    if (this.props.printStatus)
+      ResultsPrintAlert(nextProps.printStatus, this.props.clearState)
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.clients.length > 0 && this.props.clients.length === 0)
+      return true
+
+    if (this.props.printing !== nextProps.printing) return true
+
+    if (this.state !== nextState) return true
+
+    //new ones
+    if (nextProps.orders.length > 0 && this.props.orders.length === 0)
+      return true
+
+    //updated ones
+    if (nextProps.orders.length > 0 && this.props.orders.length > 0) {
+      if (nextProps.orders.length !== this.props.orders.length) return true
+
+      let hasItemUpdates = this.props.orders.some(o => {
+        let nextOrder = nextProps.orders.find(n => n.id === o.id)
+        return (
+          o.deliveryDate !== nextOrder.deliveryDate ||
+          o.items.length !== nextOrder.items.length ||
+          o.items.some(item => {
+            let nextItem = nextOrder.items.find(n => n.id === item.id)
+            if (!nextItem) return true
+            return (
+              nextItem.price !== item.price ||
+              nextItem.quantity !== item.quantity
+            )
+          })
+        )
+      })
+      if (hasItemUpdates) return true
     }
 
-    if (this.props.printState === 'notok') {
-      Alert.alert('Ups', 'No se ha podido imprimir, intente de nuevo', [
-        {
-          text: 'Ok',
-          onPress: () => this.props.clearState()
-        }
-      ])
-    }
+    return false
   }
 
   loadData = async () => {
-    await this.props.loadClients()
-    Promise.all([this.props.loadOrders(), this.props.checkPrinterStatus()])
+    if (!this.props.loadingClients && this.props.clients.length === 0)
+      await this.props.loadClients()
+    if (!this.props.loadingOrders && this.props.orders.length === 0)
+      await this.props.loadOrders()
+    if (
+      !this.props.printing &&
+      this.props.clients.length > 0 &&
+      this.props.orders.length > 0
+    )
+      await this.props.getStatus()
   }
 
   filter = text => item =>
     item.id.toString().includes(text) ||
-    item.client.mail.toLowerCase().includes(text.toLowerCase()) ||
+    item.client.email.toLowerCase().includes(text.toLowerCase()) ||
     item.client.nick.toLowerCase().includes(text.toLowerCase())
 
-  onPress = order => () => {
-    let { id, items, deliveryDate, clientId, createdAt } = order
-    this.props.setOrder({
-      id,
-      items,
-      clientId,
-      deliveryDate,
-      createdAt
-    })
+  onPress = item => () => {
+    const { client, ...order } = item
+    this.props.setOrder(order)
     this.props.navigation.navigate('Order')
   }
 
@@ -89,7 +115,7 @@ export default class Recents extends React.PureComponent {
       rightTitle={`${item.id}`}
       rightSubtitle={moment(item.deliveryDate).format('DD-MM')}
       title={item.client.nick}
-      subtitle={item.client.mail}
+      subtitle={item.client.email}
       checked={
         this.anyToDelete()
           ? this.state.delete[item.id]
@@ -151,12 +177,12 @@ export default class Recents extends React.PureComponent {
   }
 
   render() {
-    console.log('son muchos renders?', this.props.printState)
+    let btnProps = this.getButtonProps(this.anyToDelete(), this.anyToPrint())
     return (
       <Select
         autoFocus={false}
         keyExtractor={item => `${item.id}`}
-        placeholder="Escriba N° de control, alias o mail del cliente"
+        placeholder="Escriba N° de control, alias o email del cliente"
         filter={this.filter}
         data={this.props.orders}
         extraData={this.state}
@@ -164,17 +190,7 @@ export default class Recents extends React.PureComponent {
         headerComponent={
           <CheckAll onPress={this.onCheckAll} checked={this.state.all} />
         }
-        button={{
-          buttonStyle: this.anyToDelete()
-            ? { backgroundColor: '#db3838' }
-            : null,
-          disabled: !this.anyToPrint() && !this.anyToDelete(),
-          title: this.anyToDelete() ? 'Anular Pedido' : 'Imprimir',
-          onPress: this.anyToDelete() ? this.deleteOrders : this.printOrders,
-          loading: this.anyToDelete()
-            ? this.props.loadingOrders
-            : this.props.printing
-        }}
+        button={btnProps}
       />
     )
   }
@@ -183,4 +199,29 @@ export default class Recents extends React.PureComponent {
     Object.values(this.state.delete).some(selected => selected)
 
   anyToPrint = () => Object.values(this.state.items).some(selected => selected)
+
+  getButtonProps = (anyToDelete, anyToPrint) => {
+    if (anyToDelete) {
+      return {
+        buttonStyle: { backgroundColor: myColors.danger },
+        title: 'Anular Pedido',
+        onPress: this.deleteOrders,
+        loading: this.props.loadingOrders
+      }
+    }
+    if (!anyToDelete && anyToPrint) {
+      return {
+        title: 'Imprimir',
+        onPress: this.printOrders,
+        loading: this.props.printing
+      }
+    }
+    if (!anyToDelete && !anyToPrint) {
+      return {
+        title: 'Nuevo Pedido',
+        onPress: () => this.props.navigation.navigate('Clients')
+      }
+    }
+    return nulll
+  }
 }

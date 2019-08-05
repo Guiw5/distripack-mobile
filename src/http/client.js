@@ -1,13 +1,21 @@
 import axios from 'axios'
-
-/**
- * http://192.168.0.182:3000/api
- */
+import Config from '../../config.json'
 
 const http = axios.create({
-  baseURL: 'http://192.168.0.7:3000/api',
-  //baseURL: 'http://ec2-18-220-58-115.us-east-2.compute.amazonaws.com/api',
+  baseURL: Config.apiUrl,
+  headers: { 'Content-Type': 'application/json' },
   responseType: 'json'
 })
 
-export { http }
+const printer = axios.create({
+  baseURL: Config.printer.baseUrl,
+  timeout: Config.printer.timeout,
+  responseType: 'text',
+  headers: {
+    'Content-Type': 'text/xml;charset=utf-8',
+    'If-Modified-Since': 'Thu, 01 Jan 1970 00:00:00 GMT',
+    SOAPAction: '""'
+  }
+})
+
+export { http, printer }

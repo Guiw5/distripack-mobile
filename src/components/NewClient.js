@@ -4,6 +4,7 @@ import { View, StyleSheet, Alert } from 'react-native'
 import { Input } from 'react-native-elements'
 import KeyboardSpacer from 'react-native-keyboard-spacer'
 import ButtonFooter from './ButtonFooter'
+import moment from 'moment'
 
 export default class NewClient extends React.Component {
   constructor(props) {
@@ -11,9 +12,34 @@ export default class NewClient extends React.Component {
   }
 
   onSubmit = client => {
-    if (this.props.emails.includes(client.mail)) {
+    if (!client.email) {
+      client.email = `${+moment()}@gmail.com`
+    }
+    if (this.props.emails.includes(client.email)) {
       Alert.alert('Pepitooo', 'El email ingresado ya se encuentra asociado')
-    } else this.props.createClient(client)
+    } else {
+      let ct = client.cuit
+      if (ct) {
+        ct.split('-').join()
+        client.cuit = ct.replace(/^(\d{2})(\d{8})(\d{1}).*/, '$1-$2-$3')
+      }
+      this.props.createClient(client)
+    }
+  }
+
+  componentWillUpdate(nextProps) {
+    if (this.props.isLoading && !nextProps.isLoading) {
+      if (!nextProps.clientError) {
+        Alert.alert('Pepitooo', 'El cliente ha sido creado correctamente', [
+          { text: 'ok', onPress: () => this.props.navigation.goBack() }
+        ])
+      } else {
+        Alert.alert(
+          'Ups',
+          'El cliente no se pudo crear, intente de nuevo mas tarde'
+        )
+      }
+    }
   }
 
   renderNick = ({ input, label, type, meta: { touched, error, warning } }) => {
@@ -28,7 +54,7 @@ export default class NewClient extends React.Component {
     )
   }
 
-  renderMail = ({ input, label, type, meta: { touched, error, warning } }) => {
+  renderEmail = ({ input, label, type, meta: { touched, error, warning } }) => {
     return (
       <Input
         {...input}
@@ -50,6 +76,7 @@ export default class NewClient extends React.Component {
         keyboardType="numeric"
         placeholder="Ingrese cuit: 22-88888888-1"
         errorMessage={touched && error ? error : null}
+        required={false}
       />
     )
   }
@@ -58,7 +85,7 @@ export default class NewClient extends React.Component {
     return (
       <View style={styles.container}>
         <Field name="nick" component={this.renderNick} />
-        <Field name="mail" component={this.renderMail} />
+        <Field name="email" component={this.renderEmail} />
         <Field name="cuit" component={this.renderCuit} />
         <ButtonFooter
           title="Crear Cliente"

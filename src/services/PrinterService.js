@@ -1,44 +1,59 @@
 import { ePOSBuilder, ePOSPrint } from '../lib/epson'
-import { delay } from '../lib/commons'
+import { printer } from '../http/client'
+import Config from '../../config.json'
+import {
+  SuccessCode,
+  ASB_PRINT_SUCCESS_TEST,
+  ASB_PRINT_SUCCESS
+} from '../lib/types'
+import moment from 'moment'
 
 class PrinterService {
-  constructor(ip = '192.168.0.3', devId = 'local_printer', timeout = 3000) {
+  constructor() {
     this.builder = new ePOSBuilder()
-    this.epos = new ePOSPrint(ip, devId, timeout)
+    this.epos = new ePOSPrint(printer)
   }
 
-  status = async status => {
-    if (status) {
-      return this.checkStatus(status)
-    }
-    let { data } = await this.epos.print()
-    return this.checkStatus(data)
+  status = async () => {
+    const data = await this.epos.status()
+    return this.results(data)
   }
 
-  checkStatus = data => {
-    let { success, status, code } = this.extract(data)
-    return this.epos.checkStatus(success, status, code)
-  }
+  results = info => this.epos.results(info)
 
-  extract = data => {
-    return this.epos.extract(data)
-  }
-
-  printOrders = async orders => {
+  print = async orders => {
     this.builder.build(orders)
     let content = this.builder.toString()
     this.builder.clean()
-
-    let date = new Date()
-    let printJobId =
-      `${date.getHours()}` +
-      `${date.getMinutes()}` +
-      `${date.getSeconds()}` +
-      `${date.getMilliseconds()}`
-
     let timeout = (orders.length + 1) * 1.5 * 1000
-    return await this.epos.print(printJobId, content, timeout)
+    let printjobid = 'ABCD123'
+    return await this.epos.print(printjobid, content, timeout)
+  }
+
+  isOk = data => {
+    let { success, status } = this.epos.extract(data)
+    return success && Boolean(status & ASB_PRINT_SUCCESS)
   }
 }
-let printerService = new PrinterService()
+
+class PrinterMock extends PrinterService {
+  constructor() {
+    super()
+  }
+
+  status = () => this.results()
+
+  results = info => {
+    return [{ ...SuccessCode[ASB_PRINT_SUCCESS_TEST], timestamp: +moment() }]
+  }
+
+  print = async orders => 'ok'
+
+  isOk = data => true
+}
+
+let printerService = Config.printer.productive
+  ? new PrinterService()
+  : new PrinterMock()
+
 export default printerService

@@ -2,31 +2,67 @@ import createReducer from '../createReducer'
 
 const initialState = {
   data: {
-    status: [],
-    state: null
+    status: []
   },
+  status: null,
   loading: false,
   error: null //hubo un error al imprimir
 }
 
-const checkStatusRequest = state => ({
-  ...state
+const getStatusRequest = state => ({
+  ...state,
+  loading: true
 })
 
-const checkStatusSuccess = (state, action) => ({
+const getStatusSuccess = (state, action) => ({
   ...state,
   data: {
     ...state.data,
-    status: action.status
-  }
+    status: [
+      ...state.data.status.filter(
+        s => !action.status.some(as => as.key === s.key)
+      ),
+      ...action.status
+    ]
+  },
+  loading: false
 })
 
-const checkStatusError = (state, action) => ({
+const getStatusError = (state, action) => ({
   ...state,
   data: {
     ...state.data,
-    status: action.error
-  }
+    status: [...state.data.status, action.error]
+  },
+  loading: false
+})
+
+const getResultsRequest = state => ({
+  ...state,
+  loading: true
+})
+
+const getResultsSuccess = (state, action) => ({
+  ...state,
+  data: {
+    ...state.data,
+    status: [
+      ...state.data.status.filter(
+        s => !action.status.some(as => as.key === s.key)
+      ),
+      ...action.status
+    ]
+  },
+  loading: false
+})
+
+const getResultsError = (state, action) => ({
+  ...state,
+  data: {
+    ...state.data,
+    status: [...state.data.status, action.error]
+  },
+  loading: false
 })
 
 const clearStatus = (state, action) => ({
@@ -39,10 +75,7 @@ const clearStatus = (state, action) => ({
 
 const clearState = state => ({
   ...state,
-  data: {
-    ...state.data,
-    state: null
-  }
+  status: null
 })
 
 const printRequest = state => ({
@@ -52,19 +85,13 @@ const printRequest = state => ({
 
 const printSuccess = state => ({
   ...state,
-  data: {
-    ...state.data,
-    state: 'ok'
-  },
+  status: 'ok',
   loading: false
 })
 
 const printError = (state, action) => ({
   ...state,
-  data: {
-    ...state.data,
-    state: 'notok'
-  },
+  status: 'notok',
   error: action.error,
   loading: false
 })
@@ -72,9 +99,12 @@ const printError = (state, action) => ({
 const printer = createReducer((state = initialState), {
   ['CLEAR_STATUS']: clearStatus,
   ['CLEAR_STATE']: clearState,
-  ['CHECK_STATUS_REQUEST']: checkStatusRequest,
-  ['CHECK_STATUS_SUCCESS']: checkStatusSuccess,
-  ['CHECK_STATUS_ERROR']: checkStatusError,
+  ['GET_RESULTS_REQUEST']: getResultsRequest,
+  ['GET_RESULTS_SUCCESS']: getResultsSuccess,
+  ['GET_RESULTS_ERROR']: getResultsError,
+  ['GET_STATUS_REQUEST']: getStatusRequest,
+  ['GET_STATUS_SUCCESS']: getStatusSuccess,
+  ['GET_STATUS_ERROR']: getStatusError,
   ['PRINT_REQUEST']: printRequest,
   ['PRINT_SUCCESS']: printSuccess,
   ['PRINT_ERROR']: printError

@@ -17,6 +17,7 @@ export const EPTR_SCHEMAERROR = 'SchemaError'
 export const EPTR_PRINT_SYSTEM_ERROR = 'PrintSystemError'
 export const ASB_NO_RESPONSE = 1
 export const ASB_PRINT_SUCCESS = 2
+export const ASB_PRINT_SUCCESS_TEST = 3
 export const ASB_DRAWER_KICK = 4
 export const ASB_BATTERY_OFFLINE = 4
 export const ASB_OFF_LINE = 8
@@ -134,5 +135,9 @@ export const SuccessCode = {
   [ASB_PRINT_SUCCESS]: {
     msg: 'La impresora funciona correctamente',
     key: ASB_PRINT_SUCCESS
+  },
+  [ASB_PRINT_SUCCESS_TEST]: {
+    msg: 'La impresora esta en modo de pruebas',
+    key: ASB_PRINT_SUCCESS_TEST
   }
 }

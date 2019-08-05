@@ -1,52 +1,8 @@
 import React from 'react'
 import { Modal, View, StyleSheet } from 'react-native'
-import { Text, Button, colors, Input } from 'react-native-elements'
-import XDate from 'xdate'
-import { xdateToData, parseDate } from 'react-native-calendars/src/interface'
-import { Calendar, LocaleConfig } from 'react-native-calendars'
-
-LocaleConfig.locales['ar'] = {
-  monthNames: [
-    'Enero',
-    'Febrero',
-    'Marzo',
-    'Abril',
-    'Mayo',
-    'Junio',
-    'Julio',
-    'Agosto',
-    'Septiembre',
-    'Octubre',
-    'Noviembre',
-    'Diciembre'
-  ],
-  monthNamesShort: [
-    'Ene',
-    'Feb',
-    'Mar',
-    'Abr',
-    'May',
-    'Jun',
-    'Jul',
-    'Ago',
-    'Sept',
-    'Oct',
-    'Nov',
-    'Dic'
-  ],
-  dayNames: [
-    'domingo',
-    'lunes',
-    'martes',
-    'miércoles',
-    'jueves',
-    'viernes',
-    'sábado'
-  ],
-  dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab']
-}
-
-LocaleConfig.defaultLocale = 'ar'
+import { Button } from 'react-native-elements'
+import { myColors, deliveryDayString, getSelected } from '../lib/commons'
+import { Calendar } from 'react-native-calendars'
 
 export default class OrderFooter extends React.Component {
   constructor(props) {
@@ -60,31 +16,10 @@ export default class OrderFooter extends React.Component {
     }))
   }
 
-  dayString = selectedDate => {
-    let selected = this.getSelected(selectedDate)
-    let diffMonths = selected.month - (this.props.today.getMonth() + 1)
-    let diffDays = selected.day - this.props.today.getDate()
-    let date = XDate(selected.dateString)
-
-    if (diffMonths === 0) {
-      if (diffDays === 0) return 'Entregar Hoy'
-      if (diffDays === 1) return 'Entregar Mña'
-      if (diffDays > 1 && diffDays < 8) {
-        return 'Próximo ' + date.toString('dddd')
-      }
-    }
-    return 'Para el ' + date.toString('dddd') + ' ' + date.toString('dd')
-  }
-
   onDayPress = async selected => {
     let date = new Date(selected.timestamp)
     await this.props.addDeliveryDate(date)
     this.toogleCalendar()
-  }
-
-  getSelected = selected => {
-    if (!selected) selected = new Date()
-    return xdateToData(XDate(selected, true))
   }
 
   render() {
@@ -98,7 +33,7 @@ export default class OrderFooter extends React.Component {
           containerStyle={{ paddingTop: 10, alignItems: 'center' }}
         />
         <Button
-          title={this.dayString(this.props.selectedDate)}
+          title={deliveryDayString(this.props.selectedDate, this.props.today)}
           onPress={this.toogleCalendar}
           titleStyle={styles.btnTitle}
           buttonStyle={styles.btnProducts}
@@ -116,7 +51,7 @@ export default class OrderFooter extends React.Component {
             minDate={this.props.today}
             onDayPress={this.onDayPress}
             markedDates={{
-              [this.getSelected(this.props.selectedDate).dateString]: {
+              [getSelected(this.props.selectedDate).dateString]: {
                 selected: true
               }
             }}
@@ -127,17 +62,17 @@ export default class OrderFooter extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   btnProducts: {
     width: 300,
     height: 45,
     backgroundColor: '#FFF',
-    borderColor: colors.primary,
+    borderColor: myColors.primary,
     borderWidth: 1,
     borderRadius: 5
   },
   btnTitle: {
-    color: colors.primary,
+    color: myColors.primary,
     fontFamily: 'sans-serif-light'
   }
 })
