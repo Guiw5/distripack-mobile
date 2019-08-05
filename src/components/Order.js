@@ -18,11 +18,11 @@ export default class Order extends Component {
     this.state = { deleteMap: {} }
   }
 
-  // shouldComponentUpdate(nextProps) {
-  //   //if the order was cleaned
-  //   if (this.props.order && !nextProps.order) return false
-  //   return true
-  // }
+  shouldComponentUpdate(nextProps) {
+    //if the order was cleaned
+    if (this.props.order && !nextProps.order) return false
+    return true
+  }
 
   componentWillReceiveProps(nextProps) {
     //check if was printing and the status was OK
