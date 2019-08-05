@@ -1,15 +1,8 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { ListItem, Text, Input } from 'react-native-elements'
 import ButtonFooter from './ButtonFooter'
-import { myColors } from '../lib/commons'
-
-const editIconProps = {
-  type: 'materialIcons',
-  name: 'edit',
-  color: myColors.primary,
-  size: 20
-}
+import { Pills } from './Pills'
+import { SkuInfo, SkuTitle, SkuSubtotal } from './SkuInfo'
 
 export default class SkuDetails extends React.Component {
   constructor(props) {
@@ -46,56 +39,78 @@ export default class SkuDetails extends React.Component {
     this.setState({ price: parseFloat(value) })
   }
 
+  onMinusPress = name => {
+    if (this.state[name] === 1) {
+      return
+    }
+
+    this.setState(prevState => {
+      return { ...prevState, [name]: prevState[name] - 1 }
+    })
+  }
+
+  onPlusPress = name => {
+    this.setState(prevState => {
+      return { ...prevState, [name]: prevState[name] + 1 }
+    })
+  }
+
   render() {
-    if (this.props.isLoading) return <View />
+    if (this.props.isLoading) return null
 
     const { sku, isUpdate } = this.props
-    const { nick, description, quantity: skuQuantity } = sku
+
+    const {
+      nick,
+      brand,
+      measures,
+      capacity,
+      color,
+      description,
+      quantity: skuQuantity,
+      price: skuPrice
+    } = sku
     const { price, quantity } = this.state
     const subtotal = price * quantity
+
     return (
       <View style={styles.containerStyle}>
-        <ListItem
-          title={`Alias: ${nick}`}
-          containerStyle={styles.containerList}
-          input={{
-            ref: ref => (this.priceInput = ref),
-            defaultValue: `$${this.state.price.toFixed(2)}`,
-            onEndEditing: this.priceChanged,
-            selectTextOnFocus: true,
-            inputStyle: { fontSize: 14, color: myColors.primary },
-            keyboardType: 'numeric',
-            containerStyle: { flex: 0.3 }
+        <SkuTitle title={nick} subtitle={`$${skuPrice.toFixed(2)}`} />
+        <SkuInfo
+          info={{
+            1: [{ label: 'Descripción: ', value: description }],
+            2: [
+              { label: 'Marca: ', value: brand },
+              { label: 'Medidas: ', value: measures },
+              { label: 'Capacidad: ', value: capacity }
+            ],
+            3: [
+              { label: 'Color: ', value: color },
+              {
+                label: '',
+                value: `El precio incluye ${skuQuantity} ${
+                  skuQuantity === 1 ? 'unidad' : 'unidades'
+                }`
+              }
+            ]
           }}
-          rightIcon={editIconProps}
-          onPress={() => this.priceInput.focus()}
         />
-        <ListItem title={`Descripción: ${description.toProperCase()}`} />
-        <ListItem
-          title={'Unidades por bulto: ' + skuQuantity}
-          titleStyle={{ fontSize: 12 }}
+        <Pills
+          title={'Indique el precio que desea utilizar:'}
+          onMinusPress={() => this.onMinusPress('price')}
+          onPlusPress={() => this.onPlusPress('price')}
+          onTextChanged={this.priceChanged}
+          value={`$${this.state.price}`}
         />
-        <ListItem
-          title="Cantidad de bultos"
-          titleStyle={{ fontSize: 14, color: myColors.primary }}
-          input={{
-            ref: ref => (this.quantInput = ref),
-            onEndEditing: this.quantityChanged,
-            defaultValue: '' + this.state.quantity,
-            placeholderTextColor: myColors.primary,
-            selectTextOnFocus: true,
-            containerStyle: { flex: 0.3 },
-            inputStyle: { fontSize: 14, color: myColors.primary },
-            keyboardType: 'numeric'
-          }}
-          rightIcon={editIconProps}
-          onPress={() => this.quantInput.focus()}
+        <Pills
+          title={'Indique cuántos bultos desea:'}
+          onMinusPress={() => this.onMinusPress('quantity')}
+          onPlusPress={() => this.onPlusPress('quantity')}
+          onTextChanged={this.quantityChanged}
+          value={`${this.state.quantity}`}
         />
-        <ListItem
-          title="Subtotal"
-          rightSubtitle={`$${subtotal.toFixed(2)}`}
-          titleStyle={{ fontSize: 14 }}
-        />
+        <SkuSubtotal value={`$${subtotal.toFixed(2)}`} />
+
         {isUpdate ? (
           <ButtonFooter title="Modificar Item" onPress={this.modify} />
         ) : (
@@ -107,14 +122,13 @@ export default class SkuDetails extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  containerList: {
-    borderBottomWidth: 1,
-    justifyContent: 'space-around'
-  },
   containerStyle: {
     flex: 1,
-    alignContent: 'center',
-    backgroundColor: '#FFF'
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    justifyContent: 'space-around',
+    paddingHorizontal: 10,
+    backgroundColor: '#fff'
   },
   button: {
     width: 300,
