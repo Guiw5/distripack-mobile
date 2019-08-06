@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "distripack-mobile",
-    "description": "Best Project Ever",
+    "description": "App for vendors make purchase orders ",
     "slug": "distripack-mobile",
     "privacy": "public",
     "sdkVersion": "31.0.0",
@@ -10,12 +10,17 @@
     "primaryColor": "#cccccc",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "platforms": [
+      "android",
+      "ios"
+    ],
+    "githubUrl": "https://github.com/Guiw5/distripack-mobile"
   }
 }
