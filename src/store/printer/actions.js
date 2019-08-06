@@ -88,3 +88,19 @@ export const print = orders => async dispatch => {
     dispatch(printError(error))
   }
 }
+
+export const reprint = orders => async dispatch => {
+  try {
+    dispatch(printRequest())
+    const { data } = await printerService.print(orders)
+    const ok = printerService.isOk(data)
+    if (ok) {
+      dispatch(printSuccess())
+    } else {
+      dispatch(results(data))
+      dispatch(printError())
+    }
+  } catch (error) {
+    dispatch(printError(error))
+  }
+}

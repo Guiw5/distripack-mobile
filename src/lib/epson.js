@@ -1136,7 +1136,7 @@ export function ePOSPrint(printer) {
 ePOSPrint.prototype.constructor = ePOSPrint
 
 ePOSPrint.prototype.status = async function() {
-  return await this.print(null, new ePOSBuilder().toString(), 100)
+  return await this.print(null, new ePOSBuilder().toString(), 1000)
 }
 
 ePOSPrint.prototype.print = async function(printjobid, data, timeout) {
@@ -1161,19 +1161,19 @@ ePOSPrint.prototype.print = async function(printjobid, data, timeout) {
 }
 
 ePOSPrint.prototype.extract = function(data) {
-  let success, status, code, battery, printjobid
-  success = /success\s*=\s*"\s*(1|true)\s*"/.test(data)
+  let ok, status, code, battery, printjobid
+  ok = /success\s*=\s*"\s*(1|true)\s*"/.test(data)
   status = data.match(/status\s*=\s*"\s*(\d+)\s*"/) ? parseInt(RegExp.$1) : 0
   code = data.match(/code\s*=\s*"\s*(\S*)\s*"/) ? RegExp.$1 : ''
   battery = data.match(/battery\s*=\s*"\s*(\d+)\s*"/) ? parseInt(RegExp.$1) : 0
   printjobid = data.match(/<printjobid>\s*(\S*)\s*<\/printjobid>/)
     ? RegExp.$1
     : ''
-  return { success, status, code, battery, printjobid }
+  return { ok, status, code, battery, printjobid }
 }
 
 ePOSPrint.prototype.results = function(info) {
-  let { ok, status, code } = this.epos.extract(info)
+  let { ok, status, code } = this.extract(info)
   let success =
     ok && Boolean(status & ASB_PRINT_SUCCESS)
       ? [{ ...SuccessCode[ASB_PRINT_SUCCESS], timestamp: +moment() }]

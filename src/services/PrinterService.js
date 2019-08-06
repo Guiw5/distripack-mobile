@@ -15,11 +15,14 @@ class PrinterService {
   }
 
   status = async () => {
-    const data = await this.epos.status()
+    const { data } = await this.epos.status()
     return this.results(data)
   }
 
-  results = info => this.epos.results(info)
+  results = info => {
+    const result = this.epos.results(info)
+    return result
+  }
 
   print = async orders => {
     this.builder.build(orders)
