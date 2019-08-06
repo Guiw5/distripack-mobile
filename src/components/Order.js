@@ -21,12 +21,22 @@ export default class Order extends Component {
   shouldComponentUpdate(nextProps) {
     //if the order was cleaned
     if (this.props.order && !nextProps.order) return false
+
+    if (nextProps.results && nextProps.results === this.props.results)
+      return false
+
     return true
   }
 
   componentWillReceiveProps(nextProps) {
     //check if was printing and the status was OK
-    ResultsPrintAlert(nextProps.results, this.props.clearState)
+    if (
+      this.props.printing &&
+      !nextProps.printing &&
+      nextProps.results &&
+      nextProps.results !== this.props.results
+    )
+      ResultsPrintAlert(nextProps.results, this.props.clearState)
   }
 
   toDelete = index => !!this.state.deleteMap[index]
@@ -75,7 +85,6 @@ export default class Order extends Component {
   goBack = () => this.props.navigation.goBack()
 
   goTo = state => {
-    console.log('state', state)
     if (state === 'Created') this.props.navigation.navigate('Recents')
 
     if (state === 'Printed') this.props.navigation.navigate('Pendings')
@@ -132,7 +141,11 @@ export default class Order extends Component {
     )
   }
 
-  print = () => this.props.print(this.props.order)
+  print = () => {
+    if (this.props.order.state.toLowerCase() === 'created')
+      this.props.print(this.props.order)
+    else this.props.reprint(this.props.order)
+  }
 
   renderFooter = deliveredAt => {
     if (deliveredAt) return <DeliveredNote deliveredAt />
@@ -150,8 +163,9 @@ export default class Order extends Component {
             title={
               this.props.order.state === 'Created' ? 'Imprimir' : 'Reimprimir'
             }
-            loading={this.props.printing}
             onPress={this.print}
+            loading={this.props.printing}
+            loadingProps={{ color: myColors.primary }}
             titleStyle={styles.btnTitle}
             buttonStyle={styles.btnProducts}
             containerStyle={{
@@ -192,7 +206,9 @@ export default class Order extends Component {
     }
     //Si la orden no tiene items, ya se ha entregado, o no se ha modificado aun => volver
     if (!hasItems || deliveredAt || (isUpdate && !isUpdated))
-      return <ButtonFooter title="Volver" onPress={this.goBack} />
+      return (
+        <ButtonFooter title="Volver" loading={loading} onPress={this.goBack} />
+      )
 
     //Si la orden se ha modificado => Modificar
     if (isUpdate && isUpdated)
