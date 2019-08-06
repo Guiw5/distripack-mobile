@@ -5,7 +5,7 @@ import Select from './Select'
 import CheckAll from './CheckAll'
 import CheckItem from './CheckItem'
 import { myColors } from '../lib/commons'
-import ResultsPrintAlert from './ResultsPrintAlert'
+import PrintAlert from './PrintAlert'
 
 export default class Recents extends React.Component {
   constructor(props) {
@@ -20,7 +20,7 @@ export default class Recents extends React.Component {
   componentWillReceiveProps(nextProps) {
     //check if was printing and the status was OK
     if (this.props.printStatus)
-      ResultsPrintAlert(nextProps.printStatus, this.props.clearState)
+      PrintAlert(nextProps.printStatus, this.props.clearState)
   }
 
   shouldComponentUpdate(nextProps, nextState) {
