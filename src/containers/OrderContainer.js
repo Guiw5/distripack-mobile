@@ -5,7 +5,7 @@ import Order from '../components/Order'
 
 const mapStateToProps = state => ({
   client: selectors.getClientFromOrder(state),
-  order: selectors.getOrder(state),
+  order: selectors.getOrderwithClient(state),
   error: selectors.getOrderError(state),
   isUpdate: selectors.isOrderUpdate(state),
   isUpdated: selectors.isOrderUpdated(state),
@@ -20,6 +20,7 @@ const mapDispatchToProps = dispatch => ({
   modify: order => dispatch(actions.modifyOrder(order)),
   setDeliveryDate: date => dispatch(actions.setDeliveryDate(date)),
   print: order => dispatch(actions.print([order])),
+  reprint: order => dispatch(actions.reprint([order])),
   clearState: () => dispatch(actions.clearState())
 })
 

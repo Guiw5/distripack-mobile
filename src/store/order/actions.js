@@ -74,7 +74,7 @@ export const createOrder = order => async dispatch => {
     dispatch(createOrderSuccess(data))
     dispatch(addToCreated(data))
   } catch (error) {
-    console.log(error)
+    console.log('createOrder', error)
     dispatch(createOrderError(error))
   }
 }
@@ -86,7 +86,7 @@ export const modifyOrder = order => async dispatch => {
     dispatch(modifyOrderSuccess(data))
     dispatch(updateOrders(data))
   } catch (error) {
-    console.log('error', error)
+    console.log('modifyOrder', error)
     dispatch(modifyOrderError(error))
   }
 }

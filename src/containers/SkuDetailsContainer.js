@@ -6,7 +6,6 @@ import selectors from '../store/selectors'
 const mapStateToProps = (state, ownProps) => {
   let item = ownProps.navigation.getParam('item')
   let isUpdate = ownProps.navigation.getParam('isUpdate')
-  console.log('not getting item', item, isUpdate)
   return {
     item,
     isUpdate,

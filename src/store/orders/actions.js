@@ -154,7 +154,6 @@ export const printOrders = orderIds => async dispatch => {
     const { data } = await http.put('orders/print', orderIds)
     dispatch(printOrdersSuccess(data))
   } catch (error) {
-    console.log('printed errors', error)
     dispatch(printOrdersError(error))
   }
 }
@@ -165,7 +164,6 @@ export const deliverOrders = orderIds => async dispatch => {
     const { data } = await http.put('orders/deliver', orderIds)
     dispatch(deliverOrdersSuccess(data))
   } catch (error) {
-    console.log('upa', error)
     dispatch(deliverOrdersError(error))
   }
 }
@@ -176,7 +174,6 @@ export const deleteOrders = orderIds => async dispatch => {
     const { data } = await http.delete('orders', { data: orderIds })
     dispatch(deleteOrdersSuccess(data))
   } catch (error) {
-    console.log('delete error', error.message)
     dispatch(deleteOrdersError(error))
   }
 }
