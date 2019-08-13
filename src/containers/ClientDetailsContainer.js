@@ -7,7 +7,9 @@ const mapStateToProps = (state, ownProps) => {
   let id = ownProps.navigation.getParam('clientId')
   return {
     client: selectors.getClient(state, id),
-    history: selectors.getHistory(state, id)
+    account: selectors.getAccount(state, id),
+    transactions: selectors.getTransactions(state, id),
+    loading: selectors.getTransactionsLoading(state)
   }
 }
 
@@ -15,7 +17,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   let id = ownProps.navigation.getParam('clientId')
   return {
     getClient: () => dispatch(actions.fetchClient(id)),
-    getHistory: () => dispatch(actions.fetchHistory(id))
+    getAccount: () => dispatch(actions.fetchAccount(id)),
+    getTransactions: () => dispatch(actions.fetchTransactions(id))
   }
 }
 

@@ -5,7 +5,8 @@ import * as client from './client/actions'
 import * as clients from './clients/actions'
 import * as history from './history/actions'
 import * as printer from './printer/actions'
-
+import * as account from './account/actions'
+import * as transactions from './transactions/actions'
 // export all actions as modules
 
 export const initApp = () => dispatch => {
@@ -23,5 +24,7 @@ export default {
   ...client,
   ...clients,
   ...history,
-  ...printer
+  ...printer,
+  ...account,
+  ...transactions
 }

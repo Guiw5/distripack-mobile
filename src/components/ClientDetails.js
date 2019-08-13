@@ -95,18 +95,26 @@ class DetailsTab extends PureComponent {
   }
 }
 
-class HistoryTab extends PureComponent {
+class TransactionsTab extends PureComponent {
   constructor(props) {
     super(props)
   }
 
   componentDidMount() {
-    let { history, getHistory } = this.props.screenProps
-    if (history == null) getHistory()
+    let {
+      transactions,
+      account,
+      getAccount,
+      getTransactions
+    } = this.props.screenProps
+    if (account == null) getAccount()
+    if (transactions == null) getTransactions()
   }
 
   render() {
-    console.log('history', this.props.screenProps.history)
+    console.log('loading', this.props.screenProps.loading)
+    console.log('transactions', this.props.screenProps.transactions)
+    console.log('account', this.props.screenProps.account)
     return <View />
   }
 }
@@ -114,7 +122,7 @@ class HistoryTab extends PureComponent {
 export default createBottomTabNavigator(
   {
     Details: DetailsTab,
-    History: HistoryTab
+    History: TransactionsTab
   },
   {
     navigationOptions: ({ navigation }) => ({
