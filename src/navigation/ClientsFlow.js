@@ -22,6 +22,7 @@ export default createStackNavigator(
     }
   },
   {
-    headerMode: 'float'
+    headerMode: 'float',
+    cardStyle: { backgroundColor: '#fff' }
   }
 )

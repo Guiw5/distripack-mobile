@@ -20,6 +20,7 @@ export default class IconCard extends PureComponent {
         </View>
         <Icon
           raised
+          reverse
           containerStyle={styles.iconContainer}
           size={46}
           {...this.props.iconProps}

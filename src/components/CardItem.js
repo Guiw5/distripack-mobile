@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text, Icon } from 'react-native-elements'
+import { myColors } from '../lib/commons'
 
 export default class CardItem extends PureComponent {
   render() {
@@ -24,8 +25,10 @@ export default class CardItem extends PureComponent {
                 marginRight: -12,
                 marginVertical: -2
               }}
+              color={myColors.primary}
               {...icon}
               raised
+              reverse
               onPress={onPress}
               size={10}
             />
