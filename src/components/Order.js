@@ -8,7 +8,7 @@ import ButtonFooter from './ButtonFooter'
 import OrderFooter from './OrderFooter'
 import OrderTitle from './OrderTitle'
 import DeliveredNote from './DeliveredNote'
-import ResultsPrintAlert from './ResultsPrintAlert'
+import PrintAlert from './PrintAlert'
 
 import { myColors } from '../lib/commons'
 
@@ -36,7 +36,7 @@ export default class Order extends Component {
       nextProps.results &&
       nextProps.results !== this.props.results
     )
-      ResultsPrintAlert(nextProps.results, this.props.clearState)
+      PrintAlert(nextProps.results, this.props.clearState)
   }
 
   toDelete = index => !!this.state.deleteMap[index]
