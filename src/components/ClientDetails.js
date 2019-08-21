@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { View, ScrollView, StyleSheet, Linking } from 'react-native'
 import { createBottomTabNavigator } from 'react-navigation'
-import { Icon } from 'react-native-elements'
+import { Icon, Text } from 'react-native-elements'
 import IconCard from './IconCard'
 import { myColors } from '../lib/commons'
 
@@ -101,7 +101,7 @@ class TransactionsTab extends PureComponent {
   }
 
   componentDidMount() {
-    let {
+    const {
       transactions,
       account,
       getAccount,
@@ -112,10 +112,28 @@ class TransactionsTab extends PureComponent {
   }
 
   render() {
-    console.log('loading', this.props.screenProps.loading)
-    console.log('transactions', this.props.screenProps.transactions)
-    console.log('account', this.props.screenProps.account)
-    return <View />
+    const { account, transactions, loading } = this.props.screenProps
+    console.log('------------START---------------')
+    console.log('loading', loading)
+    console.log('transactions', transactions)
+    console.log('account', account)
+    console.log('-------------END----------------')
+    if (transactions == null) return null
+    return (
+      <View>
+        <View>
+          {transactions.map(t => {
+            if (t.type === 'Payment') {
+              return <Text>Payment</Text>
+            }
+            return <Text>Receipt</Text>
+          })}
+        </View>
+        <View>
+          <Text>{`Saldo Actual: ${account.currentBalance}`}</Text>
+        </View>
+      </View>
+    )
   }
 }
 

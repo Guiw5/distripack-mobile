@@ -1,5 +1,5 @@
 {
-  "apiUrl": "http://192.168.0.13:3006/api",
+  "apiUrl": "https://distripack-api-dev.herokuapp.com/api",
   "apiUrl2": "http://ec2-18-220-58-115.us-east-2.compute.amazonaws.com/api",
   "printer": {
     "productive": false,
