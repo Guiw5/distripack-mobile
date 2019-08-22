@@ -17,43 +17,25 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const validate = values => {
-  const error = {}
-  error.email = ''
-  error.nick = ''
-  error.cuit = ''
-  var ema = values.email
-  var nk = values.nick
-  var ct = values.cuit
-  if (values.email === undefined) {
-    ema = ''
-  }
-  if (values.nick === undefined) {
-    nk = ''
-  }
-  if (values.cuit === undefined) {
-    ct = ''
+  const error = { email: '', nick: '', cuit: '' }
+  const { email, nick, cuit } = values
+
+  if (!nick) {
+    error.nick = 'El campo Alias es obligatorio'
   }
 
-  if (ema) {
+  if (email) {
     let regex = new RegExp(/\S+@\S+\.\S+/)
-    if (!regex.test(ema) && ema !== '') {
+    if (!regex.test(email) && email !== '') {
       error.email = 'Ingrese un Email válido'
     }
   }
 
-  /* 
-  if (!ema) {
-    error.email = 'El campo Email es obligatorio'
-  } 
-   */
-
-  if (!nk) {
-    error.nick = 'El campo Alias es obligatorio'
-  }
-  if (ct) {
-    if (ct.split('-').join('').length !== 11)
+  if (cuit) {
+    if (cuit.split('-').join('').length !== 11)
       error.cuit = 'El Cuit debe contenter 11 digitos'
   }
+
   return error
 }
 

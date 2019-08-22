@@ -15,6 +15,7 @@ export default class NewClient extends React.Component {
     if (!client.email) {
       client.email = `${+moment()}@gmail.com`
     }
+
     if (this.props.emails.includes(client.email)) {
       Alert.alert('Pepitooo', 'El email ingresado ya se encuentra asociado')
     } else {
@@ -61,7 +62,6 @@ export default class NewClient extends React.Component {
         placeholder="Ingrese Email"
         leftIcon={{ type: 'material-community', name: 'email-outline' }}
         keyboardType="email-address"
-        placeholder="pepito@gmail.com"
         autoCapitalize="none"
         errorMessage={touched && error ? error : null}
       />
