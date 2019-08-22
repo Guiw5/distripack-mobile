@@ -1,6 +1,6 @@
 {
-  "apiUrl": "http://192.168.0.182:3006/api",
-  "apiUrl2": "http://ec2-18-220-58-115.us-east-2.compute.amazonaws.com/api",
+  "apiUrl2": "http://192.168.0.182:3006/api",
+  "apiUrl": "http://ec2-18-220-58-115.us-east-2.compute.amazonaws.com/api",
   "printer": {
     "productive": true,
     "baseUrl": "http://186.136.163.95:55431/cgi-bin",
