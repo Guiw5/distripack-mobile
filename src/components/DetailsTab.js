@@ -1,11 +1,9 @@
 import React, { PureComponent } from 'react'
-import { View, ScrollView, StyleSheet, Linking } from 'react-native'
-import { createBottomTabNavigator } from 'react-navigation'
-import { Icon, Text } from 'react-native-elements'
-import IconCard from './IconCard'
+import { Linking, ScrollView, StyleSheet } from 'react-native'
 import { myColors } from '../lib/commons'
+import IconCard from './IconCard'
 
-class DetailsTab extends PureComponent {
+export class DetailsTab extends PureComponent {
   constructor(props) {
     super(props)
   }
@@ -24,7 +22,6 @@ class DetailsTab extends PureComponent {
   handleCall = phone => async () => {
     var phoneString = phone.replace(/-/g, '')
     const url = `tel:${phoneString}`
-
     return await Linking.openURL(url)
   }
 
@@ -34,10 +31,9 @@ class DetailsTab extends PureComponent {
   }
 
   render() {
-    if (this.props.screenProps.client == null) {
-      return null
-    }
-    let client = this.props.screenProps.client
+    const { client } = this.props.screenProps
+    if (!client) return null
+
     let fullName = client.firstName + ' ' + client.lastName
     return (
       <ScrollView
@@ -94,89 +90,6 @@ class DetailsTab extends PureComponent {
     )
   }
 }
-
-class TransactionsTab extends PureComponent {
-  constructor(props) {
-    super(props)
-  }
-
-  componentDidMount() {
-    const {
-      transactions,
-      account,
-      getAccount,
-      getTransactions
-    } = this.props.screenProps
-    if (account == null) getAccount()
-    if (transactions == null) getTransactions()
-  }
-
-  render() {
-    const { account, transactions, loading } = this.props.screenProps
-    console.log('------------START---------------')
-    console.log('loading', loading)
-    console.log('transactions', transactions)
-    console.log('account', account)
-    console.log('-------------END----------------')
-    if (transactions == null) return null
-    return (
-      <View>
-        <View>
-          {transactions.map(t => {
-            if (t.type === 'Payment') {
-              return <Text>Payment</Text>
-            }
-            return <Text>Receipt</Text>
-          })}
-        </View>
-        <View>
-          <Text>{`Saldo Actual: ${account.currentBalance}`}</Text>
-        </View>
-      </View>
-    )
-  }
-}
-
-export default createBottomTabNavigator(
-  {
-    Details: DetailsTab,
-    History: TransactionsTab
-  },
-  {
-    navigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ horizontal, tintColor }) => {
-        const { routeName } = navigation.state
-        let iconName
-        let type
-        if (routeName === 'Details') {
-          iconName = 'account-details'
-          type = 'material-community'
-        } else if (routeName === 'History') {
-          iconName = 'history'
-          type = 'material'
-        }
-
-        return (
-          <Icon
-            type={type}
-            name={iconName}
-            size={horizontal ? 20 : 25}
-            color={tintColor}
-          />
-        )
-      }
-    }),
-    tabBarOptions: {
-      activeTintColor: myColors.green,
-      inactiveTintColor: 'gray',
-      activeBackgroundColor: myColors.greenBg,
-      inactiveBackgroundColor: '#fff',
-      showIcon: true,
-      showLabel: false,
-      indicatorStyle: { backgroundColor: myColors.green }
-    }
-  }
-)
 
 const styles = StyleSheet.create({
   scrollContainer: { backgroundColor: myColors.greenBg }

@@ -1,5 +1,11 @@
 import createReducer from '../createReducer'
 
+const initialState = {
+  data: [],
+  loading: false,
+  error: null
+}
+
 const fetchTransactionsRequest = (state, action) => ({
   ...state,
   loading: true,
@@ -18,12 +24,6 @@ const fetchTransactionsError = (state, action) => ({
   loading: false,
   error: action.error
 })
-
-const initialState = {
-  data: null,
-  loading: false,
-  error: null
-}
 
 const transactions = createReducer((state = initialState), {
   ['FETCH_TRANSACTIONS_REQUEST']: fetchTransactionsRequest,

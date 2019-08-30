@@ -1,20 +1,20 @@
 import { connect } from 'react-redux'
 import actions from '../store/actions'
 import selectors from '../store/selectors'
-import ClientDetails from '../components/ClientDetails'
+import Account from '../components/Account'
 
 const mapStateToProps = (state, ownProps) => {
-  let id = ownProps.navigation.getParam('clientId')
+  const { client } = ownProps.navigation.getParam('account')
   return {
-    client: selectors.getClient(state, id),
-    account: selectors.getAccount(state, id),
-    transactions: selectors.getTransactions(state, id),
+    client: client,
+    account: selectors.getAccount(state),
+    transactions: selectors.getTransactions(state),
     loading: selectors.getTransactionsLoading(state)
   }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  let id = ownProps.navigation.getParam('clientId')
+  let { id } = ownProps.navigation.getParam('account').client
   return {
     getClient: () => dispatch(actions.fetchClient(id)),
     getAccount: () => dispatch(actions.fetchAccount(id)),
@@ -39,4 +39,4 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
   mergeProps
-)(ClientDetails)
+)(Account)

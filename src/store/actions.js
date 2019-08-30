@@ -6,6 +6,7 @@ import * as clients from './clients/actions'
 import * as history from './history/actions'
 import * as printer from './printer/actions'
 import * as account from './account/actions'
+import * as accounts from './accounts/actions'
 import * as transactions from './transactions/actions'
 // export all actions as modules
 
@@ -26,5 +27,6 @@ export default {
   ...history,
   ...printer,
   ...account,
+  ...accounts,
   ...transactions
 }

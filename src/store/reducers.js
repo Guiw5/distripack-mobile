@@ -7,6 +7,7 @@ import clients from './clients/reducer'
 import history from './history/reducer'
 import printer from './printer/reducer'
 import account from './account/reducer'
+import accounts from './accounts/reducer'
 import transactions from './transactions/reducer'
 
 import { reducer as formReducer } from 'redux-form'
@@ -20,6 +21,7 @@ export const rootReducer = combineReducers({
   history,
   printer,
   account,
+  accounts,
   transactions,
   form: formReducer
 })
