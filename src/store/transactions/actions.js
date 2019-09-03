@@ -18,7 +18,6 @@ export const fetchTransactions = clientId => async dispatch => {
   try {
     dispatch(fetchTransactionsRequest())
     let { data } = await http.get(`/transactions/${clientId}`)
-    console.log('Fetching Transactions', data)
     dispatch(fetchTransactionsSuccess(data))
   } catch (error) {
     console.log('error', error)

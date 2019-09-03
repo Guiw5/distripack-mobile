@@ -17,7 +17,7 @@ export const fetchAccountError = error => ({
 export const fetchAccount = id => async dispatch => {
   try {
     dispatch(fetchAccountRequest())
-    let { data } = await http.get(`/transactions/${id}/account`)
+    let { data } = await http.get(`/accounts/${id}`)
     dispatch(fetchAccountSuccess(data))
   } catch (error) {
     dispatch(fetchAccountError(error))
