@@ -2,7 +2,7 @@
   "main": "node_modules/expo/AppEntry.js",
   "private": true,
   "dependencies": {
-    "axios": "0.18.0",
+    "axios": "0.18.1",
     "expo": "^31.0.4",
     "moment": "2.23.0",
     "prop-types": "15.7.2",
