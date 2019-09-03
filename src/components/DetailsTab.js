@@ -9,7 +9,7 @@ export class DetailsTab extends PureComponent {
   }
 
   componentDidMount() {
-    let { client, getClient } = this.props.screenProps
+    let { client, getClient } = this.props
     if (client == null) getClient()
   }
 
@@ -31,7 +31,7 @@ export class DetailsTab extends PureComponent {
   }
 
   render() {
-    const { client } = this.props.screenProps
+    const { client } = this.props
     if (!client) return null
 
     let fullName = client.firstName + ' ' + client.lastName

@@ -61,10 +61,12 @@ export default class Recents extends React.Component {
   }
 
   loadData = async () => {
-    if (!this.props.loadingClients && this.props.clients.length === 0)
-      await this.props.loadClients()
     if (!this.props.loadingOrders && this.props.orders.length === 0)
       await this.props.loadOrders()
+
+    if (!this.props.loadingClients && this.props.clients.length === 0)
+      await this.props.loadClients()
+
     if (
       !this.props.printing &&
       this.props.clients.length > 0 &&

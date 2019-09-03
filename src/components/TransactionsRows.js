@@ -6,7 +6,16 @@ import moment from 'moment'
 
 export const TransactionsHeader = ({ col1, col2, col3, col4, col5 }) => (
   <View
-    style={[styles.row, { height: 40, borderBottomColor: myColors.primary }]}
+    style={[
+      styles.row,
+      {
+        height: 40,
+        borderTopColor: myColors.primary,
+        borderBottomColor: myColors.primary,
+        borderTopWidth: 1,
+        borderBottomWidth: 1
+      }
+    ]}
   >
     <Text style={{ color: myColors.primary }}>{col1}</Text>
     <Text style={{ color: myColors.primary }}>{col2}</Text>
