@@ -16,6 +16,7 @@ export const getClientEmails = createSelector(
 export const getClientsMap = createSelector(
   getClients,
   clients => {
+    if (clients.length === 0) return null
     return clients.reduce((dict, client) => {
       dict[client.id] = client
       return dict

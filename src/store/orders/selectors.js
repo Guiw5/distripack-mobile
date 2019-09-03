@@ -73,15 +73,16 @@ export const getClientsFromOrdersCreated = createSelector(
 )
 
 export const getOrdersCreatedWithClients = createSelector(
-  getOrdersCreated,
   getClientsMap,
-  (orders, clientsMap) => {
-    if (!clientsMap) return []
-
-    return orders.map(order => ({
-      ...order,
-      client: clientsMap[order.clientId]
-    }))
+  getOrdersCreated,
+  (clientsMap, orders) => {
+    if (clientsMap) {
+      return orders.map(order => ({
+        ...order,
+        client: clientsMap[order.clientId]
+      }))
+    }
+    return []
   }
 )
 
