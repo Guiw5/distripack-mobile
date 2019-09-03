@@ -6,29 +6,24 @@ import OrderScreen from './screens/OrderScreen'
 import PendingsScreen from './screens/PendingsScreen'
 import SkuDetailsScreen from './screens/SkuDetailsScreen'
 
-export default createStackNavigator(
-  {
-    Pendings: {
-      screen: PendingsScreen,
-      navigationOptions: props => ({
-        title: 'En Reparto',
-        headerLeft: <MenuButton {...props} />
-      })
-    },
-    Order: {
-      screen: OrderScreen,
-      navigationOptions: {
-        title: 'Orden de Compra'
-      }
-    },
-    Details: {
-      screen: SkuDetailsScreen,
-      navigationOptions: {
-        title: 'Detalle'
-      }
+export default createStackNavigator({
+  Pendings: {
+    screen: PendingsScreen,
+    navigationOptions: props => ({
+      title: 'En Reparto',
+      headerLeft: <MenuButton {...props} />
+    })
+  },
+  Order: {
+    screen: OrderScreen,
+    navigationOptions: {
+      title: 'Orden de Compra'
     }
   },
-  {
-    headerMode: 'float'
+  Details: {
+    screen: SkuDetailsScreen,
+    navigationOptions: {
+      title: 'Detalle'
+    }
   }
-)
+})

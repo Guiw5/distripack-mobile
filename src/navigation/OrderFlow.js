@@ -56,7 +56,6 @@ export default createStackNavigator(
     }
   },
   {
-    headerMode: 'float',
     initialRouteName: 'Clients'
   }
 )

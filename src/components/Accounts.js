@@ -1,6 +1,8 @@
 import React from 'react'
+import { View } from 'react-native'
 import Select from './Select'
-import { ListItem } from 'react-native-elements'
+import { ListItem, Icon } from 'react-native-elements'
+import { myColors } from '../lib/commons'
 
 export default class Accounts extends React.PureComponent {
   constructor(props) {
@@ -25,8 +27,17 @@ export default class Accounts extends React.PureComponent {
     <ListItem
       title={item.client.nick}
       subtitle={item.client.email}
-      rightTitle={`$ ${item.currentBalance}`}
+      rightTitle={`$ ${item.currentBalance.toFixed(2)}`}
+      rightTitleStyle={{ color: myColors.green }}
       bottomDivider
+      leftIcon={
+        <Icon
+          type="material-community"
+          name="cart"
+          size={20}
+          color={myColors.primary}
+        />
+      }
       subtitleStyle={{ fontSize: 12 }}
       containerStyle={{ paddingVertical: 15 }}
       onPress={this.gotoDetails(item)}

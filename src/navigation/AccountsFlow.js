@@ -5,24 +5,18 @@ import MenuButton from './MenuButton'
 import AccountsScreen from './screens/AccountsScreen'
 import AccountScreen from './screens/AccountScreen'
 
-export default createStackNavigator(
-  {
-    Accounts: {
-      screen: AccountsScreen,
-      navigationOptions: props => ({
-        title: 'Cuentas Corrientes',
-        headerLeft: <MenuButton {...props} />
-      })
-    },
-    Account: {
-      screen: AccountScreen,
-      navigationOptions: ({ navigation }) => ({
-        title: `Cuenta Cte - ${navigation.getParam('account').client.nick}`
-      })
-    }
+export default createStackNavigator({
+  Accounts: {
+    screen: AccountsScreen,
+    navigationOptions: props => ({
+      title: 'Cuentas Corrientes',
+      headerLeft: <MenuButton {...props} />
+    })
   },
-  {
-    headerMode: 'float',
-    cardStyle: { backgroundColor: '#fff' }
+  Account: {
+    screen: AccountScreen,
+    navigationOptions: props => ({
+      title: `Cta Cte - ${props.navigation.getParam('account').client.nick}`
+    })
   }
-)
+})

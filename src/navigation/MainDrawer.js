@@ -7,13 +7,13 @@ import OrderFlow from './OrderFlow'
 import RecentsFlow from './RecentsFlow'
 import PendingsFlow from './PendingsFlow'
 import AccountsFlow from './AccountsFlow'
+import { myColors } from '../lib/commons'
 
 export default createDrawerNavigator(
   {
     NewOrder: {
       screen: OrderFlow,
       navigationOptions: {
-        title: 'Nuevo Pedido',
         drawerLabel: 'Nuevo Pedido',
         drawerIcon: ({ tintColor }) => (
           <Icon
@@ -28,7 +28,6 @@ export default createDrawerNavigator(
     Recents: {
       screen: RecentsFlow,
       navigationOptions: {
-        title: 'Recientes',
         drawerLabel: 'Recientes',
         drawerIcon: ({ tintColor }) => (
           <Icon name="print" size={20} color={tintColor} />
@@ -38,7 +37,6 @@ export default createDrawerNavigator(
     Pendings: {
       screen: PendingsFlow,
       navigationOptions: {
-        title: 'En Reparto',
         drawerLabel: 'En Reparto',
         drawerIcon: ({ tintColor }) => (
           <Icon
@@ -53,7 +51,6 @@ export default createDrawerNavigator(
     Accounts: {
       screen: AccountsFlow,
       navigationOptions: {
-        title: 'Cuentas Ctes',
         drawerLabel: 'Cuentas Ctes',
         drawerIcon: ({ tintColor }) => (
           <Icon name="people" size={20} color={tintColor} />
@@ -78,40 +75,18 @@ export default createDrawerNavigator(
   },
   {
     contentComponent: props => (
-      <View style={{ paddingVertical: 40 }}>
+      <View style={{ paddingTop: 20 }}>
         <DrawerItems {...props} />
       </View>
     ),
     contentOptions: {
-      itemsContainerStyle: {},
+      itemsContainerStyle: {
+        backgroundColor: myColors.greenBg
+      },
       iconContainerStyle: {
         opacity: 1
       }
     },
-    initialRouteName: 'Recents'
+    initialRouteName: 'Accounts'
   }
 )
-
-// export default createStackNavigator(
-//   {
-//     Drawer: { screen: DrawerMenu }
-//   },
-//   {
-//     headerMode: 'float',
-//     initialRouteName: 'Drawer',
-//     navigationOptions: ({ navigation }) => ({
-//       headerLeft: (
-//         <Icon
-//           type="material-community"
-//           name="menu"
-//           containerStyle={{
-//             paddingHorizontal: 15
-//           }}
-//           onPress={() => {
-//             navigation.toggleDrawer()
-//           }}
-//         />
-//       )
-//     })
-//   }
-// )
