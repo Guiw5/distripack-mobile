@@ -46,12 +46,12 @@ const getProps = t =>
  * returns a list of <TransactionRow />
  * @param {transactions} param0
  */
-export const TransactionsRows = ({ transactions }) => {
+export const TransactionsRows = ({ transactions, navigation }) => {
   return transactions.map(t => (
     <TransactionRow
       key={t.id}
       {...getProps(t)}
-      onPress={() => console.log('navigation', this.props.navigation)}
+      onPress={() => console.log('navigation', navigation)}
     />
   ))
 }

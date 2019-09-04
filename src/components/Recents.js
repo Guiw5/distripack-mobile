@@ -13,8 +13,8 @@ export default class Recents extends React.Component {
     this.state = { items: {}, all: false, delete: {} }
   }
 
-  async componentDidMount() {
-    await this.loadData()
+  componentDidMount() {
+    this.loadData()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -24,8 +24,8 @@ export default class Recents extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps.clients.length > 0 && this.props.clients.length === 0)
-      return true
+    // if (nextProps.clients.length > 0 && this.props.clients.length === 0)
+    //   return true
 
     if (this.props.printing !== nextProps.printing) return true
 
@@ -60,19 +60,19 @@ export default class Recents extends React.Component {
     return false
   }
 
-  loadData = async () => {
+  loadData = () => {
     if (!this.props.loadingOrders && this.props.orders.length === 0)
-      await this.props.loadOrders()
+      this.props.loadOrders()
 
-    if (!this.props.loadingClients && this.props.clients.length === 0)
-      await this.props.loadClients()
+    // if (!this.props.loadingClients && this.props.clients.length === 0)
+    //   await this.props.loadClients()
 
     if (
       !this.props.printing &&
-      this.props.clients.length > 0 &&
+      // this.props.clients.length > 0 &&
       this.props.orders.length > 0
     )
-      await this.props.getStatus()
+      this.props.getStatus()
   }
 
   filter = text => item =>
@@ -106,7 +106,12 @@ export default class Recents extends React.Component {
     this.setState(prevState => {
       let newState = { ...prevState.delete }
       newState[item.id] = !prevState.delete[item.id]
-      return { ...prevState, delete: newState, items: {}, all: false }
+      return {
+        ...prevState,
+        delete: newState,
+        items: {},
+        all: false
+      }
     })
   }
 
@@ -123,7 +128,11 @@ export default class Recents extends React.Component {
           ? this.state.delete[item.id]
           : this.state.items[item.id]
       }
-      onPress={this.onPress(item)}
+      onPress={
+        (this.anyToDelete() && this.onCheckDelete(item)) ||
+        (this.anyToPrint() && this.onCheck(item)) ||
+        this.onPress(item)
+      }
       onLongPress={this.onLongPress(item)}
       isDeletion={this.isDelete(item.id)}
       onCheck={
@@ -187,6 +196,8 @@ export default class Recents extends React.Component {
         placeholder="Escriba N° de control, alias o email del cliente"
         filter={this.filter}
         data={this.props.orders}
+        refreshing={this.props.loadingOrders}
+        onRefresh={this.props.loadOrders}
         extraData={this.state}
         renderItem={this.renderItem}
         headerComponent={

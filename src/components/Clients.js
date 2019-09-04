@@ -26,7 +26,7 @@ export default class Clients extends React.PureComponent {
         this.gotoOrdersByClient(id, nick)
       } else {
         //should create a the new one
-        this.gotoProducts(id)
+        this.gotoProducts(id, nick)
       }
     } else {
       //cames from Clients Info Flow
@@ -35,18 +35,16 @@ export default class Clients extends React.PureComponent {
   }
 
   gotoDetails = id => {
-    this.props.navigation.navigate('Details', {
-      clientId: id
-    })
+    this.props.navigation.navigate('Details', { clientId: id })
   }
 
   gotoOrdersByClient = (id, nick) => {
     this.props.navigation.navigate('RecentlyOrders', { clientId: id, nick })
   }
 
-  gotoProducts = id => {
+  gotoProducts = (id, nick) => {
     this.props.setClient(id)
-    this.props.navigation.navigate('Products')
+    this.props.navigation.navigate('Products', { client: nick })
   }
 
   goToClient = () => this.props.navigation.navigate('Client')
@@ -72,6 +70,8 @@ export default class Clients extends React.PureComponent {
         keyExtractor={item => item.email}
         placeholder="Escriba alias o email del cliente"
         filter={this.filter}
+        refreshing={this.props.loading}
+        onRefresh={this.props.loadClients}
         data={this.props.clients}
         renderItem={this.renderItem}
         button={{

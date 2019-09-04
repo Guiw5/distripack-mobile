@@ -5,7 +5,8 @@ import Products from '../components/Products'
 
 const mapStateToProps = state => ({
   products: selectors.getProducts(state),
-  order: selectors.getOrder(state)
+  order: selectors.getOrder(state),
+  loading: selectors.getProductsLoading(state)
 })
 
 const mapDispatchToProps = dispatch => ({

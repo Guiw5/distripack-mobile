@@ -3,8 +3,8 @@ import actions from '../store/actions'
 import selectors from '../store/selectors'
 import { TransactionsTab } from '../components/TransactionsTab'
 
-const mapStateToProps = state => ({
-  account: selectors.getAccount(state),
+const mapStateToProps = (state, ownProps) => ({
+  account: ownProps.navigation.getParam('account'),
   transactions: selectors.getTransactions(state),
   loading: selectors.getTransactionsLoading(state)
 })

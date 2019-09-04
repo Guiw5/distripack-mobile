@@ -8,7 +8,8 @@ const mapStateToProps = state => {
     clients: selectors.getClients(state),
     created: selectors.getOrdersCreatedByClient(state),
     pending: selectors.getOrdersPendingByClient(state),
-    delivered: selectors.getOrdersDeliveredByClient(state)
+    delivered: selectors.getOrdersDeliveredByClient(state),
+    loading: selectors.getClientsLoading(state)
   }
 }
 

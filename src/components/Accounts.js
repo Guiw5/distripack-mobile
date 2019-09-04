@@ -1,5 +1,4 @@
 import React from 'react'
-import { View } from 'react-native'
 import Select from './Select'
 import { ListItem, Icon } from 'react-native-elements'
 import { myColors } from '../lib/commons'
@@ -50,6 +49,8 @@ export default class Accounts extends React.PureComponent {
         keyExtractor={item => item.client.email}
         placeholder="Escriba alias o email del cliente"
         filter={this.filter}
+        refreshing={this.props.loading}
+        onRefresh={this.props.loadAccounts}
         data={this.props.accounts}
         renderItem={this.renderItem}
       />

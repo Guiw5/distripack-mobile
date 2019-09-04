@@ -73,8 +73,9 @@ export default class RecentlyOrders extends PureComponent {
   gotoProducts = () => {
     const { navigation, setClient } = this.props
     const id = navigation.getParam('clientId')
+    const client = navigation.getParam('nick')
     setClient(id)
-    navigation.navigate('Products')
+    navigation.navigate('Products', { client })
   }
 
   render() {

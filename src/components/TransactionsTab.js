@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { ScrollView, View } from 'react-native'
+import { ScrollView, View, RefreshControl } from 'react-native'
 import { Text } from 'react-native-elements'
 import {
   TransactionsHeader,
@@ -20,10 +20,14 @@ export class TransactionsTab extends PureComponent {
   }
 
   render() {
-    const { account, transactions, loading } = this.props
-    if (loading || !account) return null
+    const { account, transactions, loading, getTransactions } = this.props
     return (
-      <ScrollView style={{ paddingHorizontal: 5 }}>
+      <ScrollView
+        style={{ paddingHorizontal: 5 }}
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={getTransactions} />
+        }
+      >
         <AccountBalance {...account} />
         <TransactionsHeader
           col1={'Fecha'}

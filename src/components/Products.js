@@ -60,25 +60,22 @@ export default class Products extends PureComponent {
   )
 
   render() {
-    const { order } = this.props
+    const { order, navigation } = this.props
     return (
       <Select
         keyExtractor={item => `${item.id}`}
         placeholder="Escriba nombre o alias del producto"
         renderItem={this.renderItem}
+        refreshing={this.props.loading}
+        onRefresh={this.props.loadProducts}
         filter={this.filter}
         data={this.props.products}
-        button={this.getButtonProps(order)}
+        button={{
+          title: `${navigation.getParam('client')} (${order.items.length})`,
+          onPress: this.goToOrder,
+          disabled: order.items.length == 0
+        }}
       />
     )
-  }
-
-  getButtonProps = order => {
-    if (order.items && order.items.length > 0)
-      return {
-        title: 'Ver Pedido (' + order.items.length + ')',
-        onPress: this.goToOrder
-      }
-    return null
   }
 }
