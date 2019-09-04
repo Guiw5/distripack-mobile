@@ -27,15 +27,12 @@ export default class Accounts extends React.PureComponent {
       title={item.client.nick}
       subtitle={item.client.email}
       rightTitle={`$ ${item.currentBalance.toFixed(2)}`}
-      rightTitleStyle={{ color: myColors.green }}
+      rightTitleStyle={{
+        color: item.currentBalance > 0 ? myColors.green : myColors.danger
+      }}
       bottomDivider
       leftIcon={
-        <Icon
-          type="material-community"
-          name="cart"
-          size={20}
-          color={myColors.primary}
-        />
+        <Icon type="material-community" name="format-list-checks" size={24} />
       }
       subtitleStyle={{ fontSize: 12 }}
       containerStyle={{ paddingVertical: 15 }}
