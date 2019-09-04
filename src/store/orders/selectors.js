@@ -17,8 +17,9 @@ export const getOrdersCreatedByClient = createSelector(
   getOrdersCreated,
   orders => {
     return orders.reduce((dict, order) => {
-      if (!dict[order.clientId]) dict[order.clientId] = [order]
-      else dict[order.clientId] = dict[order.clientId].concat(order)
+      dict[order.clientId] = dict[order.clientId]
+        ? [...dict[order.clientId], order]
+        : [order]
       return dict
     }, {})
   }
@@ -28,8 +29,9 @@ export const getOrdersPendingByClient = createSelector(
   getOrdersPending,
   orders => {
     return orders.reduce((dict, order) => {
-      if (!dict[order.clientId]) dict[order.clientId] = [order]
-      else dict[order.clientId] = dict[order.clientId].concat(order)
+      dict[order.clientId] = dict[order.clientId]
+        ? [...dict[order.clientId], order]
+        : [order]
       return dict
     }, {})
   }
@@ -39,8 +41,9 @@ export const getOrdersDeliveredByClient = createSelector(
   getOrdersDelivered,
   orders => {
     return orders.reduce((dict, order) => {
-      if (!dict[order.clientId]) dict[order.clientId] = [order]
-      else dict[order.clientId] = dict[order.clientId].concat(order)
+      dict[order.clientId] = dict[order.clientId]
+        ? [...dict[order.clientId], order]
+        : [order]
       return dict
     }, {})
   }
