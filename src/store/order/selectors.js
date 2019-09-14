@@ -7,6 +7,8 @@ export const getOrderLoading = state => state.order.loading
 
 export const getOrderError = state => state.order.error
 
+export const getOrderItems = state => state.order.data.items
+
 export const getClientFromOrder = createSelector(
   getClients,
   getOrder,

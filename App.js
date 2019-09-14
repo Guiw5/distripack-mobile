@@ -12,11 +12,11 @@ Sentry.config(
   'https://a4ef8c9c874d4e45b0143b709735d2b7@sentry.io/1540156'
 ).install()
 
-useScreens()
-const Navigator = createAppContainer(Drawer)
-
 const store = configureStore()
 store.dispatch(initApp())
+
+useScreens()
+const Navigator = createAppContainer(Drawer)
 
 export default class App extends React.Component {
   constructor(props) {

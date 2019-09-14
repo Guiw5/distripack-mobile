@@ -99,7 +99,13 @@ export const myColors = {
   green: '#42adb3',
   greenBg: '#42adb320',
   danger: '#db3838',
-  dangerBg: '#db383820'
+  dangerBg: '#db383820',
+  grey0: '#393e42',
+  grey1: '#43484d',
+  grey2: '#5e6977',
+  grey3: '#86939e',
+  grey4: '#bdc6cf',
+  grey5: '#e1e8ee'
 }
 const style = StyleSheet.create({
   separator: {

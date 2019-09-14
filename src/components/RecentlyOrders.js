@@ -80,12 +80,13 @@ export default class RecentlyOrders extends PureComponent {
 
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: '#fff' }}>
+      <View style={{ flex: 1 }}>
         <SectionList
           sections={this.sections}
           renderItem={this.renderItem}
           renderSectionHeader={this.renderSectionHeader}
           keyExtractor={item => item.id}
+          initialNumToRender={13}
         />
         <ButtonFooter title="Nuevo" onPress={this.gotoProducts} />
       </View>

@@ -23,6 +23,15 @@ export const fetchProductsError = data => ({
   data
 })
 
+export const setSearchText = text => ({
+  type: 'SET_SEARCH_TEXT',
+  text
+})
+
+export const fetchNewPage = () => ({
+  type: 'FETCH_NEW_PAGE'
+})
+
 export const loadProducts = () => async dispatch => {
   try {
     dispatch(fetchProducts())
@@ -31,4 +40,9 @@ export const loadProducts = () => async dispatch => {
   } catch (error) {
     dispatch(fetchProductsError(error))
   }
+}
+
+export const filterProducts = text => async dispatch => {
+  dispatch(setSearchText(text))
+  dispatch(fetchNewPage())
 }

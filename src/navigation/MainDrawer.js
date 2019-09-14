@@ -81,12 +81,12 @@ export default createDrawerNavigator(
     ),
     contentOptions: {
       itemsContainerStyle: {
-        backgroundColor: myColors.greenBg
+        marginTop: 10
       },
       iconContainerStyle: {
         opacity: 1
       }
     },
-    initialRouteName: 'Accounts'
+    initialRouteName: 'NewOrder'
   }
 )

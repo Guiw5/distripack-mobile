@@ -1,8 +1,9 @@
 import React from 'react'
-import { SearchBar } from 'react-native-elements'
+import { SearchBar, Text } from 'react-native-elements'
 import { StyleSheet, View } from 'react-native'
 import { ListView as SearchList } from './ListView'
 import ButtonFooter from './ButtonFooter'
+import { myColors } from '../lib/commons'
 
 export default class Select extends React.Component {
   constructor(props) {
@@ -25,6 +26,7 @@ export default class Select extends React.Component {
     return (
       <View style={styles.searchContent}>
         <SearchBar
+          autoCompleteType="off"
           autoFocus={this.props.autoFocus}
           inputStyle={styles.searchBarInput}
           placeholder={this.props.placeholder}
@@ -39,6 +41,7 @@ export default class Select extends React.Component {
             keyExtractor={this.props.keyExtractor}
             renderItem={this.props.renderItem}
             data={this.filterData()}
+            ListFooterComponent={<FooterList />}
           />
         )}
         {this.props.button && <ButtonFooter {...this.props.button} />}
@@ -47,6 +50,12 @@ export default class Select extends React.Component {
   }
 }
 
+export const FooterList = () => (
+  <View style={styles.footer}>
+    <Text style={styles.footerText}> ----o---- </Text>
+  </View>
+)
+
 const styles = StyleSheet.create({
   searchBarInput: {
     fontSize: 14
@@ -54,7 +63,16 @@ const styles = StyleSheet.create({
   searchContent: {
     flex: 1,
     flexDirection: 'column',
-    height: '100%',
-    backgroundColor: '#FFF'
+    alignItems: 'stretch'
+  },
+  footer: {
+    width: '100%',
+    height: 60
+  },
+  footerText: {
+    textAlign: 'center',
+    color: myColors.grey4,
+    fontSize: 18,
+    padding: 7
   }
 })

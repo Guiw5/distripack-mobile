@@ -1,12 +1,63 @@
 import { createSelector } from 'reselect'
 
-export const getProductsLoading = state => state.products.loading
-
-export const getProducts = state => state.products.data
+export const pageSize = 20
 
 export const getProductId = (_, productId) => productId
 
 export const getSkuId = (_, skuId) => skuId
+
+export const getProductsLoading = state => state.products.loading
+
+export const getProducts = state => state.products.data
+
+export const getProductsTotal = state => state.products.data.length
+
+export const getSearchText = state => state.products.searchText
+
+export const getPageNr = state => state.products.page
+
+export const getTotalFiltered = state => state.products.total
+
+export const filterBySearchText = (products, searchText) =>
+  products.filter(item => {
+    const desc = item.skus[0].description.toLowerCase()
+    const nick = item.skus[0].nick.replace('/', ' ').toLowerCase()
+    const searchWords = searchText.split(' ')
+    return (
+      desc.contains(searchText) ||
+      nick.contains(searchText) ||
+      searchWords.every(word => desc.contains(word) || nick.contains(word))
+    )
+  })
+
+export const getFilteredProducts = createSelector(
+  getProducts,
+  getSearchText,
+  (products, searchText) => {
+    if (!searchText || searchText.length < 2) return products
+    searchText = searchText.replace('/', ' ').toLowerCase()
+    return filterBySearchText(products, searchText)
+  }
+)
+
+export const getPage = (list, number) =>
+  list.slice((number - 1) * pageSize, number * pageSize)
+
+export const getPageProducts = createSelector(
+  getFilteredProducts,
+  getPageNr,
+  (filtered, page) => getPage(filtered, page)
+)
+
+/** This product list should be mutable to handle the silent load in flatlist */
+export const getPaginatedProducts = createSelector(
+  state => state.products.paginated,
+  getPageProducts,
+  (products, newItems) => {
+    newItems.forEach(newItem => products.push(newItem))
+    return products
+  }
+)
 
 export const getProduct = createSelector(
   getProducts,
