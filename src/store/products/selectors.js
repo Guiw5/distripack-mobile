@@ -18,6 +18,8 @@ export const getPageNr = state => state.products.page
 
 export const getTotalFiltered = state => state.products.total
 
+export const getPaginated = state => state.products.paginated
+
 export const filterBySearchText = (products, searchText) =>
   products.filter(item => {
     const desc = item.skus[0].description.toLowerCase()
@@ -51,7 +53,7 @@ export const getPageProducts = createSelector(
 
 /** This product list should be mutable to handle the silent load in flatlist */
 export const getPaginatedProducts = createSelector(
-  state => state.products.paginated,
+  getPaginated,
   getPageProducts,
   (products, newItems) => {
     newItems.forEach(newItem => products.push(newItem))

@@ -108,13 +108,6 @@ export default class Order extends Component {
 
   getNumber = () => (this.props.order.id ? this.props.order.id : '-')
 
-  Subtotal = () => (
-    <View style={styles.subtotalContainer}>
-      <Text style={styles.subtotal}>{`$${this.getSubtotal().toFixed(2)}`}</Text>
-      <Text>Total </Text>
-    </View>
-  )
-
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: '#FFF' }}>
@@ -126,7 +119,9 @@ export default class Order extends Component {
           extraData={this.state.deleteMap}
           keyExtractor={(item, index) => `${index}`}
           renderItem={this.renderItem}
-          ListFooterComponent={this.Subtotal()}
+          ListFooterComponent={
+            <Subtotal subtotal={this.getSubtotal().toFixed(2)} />
+          }
         />
         {this.renderFooter(this.props.order.deliveredAt)}
         {this.renderButton(
@@ -231,6 +226,13 @@ export default class Order extends Component {
     )
   }
 }
+
+export const Subtotal = ({ subtotal }) => (
+  <View style={styles.subtotalContainer}>
+    <Text style={styles.subtotal}>{`$${subtotal}`}</Text>
+    <Text>Total </Text>
+  </View>
+)
 
 const styles = StyleSheet.create({
   btnProducts: {

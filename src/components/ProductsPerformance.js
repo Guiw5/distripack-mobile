@@ -3,7 +3,13 @@ import actions from '../store/actions'
 import selectors from '../store/selectors'
 
 import React, { PureComponent } from 'react'
-import { Keyboard, View, FlatList, StyleSheet } from 'react-native'
+import {
+  Keyboard,
+  View,
+  FlatList,
+  StyleSheet,
+  ActivityIndicator
+} from 'react-native'
 import { ListItem, SearchBar, Text } from 'react-native-elements'
 import ButtonFooter from './ButtonFooter'
 import { myColors } from '../lib/commons'
@@ -34,7 +40,7 @@ class ProductsPerformance extends PureComponent {
   }
 
   componentDidMount() {
-    if (this.props.paginated.length === 0) this.props.fetchNewPage()
+    if (this.props.paginated.length === 0) this.fetchNewPage()
   }
 
   goToDetails = ({ id, price }) => () => {
@@ -85,7 +91,7 @@ class ProductsPerformance extends PureComponent {
   }
 
   onRefresh = () => {
-    this.props.fetchNewPage()
+    this.fetchNewPage()
   }
 
   render() {
@@ -96,8 +102,10 @@ class ProductsPerformance extends PureComponent {
       totalProducts,
       totalFiltered,
       searchText,
-      page
+      page,
+      loading
     } = this.props
+
     return (
       <View style={{ flex: 1 }}>
         <SearchBar
@@ -107,32 +115,30 @@ class ProductsPerformance extends PureComponent {
           onChangeText={this.onChangeText}
           value={searchText}
         />
+        <HeaderList
+          totalFiltered={totalFiltered}
+          totalProducts={totalProducts}
+          page={page}
+          size={pageSize}
+          loading={loading}
+        />
         {paginated && (
           <FlatList
             ref={ref => (this.flatList = ref)}
             keyboardShouldPersistTaps={'handled'}
             keyExtractor={item => `${item.id}`}
             data={paginated}
-            // legacyImplementation={true}
             renderItem={this.renderSection}
             initialNumToRender={8}
-            onEndReachedThreshold={200}
             onEndReached={this.fetchNewPage}
-            refreshing={this.props.loading}
+            refreshing={loading}
             onRefresh={this.onRefresh}
             // windowSize={91}
-            maxToRenderPerBatch={15}
-            updateCellsBatchingPeriod={5}
-            ListHeaderComponent={
-              <HeaderList
-                totalFiltered={totalFiltered}
-                totalProducts={totalProducts}
-                page={page}
-                size={pageSize}
-              />
-            }
+            showsVerticalScrollIndicator
+            onEndReachedThreshold={1}
+            maxToRenderPerBatch={8}
+            updateCellsBatchingPeriod={8}
             ListFooterComponent={<FooterList />}
-            stickyHeaderIndices={[0]}
           />
         )}
         <ButtonFooter
@@ -145,22 +151,17 @@ class ProductsPerformance extends PureComponent {
   }
 }
 
-export const HeaderList = ({ totalProducts, totalFiltered, page, size }) => (
+export const HeaderList = ({
+  totalProducts,
+  totalFiltered,
+  loading,
+  page,
+  size
+}) => (
   <View style={styles.headerList}>
-    <Text
-      style={{
-        color: myColors.grey5,
-        fontWeight: '600',
-        fontFamily: 'sans-serif-light'
-      }}
-    >{`Cant total: ${totalProducts}`}</Text>
-    <Text
-      style={{
-        color: myColors.grey5,
-        fontWeight: '600',
-        fontFamily: 'sans-serif-light'
-      }}
-    >{`En pantalla: ${
+    <Text style={styles.headerText}>{`Cant total: ${totalProducts}`}</Text>
+    <ActivityIndicator animating={loading} />
+    <Text style={styles.headerText}>{`En pantalla: ${
       totalFiltered === 0
         ? 0
         : page * size > totalFiltered
@@ -178,10 +179,15 @@ const styles = StyleSheet.create({
   },
   headerList: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     alignItems: 'center',
     height: 25,
     backgroundColor: myColors.grey0
+  },
+  headerText: {
+    color: myColors.grey5,
+    fontWeight: '600',
+    fontFamily: 'sans-serif-light'
   }
 })
 

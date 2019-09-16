@@ -1,9 +1,12 @@
 import React, { PureComponent } from 'react'
 import { SectionList, View, StyleSheet } from 'react-native'
-import { ListItem, Text } from 'react-native-elements'
+import { ListItem, Text, Card } from 'react-native-elements'
 import { myColors, deliveryDayString } from '../lib/commons'
 import moment from 'moment'
 import ButtonFooter from './ButtonFooter'
+import { FlatList, RotationGestureHandler } from 'react-native-gesture-handler'
+import { Subtotal } from './Order'
+import OrderItem from './OrderItem'
 
 export default class RecentlyOrders extends PureComponent {
   constructor(props) {
@@ -36,21 +39,63 @@ export default class RecentlyOrders extends PureComponent {
     this.props.navigation.navigate('Order')
   }
 
-  renderItem = ({ item }) => (
+  renderOrderItem = ({ item }) => (
     <ListItem
-      leftElement={<Text>{item.id}</Text>}
+      leftElement={
+        <Text
+          style={{
+            marginLeft: -10,
+            width: 35,
+            backgroundColor: myColors.danger
+          }}
+        >
+          {item.quantity}
+        </Text>
+      }
+      title={item.skuNick}
+      titleStyle={{ fontSize: 12 }}
+      rightTitle={`$${item.price}`}
+      rightTitleStyle={{ fontSize: 12, marginRight: -10 }}
+      containerStyle={{
+        paddingVertical: 5,
+        backgroundColor: myColors.grey4
+      }}
+    />
+  )
+
+  renderItem = ({ item }) => (
+    // <Card
+    //   key={order.id}
+    //   title={`Orden #${order.id}`}
+    //   wrapperStyle={{
+    //     backgroundColor: myColors.greenBg
+    //   }}
+    //   containerStyle={{
+    //     borderRadius: 3
+    //   }}
+    // >
+    //   <FlatList
+    //     containerStyle={{ flex: 0.4 }}
+    //     data={order.items}
+    //     keyExtractor={({ index }) => `${index}`}
+    //     renderItem={this.renderOrderItem}
+    //     ListFooterComponent={<Subtotal subtotal={this.getSubtotal(order)} />}
+    //   />
+    // </Card>
+    <ListItem
       contentContainerStyle={styles.listContent}
       containerStyle={styles.listContainer}
       titleStyle={{ margin: 0, padding: 0 }}
       title={`${moment(item.createdAt)
-        .format('dddd DD/MM HH:mm')
-        .toUpperCase()}hs`}
+        .format('dddd DD/MM, HH:mm')
+        .capitalize()}hs`}
       subtitle={
         item.deliveredAt
-          ? `Entregado el ${moment(item.deliveredAt).format('dddd DD/MM')}`
-          : deliveryDayString(item.deliveryDate, new Date())
+          ? `entregado el ${moment(item.deliveredAt).format('dddd DD/MM')}`
+          : deliveryDayString(item.deliveryDate, new Date()).toLowerCase()
       }
-      rightTitle={`$${this.getSubtotal(item)}`}
+      rightSubtitle={`Orden: #${item.id}`}
+      rightTitle={`$${this.getSubtotal(item).toFixed(2)}`}
       rightTitleStyle={{ color: myColors.green }}
       rightContentContainerStyle={{ flex: 0.4 }}
       onPress={this.onPress(item)}
@@ -58,17 +103,18 @@ export default class RecentlyOrders extends PureComponent {
     />
   )
 
-  renderSectionHeader = ({ section }) => (
-    <ListItem
-      title={(section.data.length === 0 ? 'No tiene ' : '') + section.title}
-      containerStyle={{
-        backgroundColor: myColors.primaryBg,
-        paddingVertical: 5
-      }}
-      titleStyle={styles.sectionHeader}
-      bottomDivider
-    />
-  )
+  renderSectionHeader = ({ section }) =>
+    section.data.length !== 0 && (
+      <ListItem
+        title={section.title}
+        containerStyle={{
+          backgroundColor: myColors.primaryBg,
+          paddingVertical: 5
+        }}
+        titleStyle={styles.sectionHeader}
+        bottomDivider
+      />
+    )
 
   gotoProducts = () => {
     const { navigation, setClient } = this.props
@@ -97,15 +143,16 @@ export default class RecentlyOrders extends PureComponent {
 const styles = StyleSheet.create({
   sectionHeader: {
     color: myColors.primary,
-    fontSize: 18
+    fontSize: 18,
+    textAlign: 'center'
   },
   listContent: {
-    marginLeft: 0,
-    paddingLeft: 0
+    //   marginLeft: 0,
+    //   paddingLeft: 0
   },
   listContainer: {
-    marginLeft: 0,
-    paddingLeft: 0,
+    // marginLeft: 0,
+    // paddingLeft: 0,
     paddingRight: 5,
     paddingTop: 5,
     paddingBottom: 5,

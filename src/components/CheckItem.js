@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     paddingRight: 0
   },
   checkContainer: {
-    marginLeft: -13,
+    marginLeft: -8,
     marginRight: 0,
     paddingLeft: 0,
     paddingRight: 0,

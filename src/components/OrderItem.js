@@ -59,8 +59,6 @@ export default class OrderItem extends React.PureComponent {
 const styles = StyleSheet.create({
   listContainer: {
     borderBottomWidth: 1,
-    marginLeft: 0,
-    paddingLeft: 0,
     paddingRight: 10,
     paddingTop: 4,
     paddingBottom: 4,
@@ -69,17 +67,18 @@ const styles = StyleSheet.create({
     height: 50
   },
   checkText: {
+    paddingLeft: 13,
     marginLeft: 0,
-    paddingLeft: 4,
     marginRight: 0,
     paddingRight: 0
   },
   checkContainer: {
     justifyContent: 'flex-start',
+    alignItems: 'center',
     marginLeft: -13,
-    marginRight: 0,
-    paddingLeft: 0,
-    paddingRight: 0,
+    marginRight: -10,
+    // paddingLeft: 0,
+    // paddingRight: 0,
     borderWidth: 0,
     width: 60,
     backgroundColor: 'transparent'
