@@ -37,6 +37,11 @@ const createClientError = (state, action) => ({
   error: action.error
 })
 
+const updateClient = (state, action) => ({
+  ...state,
+  data: state.data.map(c => (c.id === action.client.id ? action.client : c))
+})
+
 const initialState = {
   data: [],
   loading: false,
@@ -49,7 +54,8 @@ const clients = createReducer((state = initialState), {
   ['FETCH_CLIENTS_ERROR']: fetchClientsError,
   ['CREATE_CLIENT_REQUEST']: createClientRequest,
   ['CREATE_CLIENT_SUCCESS']: createClientSuccess,
-  ['CREATE_CLIENT_ERROR']: createClientError
+  ['CREATE_CLIENT_ERROR']: createClientError,
+  ['UPDATE_CLIENT']: updateClient
 })
 
 export default clients

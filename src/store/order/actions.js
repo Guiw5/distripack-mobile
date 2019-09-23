@@ -17,9 +17,9 @@ export const removeItems = items => ({
   items
 })
 
-export const setClient = clientId => ({
+export const setClient = client => ({
   type: 'SET_CLIENT',
-  clientId
+  client
 })
 
 export const setOrder = order => ({
@@ -62,6 +62,11 @@ export const modifyOrderSuccess = order => ({
 export const modifyOrderError = error => ({
   type: 'MODIFY_ORDER_ERROR',
   error
+})
+
+export const setPreviousBalance = previousBalance => ({
+  type: 'SET_PREVIOUS_BALANCE',
+  previousBalance
 })
 
 export const createOrder = order => async dispatch => {

@@ -28,6 +28,11 @@ export const createClientError = error => ({
   error
 })
 
+export const updateClient = client => ({
+  type: 'UPDATE_CLIENT',
+  client
+})
+
 export const fetchClients = () => async dispatch => {
   try {
     dispatch(fetchClientsRequest())

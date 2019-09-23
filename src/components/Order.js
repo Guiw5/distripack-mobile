@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, StyleSheet } from 'react-native'
-import { Text, Button } from 'react-native-elements'
+import { Text, Button, ListItem } from 'react-native-elements'
 
 import { ListView as OrderItems } from './ListView'
 import OrderItem from './OrderItem'
@@ -11,11 +11,12 @@ import DeliveredNote from './DeliveredNote'
 import PrintAlert from './PrintAlert'
 
 import { myColors } from '../lib/commons'
+import SetAccountModal from './SetAccountModal'
 
 export default class Order extends Component {
   constructor(props) {
     super(props)
-    this.state = { deleteMap: {} }
+    this.state = { deleteMap: {}, showModal: false, yOffset: 0 }
   }
 
   shouldComponentUpdate(nextProps) {
@@ -72,8 +73,12 @@ export default class Order extends Component {
 
   subtotal = x => x.quantity * x.price
 
-  getSubtotal = () =>
-    this.props.order.items.reduce((acc, x) => acc + this.subtotal(x), 0)
+  getSubtotal = () => {
+    const { items, previousBalance } = this.props.order
+    let subtotal = items.reduce((acc, x) => acc + this.subtotal(x), 0)
+    if (previousBalance) subtotal += previousBalance
+    return subtotal
+  }
 
   goToProducts = () => this.props.navigation.navigate('Products')
 
@@ -109,28 +114,82 @@ export default class Order extends Component {
   getNumber = () => (this.props.order.id ? this.props.order.id : '-')
 
   render() {
+    if (!this.props.client) return null
+    const {
+      order: { previousBalance, items, deliveredAt },
+      client: { accountId, currentBalance, id, nick },
+      setPreviousBalance
+    } = this.props
     return (
-      <View style={{ flex: 1, backgroundColor: '#FFF' }}>
+      <View style={{ flex: 1 }}>
         <OrderTitle title={this.getNick()} nro={this.getNumber()} />
         <OrderItems
-          containerStyle={{ flex: 0.7 }}
-          initialNumToRender={this.props.order.items.length}
-          data={this.props.order.items}
+          containerStyle={{
+            flex: 0.7,
+            borderTopWidth: 1,
+            borderTopColor: this.state.yOffset > 0 ? myColors.green : '#CED0CE'
+          }}
+          onScroll={event => {
+            this.setState({ yOffset: event.nativeEvent.contentOffset.y })
+          }}
+          initialNumToRender={items.length}
+          data={items}
           extraData={this.state.deleteMap}
           keyExtractor={(item, index) => `${index}`}
           renderItem={this.renderItem}
           ListFooterComponent={
-            <Subtotal subtotal={this.getSubtotal().toFixed(2)} />
+            <View>
+              {!accountId && !previousBalance && (
+                <ListItem
+                  title="Agregar Saldo Anterior"
+                  titleStyle={{
+                    color: myColors.primary,
+                    fontFamily: 'sans-serif-light',
+                    fontWeight: '600'
+                  }}
+                  rightSubtitle={'$0.00'}
+                  rightSubtitleStyle={{ color: myColors.green }}
+                  containerStyle={{ paddingVertical: 12 }}
+                  onPress={() => this.setState({ showModal: true })}
+                  bottomDivider
+                />
+              )}
+              {(accountId || previousBalance) && (
+                <ListItem
+                  title="Saldo Anterior"
+                  titleStyle={{
+                    fontFamily: 'sans-serif-light'
+                  }}
+                  rightSubtitle={`$${(previousBalance
+                    ? previousBalance
+                    : currentBalance
+                  ).toFixed(2)}`}
+                  rightSubtitleStyle={{ color: myColors.green }}
+                  containerStyle={{ paddingVertical: 12 }}
+                  bottomDivider
+                />
+              )}
+              <Subtotal subtotal={this.getSubtotal().toFixed(2)} />
+            </View>
           }
         />
-        {this.renderFooter(this.props.order.deliveredAt)}
+        <SetAccountModal
+          title={nick}
+          visible={this.state.showModal}
+          onCancel={() => this.setState({ showModal: false })}
+          onOk={amount => {
+            setPreviousBalance(Number(amount))
+            this.setState({ showModal: false })
+          }}
+        />
+        {this.renderFooter(deliveredAt)}
         {this.renderButton(
-          this.props.order.deliveredAt,
+          deliveredAt,
           this.hasSelected(this.state.deleteMap),
           this.props.isUpdate,
           this.props.isUpdated,
           this.props.loading,
-          this.props.order.items.length > 0
+          items.length > 0
         )}
       </View>
     )

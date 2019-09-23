@@ -24,10 +24,12 @@ export const filterBySearchText = (products, searchText) =>
   products.filter(item => {
     const desc = item.skus[0].description.toLowerCase()
     const nick = item.skus[0].nick.replace('/', ' ').toLowerCase()
-    const searchWords = searchText.split(' ')
+    const query = searchText.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    const searchWords = query.split(' ')
+
     return (
-      desc.contains(searchText) ||
-      nick.contains(searchText) ||
+      desc.contains(query) ||
+      nick.contains(query) ||
       searchWords.every(word => desc.contains(word) || nick.contains(word))
     )
   })

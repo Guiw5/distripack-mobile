@@ -1,20 +1,5 @@
 import createReducer from '../createReducer'
 
-const initialState = {
-  data: {
-    id: null,
-    items: [],
-    clientId: null,
-    deliveryDate: null,
-    deliveredAt: null,
-    createdAt: null,
-    state: null
-  },
-  isUpdated: false,
-  loading: false,
-  error: null
-}
-
 const addToOrder = (state, action) => ({
   ...state,
   data: {
@@ -57,7 +42,12 @@ const setOrder = (state, action) => ({
 
 const setClient = (state, action) => ({
   ...state,
-  data: { ...initialState.data, clientId: action.clientId }
+  data: {
+    ...initialState.data,
+    clientId: action.client.id,
+    previousBalance:
+      action.client.accountId !== null ? action.client.currentBalance : null
+  }
 })
 
 const setDeliveryDate = (state, action) => ({
@@ -100,6 +90,27 @@ const modifyOrderError = (state, action) => ({
   error: action.error
 })
 
+const setPreviousBalance = (state, { previousBalance }) => ({
+  ...state,
+  data: { ...state.data, previousBalance: previousBalance }
+})
+
+const initialState = {
+  data: {
+    id: null,
+    items: [],
+    clientId: null,
+    deliveryDate: null,
+    deliveredAt: null,
+    createdAt: null,
+    state: null,
+    previousBalance: null
+  },
+  isUpdated: false,
+  loading: false,
+  error: null
+}
+
 const order = createReducer((state = initialState), {
   ['FETCH_ORDER']: fetchOrder,
   ['ADD_ITEM']: addToOrder,
@@ -107,6 +118,7 @@ const order = createReducer((state = initialState), {
   ['SET_ORDER']: setOrder,
   ['SET_CLIENT']: setClient,
   ['SET_DELIVERY_DATE']: setDeliveryDate,
+  ['SET_PREVIOUS_BALANCE']: setPreviousBalance,
   ['REMOVE_ITEMS']: removeItems,
   ['CREATE_ORDER_REQUEST']: createOrderRequest,
   ['CREATE_ORDER_SUCCESS']: createOrderSuccess,
