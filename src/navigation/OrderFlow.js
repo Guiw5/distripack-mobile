@@ -27,7 +27,7 @@ export default createStackNavigator(
     RecentlyOrders: {
       screen: RecentlyOrdersScreen,
       navigationOptions: ({ navigation }) => ({
-        title: `Pedidos ${navigation.getParam('nick')}`
+        title: `Pedidos ${navigation.getParam('client').nick}`
       })
     },
     Products: {

@@ -46,6 +46,8 @@ export default class NewClient extends React.Component {
     return (
       <Input
         {...input}
+        blurOnSubmit={false}
+        onSubmitEditing={() => this.email.focus()}
         placeholder="Ingrese Alias"
         leftIcon={{ type: 'simple-line-icon', name: 'user' }}
         autoCapitalize="words"
@@ -58,6 +60,9 @@ export default class NewClient extends React.Component {
     return (
       <Input
         {...input}
+        blurOnSubmit={false}
+        ref={input => (this.email = input)}
+        onSubmitEditing={() => this.cuit.focus()}
         placeholder="Ingrese Email"
         leftIcon={{ type: 'material-community', name: 'email-outline' }}
         keyboardType="email-address"
@@ -72,6 +77,7 @@ export default class NewClient extends React.Component {
     return (
       <Input
         {...input}
+        ref={input => (this.cuit = input)}
         leftIcon={{ type: 'font-awesome', name: 'address-card-o' }}
         keyboardType="numeric"
         placeholder="Ingrese cuit: 22-88888888-1"

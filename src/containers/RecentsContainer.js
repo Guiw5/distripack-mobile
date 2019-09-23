@@ -9,7 +9,6 @@ const mapStateToProps = state => ({
   printStatus: selectors.getPrintJobState(state),
   printing: selectors.getPrintLoading(state),
   loadingOrders: selectors.getOrdersLoading(state)
-  // loadingClients: selectors.getClientsLoading(state)
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -18,7 +17,6 @@ const mapDispatchToProps = dispatch => ({
   deleteOrders: orders => dispatch(actions.deleteOrders(orders)),
   setOrder: order => dispatch(actions.setOrder(order)),
   loadOrders: () => dispatch(actions.fetchOrdersCreated()),
-  // loadClients: () => dispatch(actions.fetchClients()),
   clearState: () => dispatch(actions.clearState())
 })
 

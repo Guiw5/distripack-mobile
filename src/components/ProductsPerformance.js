@@ -24,7 +24,7 @@ const mapStateToProps = state => ({
   totalFiltered: selectors.getTotalFiltered(state),
   page: selectors.getPageNr(state),
   searchText: selectors.getSearchText(state),
-  orderItems: selectors.getOrderItems(state),
+  order: selectors.getOrderWithClient(state),
   loading: selectors.getProductsLoading(state)
 })
 
@@ -40,6 +40,7 @@ class ProductsPerformance extends PureComponent {
   }
 
   componentDidMount() {
+    if (this.props.totalProducts === 0) this.props.loadProducts()
     if (this.props.paginated.length === 0) this.fetchNewPage()
   }
 
@@ -91,12 +92,13 @@ class ProductsPerformance extends PureComponent {
   }
 
   onRefresh = () => {
+    if (this.props.totalProducts === 0) this.props.loadProducts()
     this.fetchNewPage()
   }
 
   render() {
     const {
-      orderItems,
+      order,
       navigation,
       paginated,
       totalProducts,
@@ -141,11 +143,13 @@ class ProductsPerformance extends PureComponent {
             ListFooterComponent={<FooterList />}
           />
         )}
-        <ButtonFooter
-          title={`${navigation.getParam('client')} (${orderItems.length})`}
-          onPress={this.goToOrder}
-          disabled={orderItems.length == 0}
-        />
+        {order.client && (
+          <ButtonFooter
+            title={`${order.client.nick} (${order.items.length})`}
+            onPress={this.goToOrder}
+            disabled={order.items.length == 0}
+          />
+        )}
       </View>
     )
   }

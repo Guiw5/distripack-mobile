@@ -52,13 +52,14 @@ export default class OrderItem extends React.PureComponent {
         rightContentContainerStyle={{ flex: 0.4 }}
         rightSubtitle={`$${subtotal.toFixed(2)}`}
         rightSubtitleStyle={{ color: myColors.green }}
+        bottomDivider
       />
     )
   }
 }
 const styles = StyleSheet.create({
   listContainer: {
-    borderBottomWidth: 1,
+    // borderBottomWidth: 1,
     paddingRight: 10,
     paddingTop: 4,
     paddingBottom: 4,

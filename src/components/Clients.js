@@ -16,17 +16,18 @@ export default class Clients extends React.PureComponent {
     return created[id] || pending[id]
   }
 
-  onPress = ({ id, nick }) => () => {
+  onPress = client => () => {
+    const { id, nick } = client
     const parent = this.props.navigation.dangerouslyGetParent()
     //cames from New Order Flow?
     if (parent.state.routeName === 'NewOrder') {
       //check if the client has orders
       if (this.hasOrders(id)) {
         //should see the list
-        this.gotoOrdersByClient(id, nick)
+        this.gotoOrdersByClient(client)
       } else {
         //should create a the new one
-        this.gotoProducts(id, nick)
+        this.gotoProducts(client)
       }
     } else {
       //cames from Clients Info Flow
@@ -38,13 +39,13 @@ export default class Clients extends React.PureComponent {
     this.props.navigation.navigate('Details', { clientId: id })
   }
 
-  gotoOrdersByClient = (id, nick) => {
-    this.props.navigation.navigate('RecentlyOrders', { clientId: id, nick })
+  gotoOrdersByClient = client => {
+    this.props.navigation.navigate('RecentlyOrders', { client })
   }
 
-  gotoProducts = (id, nick) => {
-    this.props.setClient(id)
-    this.props.navigation.navigate('Products', { client: nick })
+  gotoProducts = client => {
+    this.props.setClient(client)
+    this.props.navigation.navigate('Products')
   }
 
   goToClient = () => this.props.navigation.navigate('Client')

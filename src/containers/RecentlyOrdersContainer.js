@@ -4,7 +4,7 @@ import selectors from '../store/selectors'
 import RecentlyOrders from '../components/RecentlyOrders'
 
 const mapStateToProps = (state, ownProps) => {
-  const id = ownProps.navigation.getParam('clientId')
+  const id = ownProps.navigation.getParam('client').id
   return {
     created: selectors.getOrdersCreatedByClient(state)[id],
     pending: selectors.getOrdersPendingByClient(state)[id],
@@ -14,7 +14,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => ({
   setOrder: order => dispatch(actions.setOrder(order)),
-  setClient: id => dispatch(actions.setClient(id))
+  setClient: client => dispatch(actions.setClient(client))
 })
 
 export default connect(

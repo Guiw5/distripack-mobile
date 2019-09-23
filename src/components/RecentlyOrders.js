@@ -1,12 +1,9 @@
 import React, { PureComponent } from 'react'
 import { SectionList, View, StyleSheet } from 'react-native'
-import { ListItem, Text, Card } from 'react-native-elements'
+import { ListItem, Text } from 'react-native-elements'
 import { myColors, deliveryDayString } from '../lib/commons'
 import moment from 'moment'
 import ButtonFooter from './ButtonFooter'
-import { FlatList, RotationGestureHandler } from 'react-native-gesture-handler'
-import { Subtotal } from './Order'
-import OrderItem from './OrderItem'
 
 export default class RecentlyOrders extends PureComponent {
   constructor(props) {
@@ -118,10 +115,9 @@ export default class RecentlyOrders extends PureComponent {
 
   gotoProducts = () => {
     const { navigation, setClient } = this.props
-    const id = navigation.getParam('clientId')
-    const client = navigation.getParam('nick')
-    setClient(id)
-    navigation.navigate('Products', { client })
+    const client = navigation.getParam('client')
+    setClient(client)
+    navigation.navigate('Products', { client: client.nick })
   }
 
   render() {

@@ -10,18 +10,15 @@ export default class OrderTitle extends React.PureComponent {
 
   render() {
     return (
-      <View style={{ backgroundColor: '#fff' }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'baseline'
-          }}
-        >
-          <Text style={styles.title}>{this.props.title.capitalize()}</Text>
-          <Text style={styles.titleRight}>Nro: {this.props.nro} </Text>
-        </View>
-        <Separator />
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'baseline'
+        }}
+      >
+        <Text style={styles.title}>{this.props.title.capitalize()}</Text>
+        <Text style={styles.titleRight}>Nro: {this.props.nro} </Text>
       </View>
     )
   }
