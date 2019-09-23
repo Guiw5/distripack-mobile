@@ -1,11 +1,5 @@
 import createReducer from '../createReducer'
 
-const initialState = {
-  data: [],
-  loading: false,
-  error: null
-}
-
 const fetchAccountsRequest = state => ({
   ...state,
   loading: true,
@@ -23,6 +17,12 @@ const fetchAccountsError = (state, action) => ({
   loading: false,
   error: action.error
 })
+
+const initialState = {
+  data: [],
+  loading: false,
+  error: null
+}
 
 const accounts = createReducer((state = initialState), {
   ['FETCH_ACCOUNTS_REQUEST']: fetchAccountsRequest,

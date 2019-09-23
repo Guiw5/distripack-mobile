@@ -17,7 +17,7 @@ export const getClientFromOrder = createSelector(
   }
 )
 
-export const getOrderwithClient = createSelector(
+export const getOrderWithClient = createSelector(
   getClientFromOrder,
   getOrder,
   (client, order) => ({ ...order, client })
