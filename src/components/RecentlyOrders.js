@@ -27,13 +27,18 @@ export default class RecentlyOrders extends PureComponent {
 
   subtotal = item => item.price * item.quantity
 
-  getSubtotal = order =>
-    order.items.reduce((acc, x) => acc + this.subtotal(x), 0)
+  getSubtotal = ({ items }) => {
+    const { accountId, currentBalance } = this.props.client
+    const subtotal = items.reduce((acc, x) => acc + this.subtotal(x), 0)
+    //si el cliente tiene cc, se suma el balance actual
+    if (accountId !== null) return subtotal + currentBalance
+    return subtotal
+  }
 
-  onPress = item => () => {
-    const { client, ...order } = item
-    this.props.setOrder(order)
-    this.props.navigation.navigate('Order')
+  onPress = order => () => {
+    const { setOrder, navigation } = this.props
+    setOrder(order)
+    navigation.navigate('Order')
   }
 
   renderOrderItem = ({ item }) => (
@@ -61,24 +66,6 @@ export default class RecentlyOrders extends PureComponent {
   )
 
   renderItem = ({ item }) => (
-    // <Card
-    //   key={order.id}
-    //   title={`Orden #${order.id}`}
-    //   wrapperStyle={{
-    //     backgroundColor: myColors.greenBg
-    //   }}
-    //   containerStyle={{
-    //     borderRadius: 3
-    //   }}
-    // >
-    //   <FlatList
-    //     containerStyle={{ flex: 0.4 }}
-    //     data={order.items}
-    //     keyExtractor={({ index }) => `${index}`}
-    //     renderItem={this.renderOrderItem}
-    //     ListFooterComponent={<Subtotal subtotal={this.getSubtotal(order)} />}
-    //   />
-    // </Card>
     <ListItem
       contentContainerStyle={styles.listContent}
       containerStyle={styles.listContainer}
@@ -113,14 +100,14 @@ export default class RecentlyOrders extends PureComponent {
       />
     )
 
-  gotoProducts = () => {
-    const { navigation, setClient } = this.props
-    const client = navigation.getParam('client')
-    setClient(client)
-    navigation.navigate('Products', { client: client.nick })
+  onNewOrder = () => {
+    const { client, initOrder, navigation } = this.props
+    initOrder(client.id)
+    navigation.navigate('Products')
   }
 
   render() {
+    console.log('client', this.props.client, this.props.created)
     return (
       <View style={{ flex: 1 }}>
         <SectionList
@@ -130,7 +117,7 @@ export default class RecentlyOrders extends PureComponent {
           keyExtractor={item => item.id}
           initialNumToRender={13}
         />
-        <ButtonFooter title="Nuevo" onPress={this.gotoProducts} />
+        <ButtonFooter title="Nuevo" onPress={this.onNewOrder} />
       </View>
     )
   }

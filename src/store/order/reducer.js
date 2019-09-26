@@ -36,17 +36,15 @@ const updateItem = (state, action) => ({
 })
 
 const setOrder = (state, action) => ({
-  ...state,
+  ...initialState,
   data: action.order
 })
 
-const setClient = (state, action) => ({
-  ...state,
+const initOrder = (state, action) => ({
+  ...initialState,
   data: {
     ...initialState.data,
-    clientId: action.client.id,
-    previousBalance:
-      action.client.accountId !== null ? action.client.currentBalance : null
+    clientId: action.clientId
   }
 })
 
@@ -103,6 +101,7 @@ const initialState = {
     deliveryDate: null,
     deliveredAt: null,
     createdAt: null,
+    updatedAt: null,
     state: null,
     previousBalance: null
   },
@@ -116,7 +115,7 @@ const order = createReducer((state = initialState), {
   ['ADD_ITEM']: addToOrder,
   ['UPDATE_ITEM']: updateItem,
   ['SET_ORDER']: setOrder,
-  ['SET_CLIENT']: setClient,
+  ['INIT_ORDER']: initOrder,
   ['SET_DELIVERY_DATE']: setDeliveryDate,
   ['SET_PREVIOUS_BALANCE']: setPreviousBalance,
   ['REMOVE_ITEMS']: removeItems,

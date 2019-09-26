@@ -6,14 +6,14 @@ import CheckAll from './CheckAll'
 import CheckItem from './CheckItem'
 import { myColors } from '../lib/commons'
 
-export default class Pendings extends React.PureComponent {
+export default class Pendings extends React.Component {
   constructor(props) {
     super(props)
     this.state = { items: {}, all: false, delete: {} }
   }
 
-  async componentDidMount() {
-    await this.props.loadOrders()
+  componentDidMount() {
+    this.props.loadOrders()
   }
 
   filter = text => item =>
@@ -101,6 +101,7 @@ export default class Pendings extends React.PureComponent {
       id => this.state.items[id]
     )
     await this.props.deliverOrders(orderIds)
+    this.setState({ items: {}, all: false })
   }
 
   deleteOrders = async () => {
@@ -119,6 +120,8 @@ export default class Pendings extends React.PureComponent {
         placeholder="Escriba N° de control, alias o email del cliente"
         filter={this.filter}
         data={this.props.orders}
+        onRefresh={this.props.loadOrders}
+        refreshing={this.props.loading}
         extraData={this.state}
         renderItem={this.renderItem}
         headerComponent={

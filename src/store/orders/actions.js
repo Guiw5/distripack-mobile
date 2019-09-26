@@ -1,4 +1,5 @@
 import { http } from '../../http/client'
+import { fetchClients } from '../clients/actions'
 
 export const addToCreated = order => ({
   type: 'ADD_TO_CREATED',
@@ -163,6 +164,7 @@ export const deliverOrders = orderIds => async dispatch => {
     dispatch(deliverOrdersRequest())
     const { data } = await http.put('orders/deliver', orderIds)
     dispatch(deliverOrdersSuccess(data))
+    dispatch(fetchClients())
   } catch (error) {
     dispatch(deliverOrdersError(error))
   }

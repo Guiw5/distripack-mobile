@@ -177,6 +177,7 @@ export default class Recents extends React.Component {
   printOrders = async () => {
     let orders = this.getOrdersToPrint()
     await this.props.printOrders(orders)
+    this.setState({ items: {}, all: false })
   }
 
   deleteOrders = async () => {

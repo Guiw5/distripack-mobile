@@ -1,6 +1,6 @@
 import React from 'react'
 import { createStackNavigator } from 'react-navigation'
-import ClientScreen from './screens/ClientScreen'
+import NewClientScreen from './screens/NewClientScreen'
 import ProductScreen from './screens/ProductScreen'
 import SkuScreen from './screens/SkuScreen'
 import OrderScreen from './screens/OrderScreen'
@@ -18,8 +18,8 @@ export default createStackNavigator(
         headerLeft: <MenuButton {...props} />
       })
     },
-    Client: {
-      screen: ClientScreen,
+    NewClient: {
+      screen: NewClientScreen,
       navigationOptions: {
         title: 'Nuevo Cliente'
       }
@@ -27,7 +27,10 @@ export default createStackNavigator(
     RecentlyOrders: {
       screen: RecentlyOrdersScreen,
       navigationOptions: ({ navigation }) => ({
-        title: `Pedidos ${navigation.getParam('client').nick}`
+        title: navigation.getParam('title'),
+        headerTitleStyle: {
+          fontSize: 18
+        }
       })
     },
     Products: {
