@@ -71,7 +71,7 @@ export default class Products extends PureComponent {
         filter={this.filter}
         data={this.props.products}
         button={{
-          title: `${navigation.getParam('client')} (${order.items.length})`,
+          title: `${this.props.client.nick} (${order.items.length})`,
           onPress: this.goToOrder,
           disabled: order.items.length == 0
         }}

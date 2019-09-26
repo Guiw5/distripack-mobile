@@ -75,8 +75,17 @@ export default class Order extends Component {
 
   getSubtotal = () => {
     const { items, previousBalance } = this.props.order
+    console.log('client', this.props.client)
+    const { accountId, currentBalance } = this.props.client
     let subtotal = items.reduce((acc, x) => acc + this.subtotal(x), 0)
-    if (previousBalance) subtotal += previousBalance
+
+    //si la orden tiene previousBalance, la cc ya se actualizó
+    if (previousBalance !== null) return subtotal + previousBalance
+
+    //sino, la orden es nueva y me fijo si tiene cc y uso el balance actual
+    if (accountId !== null) return subtotal + currentBalance
+
+    //sino, el cliente no tiene cc
     return subtotal
   }
 
@@ -115,11 +124,10 @@ export default class Order extends Component {
 
   render() {
     if (!this.props.client) return null
-    const {
-      order: { previousBalance, items, deliveredAt },
-      client: { accountId, currentBalance, id, nick },
-      setPreviousBalance
-    } = this.props
+    const { order, client, createAccount } = this.props
+    const { previousBalance, items, deliveredAt } = order
+    const { id, nick, accountId, currentBalance } = client
+    console.log('currentBalance', currentBalance, accountId)
     return (
       <View style={{ flex: 1 }}>
         <OrderTitle title={this.getNick()} nro={this.getNumber()} />
@@ -139,28 +147,27 @@ export default class Order extends Component {
           renderItem={this.renderItem}
           ListFooterComponent={
             <View>
-              {!accountId && !previousBalance && (
+              {accountId === null ? (
                 <ListItem
-                  title="Agregar Saldo Anterior"
+                  title="Agregar Saldo CC"
                   titleStyle={{
                     color: myColors.primary,
                     fontFamily: 'sans-serif-light',
                     fontWeight: '600'
                   }}
-                  rightSubtitle={'$0.00'}
+                  rightSubtitle={'----'}
                   rightSubtitleStyle={{ color: myColors.green }}
                   containerStyle={{ paddingVertical: 12 }}
                   onPress={() => this.setState({ showModal: true })}
                   bottomDivider
                 />
-              )}
-              {(accountId || previousBalance) && (
+              ) : (
                 <ListItem
                   title="Saldo Anterior"
                   titleStyle={{
                     fontFamily: 'sans-serif-light'
                   }}
-                  rightSubtitle={`$${(previousBalance
+                  rightSubtitle={`$${(previousBalance !== null
                     ? previousBalance
                     : currentBalance
                   ).toFixed(2)}`}
@@ -178,7 +185,7 @@ export default class Order extends Component {
           visible={this.state.showModal}
           onCancel={() => this.setState({ showModal: false })}
           onOk={amount => {
-            setPreviousBalance(Number(amount))
+            createAccount({ clientId: id, amount })
             this.setState({ showModal: false })
           }}
         />

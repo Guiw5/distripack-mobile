@@ -6,15 +6,16 @@ import Clients from '../components/Clients'
 const mapStateToProps = state => {
   return {
     clients: selectors.getClients(state),
-    created: selectors.getOrdersCreatedByClient(state),
-    pending: selectors.getOrdersPendingByClient(state),
-    delivered: selectors.getOrdersDeliveredByClient(state),
+    created: selectors.getOrdersCreatedByClients(state),
+    pending: selectors.getOrdersPendingByClients(state),
+    delivered: selectors.getOrdersDeliveredByClients(state),
     loading: selectors.getClientsLoading(state)
   }
 }
 
 const mapDispatchToProps = dispatch => ({
   loadClients: () => dispatch(actions.fetchClients()),
+  initOrder: clientId => dispatch(actions.initOrder(clientId)),
   setClient: client => dispatch(actions.setClient(client))
 })
 

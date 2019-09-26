@@ -14,6 +14,11 @@ export const fetchClientError = error => ({
   error
 })
 
+export const setClient = client => ({
+  type: 'SET_CLIENT',
+  client
+})
+
 export const fetchClient = id => async dispatch => {
   try {
     dispatch(fetchClientRequest())

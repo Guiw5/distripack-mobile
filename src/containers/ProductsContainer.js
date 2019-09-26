@@ -5,6 +5,7 @@ import Products from '../components/Products'
 
 const mapStateToProps = state => ({
   products: selectors.getProducts(state),
+  client: selectors.getClientFromOrder(state),
   order: selectors.getOrder(state),
   loading: selectors.getProductsLoading(state)
 })

@@ -13,10 +13,14 @@ const fetchClientSuccess = (state, action) => ({
 })
 
 const fetchClientError = (state, action) => ({
-  ...state,
-  data: null,
+  ...initialState,
   loading: false,
   error: action.error
+})
+
+const setClient = (state, action) => ({
+  ...initialState,
+  data: action.client
 })
 
 const initialState = {
@@ -28,7 +32,8 @@ const initialState = {
 const clients = createReducer((state = initialState), {
   ['FETCH_CLIENT_REQUEST']: fetchClientRequest,
   ['FETCH_CLIENT_SUCCESS']: fetchClientSuccess,
-  ['FETCH_CLIENT_ERROR']: fetchClientError
+  ['FETCH_CLIENT_ERROR']: fetchClientError,
+  ['SET_CLIENT']: setClient
 })
 
 export default clients

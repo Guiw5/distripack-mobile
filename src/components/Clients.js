@@ -11,44 +11,35 @@ export default class Clients extends React.PureComponent {
     if (this.props.clients.length === 0) this.props.loadClients()
   }
 
-  hasOrders = id => {
+  hasOrders = clientId => {
     const { created, pending } = this.props
-    return created[id] || pending[id]
+    return created[clientId] || pending[clientId]
   }
 
   onPress = client => () => {
-    const { id, nick } = client
-    const parent = this.props.navigation.dangerouslyGetParent()
-    //cames from New Order Flow?
-    if (parent.state.routeName === 'NewOrder') {
-      //check if the client has orders
-      if (this.hasOrders(id)) {
-        //should see the list
-        this.gotoOrdersByClient(client)
-      } else {
-        //should create a the new one
-        this.gotoProducts(client)
-      }
+    console.log('client', client)
+    this.props.setClient(client)
+    //check if the client has recents orders
+    if (this.hasOrders(client.id)) {
+      //should see last orders
+      this.gotoRecentlyOrders(client)
     } else {
-      //cames from Clients Info Flow
-      this.gotoDetails(id)
+      //should create a the new one
+      this.props.initOrder(client.id)
+      this.gotoProducts()
     }
   }
 
-  gotoDetails = id => {
-    this.props.navigation.navigate('Details', { clientId: id })
+  gotoRecentlyOrders = ({ nick }) => {
+    const { navigate } = this.props.navigation
+    navigate('RecentlyOrders', { title: `Ultimos Pedidos - ${nick}` })
   }
 
-  gotoOrdersByClient = client => {
-    this.props.navigation.navigate('RecentlyOrders', { client })
-  }
-
-  gotoProducts = client => {
-    this.props.setClient(client)
+  gotoProducts = () => {
     this.props.navigation.navigate('Products')
   }
 
-  goToClient = () => this.props.navigation.navigate('Client')
+  goToNewClient = () => this.props.navigation.navigate('NewClient')
 
   filter = text => item =>
     item.email.toLowerCase().includes(text.toLowerCase()) ||
@@ -77,7 +68,7 @@ export default class Clients extends React.PureComponent {
         renderItem={this.renderItem}
         button={{
           title: 'Agregar Cliente',
-          onPress: this.goToClient
+          onPress: this.goToNewClient
         }}
       />
     )

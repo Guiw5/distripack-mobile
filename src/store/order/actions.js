@@ -17,9 +17,9 @@ export const removeItems = items => ({
   items
 })
 
-export const setClient = client => ({
-  type: 'SET_CLIENT',
-  client
+export const initOrder = clientId => ({
+  type: 'INIT_ORDER',
+  clientId
 })
 
 export const setOrder = order => ({
@@ -75,6 +75,7 @@ export const createOrder = order => async dispatch => {
     let today = moment().format()
     order.createdAt = today
     if (!order.deliveryDate) order.deliveryDate = today
+    console.log('order', order)
     let { data } = await http.post('/orders', order)
     dispatch(createOrderSuccess(data))
     dispatch(addToCreated(data))

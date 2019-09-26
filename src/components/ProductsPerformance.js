@@ -18,13 +18,13 @@ import { pageSize } from '../store/products/selectors'
 import { FooterList } from './Select'
 
 const mapStateToProps = state => ({
-  // data: selectors.getFilteredProducts(state),
   paginated: selectors.getPaginatedProducts(state),
   totalProducts: selectors.getProductsTotal(state),
   totalFiltered: selectors.getTotalFiltered(state),
   page: selectors.getPageNr(state),
   searchText: selectors.getSearchText(state),
-  order: selectors.getOrderWithClient(state),
+  order: selectors.getOrder(state),
+  client: selectors.getClient(state),
   loading: selectors.getProductsLoading(state)
 })
 
@@ -40,7 +40,8 @@ class ProductsPerformance extends PureComponent {
   }
 
   componentDidMount() {
-    if (this.props.totalProducts === 0) this.props.loadProducts()
+    if (this.props.totalProducts === 0 && !this.props.loading)
+      this.props.loadProducts()
     if (this.props.paginated.length === 0) this.fetchNewPage()
   }
 
@@ -99,7 +100,7 @@ class ProductsPerformance extends PureComponent {
   render() {
     const {
       order,
-      navigation,
+      client,
       paginated,
       totalProducts,
       totalFiltered,
@@ -137,15 +138,15 @@ class ProductsPerformance extends PureComponent {
             onRefresh={this.onRefresh}
             // windowSize={91}
             showsVerticalScrollIndicator
-            onEndReachedThreshold={1}
+            onEndReachedThreshold={5}
             maxToRenderPerBatch={8}
             updateCellsBatchingPeriod={8}
             ListFooterComponent={<FooterList />}
           />
         )}
-        {order.client && (
+        {client && (
           <ButtonFooter
-            title={`${order.client.nick} (${order.items.length})`}
+            title={`${client.nick} (${order.items.length})`}
             onPress={this.goToOrder}
             disabled={order.items.length == 0}
           />

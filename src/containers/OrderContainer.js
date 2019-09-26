@@ -15,7 +15,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  setPreviousBalance: amount => dispatch(actions.setPreviousBalance(amount)),
+  createAccount: account => dispatch(actions.createAccount(account)),
   removeItems: items => dispatch(actions.removeItems(items)),
   create: order => dispatch(actions.createOrder(order)),
   modify: order => dispatch(actions.modifyOrder(order)),
