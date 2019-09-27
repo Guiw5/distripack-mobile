@@ -23,7 +23,7 @@ export default class Pendings extends React.Component {
 
   onPress = item => () => {
     const { client, ...order } = item
-    this.props.setOrder(order)
+    this.props.initOrder(client, order)
     this.props.navigation.navigate('Order')
   }
 

@@ -81,10 +81,12 @@ export const print = orders => async dispatch => {
       dispatch(printOrders(orders.map(o => o.id)))
       dispatch(printSuccess())
     } else {
+      console.log('data to print', data)
       dispatch(results(data))
       dispatch(printError())
     }
   } catch (error) {
+    console.log('error print', orders, error)
     dispatch(printError(error))
   }
 }

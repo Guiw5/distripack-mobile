@@ -10,10 +10,13 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  let { id } = ownProps.navigation.getParam('account').client
+  let {
+    client: { id }
+  } = ownProps.navigation.getParam('account')
   return {
     getAccount: () => dispatch(actions.fetchAccount(id)),
-    getTransactions: () => dispatch(actions.fetchTransactions(id))
+    getTransactions: () => dispatch(actions.fetchTransactions(id)),
+    loadOrder: orderId => dispatch(actions.loadOrder(orderId))
   }
 }
 

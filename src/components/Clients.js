@@ -17,15 +17,14 @@ export default class Clients extends React.PureComponent {
   }
 
   onPress = client => () => {
-    console.log('client', client)
-    this.props.setClient(client)
     //check if the client has recents orders
     if (this.hasOrders(client.id)) {
       //should see last orders
+      this.props.setClient(client)
       this.gotoRecentlyOrders(client)
     } else {
       //should create a the new one
-      this.props.initOrder(client.id)
+      this.props.initOrder(client)
       this.gotoProducts()
     }
   }

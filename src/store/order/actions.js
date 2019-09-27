@@ -1,6 +1,7 @@
 import { http } from '../../http/client'
 import { addToCreated, updateOrders } from '../orders/actions'
 import moment from 'moment'
+import { setClient } from '../client/actions'
 
 export const addItem = item => ({
   type: 'ADD_ITEM',
@@ -17,8 +18,8 @@ export const removeItems = items => ({
   items
 })
 
-export const initOrder = clientId => ({
-  type: 'INIT_ORDER',
+export const init = clientId => ({
+  type: 'INIT',
   clientId
 })
 
@@ -69,13 +70,26 @@ export const setPreviousBalance = previousBalance => ({
   previousBalance
 })
 
+export const fetchOrderRequest = () => ({
+  type: 'FETCH_ORDER_REQUEST'
+})
+
+export const fetchOrderSuccess = order => ({
+  type: 'FETCH_ORDER_SUCCESS',
+  order
+})
+
+export const fetchOrderError = error => ({
+  type: 'FETCH_ORDER_ERROR',
+  error
+})
+
 export const createOrder = order => async dispatch => {
   try {
     dispatch(createOrderRequest())
     let today = moment().format()
     order.createdAt = today
     if (!order.deliveryDate) order.deliveryDate = today
-    console.log('order', order)
     let { data } = await http.post('/orders', order)
     dispatch(createOrderSuccess(data))
     dispatch(addToCreated(data))
@@ -94,5 +108,22 @@ export const modifyOrder = order => async dispatch => {
   } catch (error) {
     console.log('modifyOrder', error)
     dispatch(modifyOrderError(error))
+  }
+}
+
+export const initOrder = (client = null, order = null) => dispatch => {
+  if (client !== null) dispatch(setClient(client))
+  if (order !== null) dispatch(setOrder(order))
+  else dispatch(init(client.id))
+}
+
+export const loadOrder = id => async dispatch => {
+  try {
+    dispatch(fetchOrderRequest())
+    let { data } = await http.get(`/orders/${id}`)
+    dispatch(fetchOrderSuccess(data))
+  } catch (error) {
+    console.log('loadOrder', error)
+    dispatch(fetchOrderError(error))
   }
 }

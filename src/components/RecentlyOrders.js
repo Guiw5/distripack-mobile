@@ -35,7 +35,7 @@ export default class RecentlyOrders extends PureComponent {
     return subtotal
   }
 
-  onPress = order => () => {
+  editOrder = order => () => {
     const { setOrder, navigation } = this.props
     setOrder(order)
     navigation.navigate('Order')
@@ -82,7 +82,7 @@ export default class RecentlyOrders extends PureComponent {
       rightTitle={`$${this.getSubtotal(item).toFixed(2)}`}
       rightTitleStyle={{ color: myColors.green }}
       rightContentContainerStyle={{ flex: 0.4 }}
-      onPress={this.onPress(item)}
+      onPress={this.editOrder(item)}
       bottomDivider
     />
   )
@@ -101,13 +101,12 @@ export default class RecentlyOrders extends PureComponent {
     )
 
   onNewOrder = () => {
-    const { client, initOrder, navigation } = this.props
-    initOrder(client.id)
+    const { client, init, navigation } = this.props
+    init(client.id)
     navigation.navigate('Products')
   }
 
   render() {
-    console.log('client', this.props.client, this.props.created)
     return (
       <View style={{ flex: 1 }}>
         <SectionList

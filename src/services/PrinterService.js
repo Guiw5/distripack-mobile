@@ -34,8 +34,8 @@ class PrinterService {
   }
 
   isOk = data => {
-    let { success, status } = this.epos.extract(data)
-    return success && Boolean(status & ASB_PRINT_SUCCESS)
+    const { ok, status } = this.epos.extract(data)
+    return ok && Boolean(status & ASB_PRINT_SUCCESS)
   }
 }
 

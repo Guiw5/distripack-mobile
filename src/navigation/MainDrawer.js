@@ -41,27 +41,18 @@ export default createDrawerNavigator(
         drawerIcon: ({ tintColor }) => (
           <Icon
             type="material-community"
-            name="format-list-checks"
+            name="truck-delivery"
             size={20}
             color={tintColor}
           />
         )
       }
     },
-    Accounts: {
-      screen: AccountsFlow,
-      navigationOptions: {
-        drawerLabel: 'Cuentas Ctes',
-        drawerIcon: ({ tintColor }) => (
-          <Icon name="people" size={20} color={tintColor} />
-        )
-      }
-    }
     // Delivered: {
     //   screen: PendingsFlow,
     //   navigationOptions: {
-    //     title: 'Ultimas Entregas',
-    //     drawerLabel: 'Ultimas Entregas',
+    //     title: 'Entregados',
+    //     drawerLabel: 'Entregados',
     //     drawerIcon: ({ tintColor }) => (
     //       <Icon
     //         type="material-community"
@@ -71,7 +62,16 @@ export default createDrawerNavigator(
     //       />
     //     )
     //   }
-    //}
+    // },
+    Accounts: {
+      screen: AccountsFlow,
+      navigationOptions: {
+        drawerLabel: 'Cuentas Ctes',
+        drawerIcon: ({ tintColor }) => (
+          <Icon name="people" size={20} color={tintColor} />
+        )
+      }
+    }
   },
   {
     contentComponent: props => (

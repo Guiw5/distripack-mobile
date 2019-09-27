@@ -15,7 +15,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   loadClients: () => dispatch(actions.fetchClients()),
-  initOrder: clientId => dispatch(actions.initOrder(clientId)),
+  initOrder: client => dispatch(actions.initOrder(client)),
   setClient: client => dispatch(actions.setClient(client))
 })
 

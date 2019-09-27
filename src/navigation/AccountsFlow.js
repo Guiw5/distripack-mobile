@@ -4,6 +4,7 @@ import { createStackNavigator } from 'react-navigation'
 import MenuButton from './MenuButton'
 import AccountsScreen from './screens/AccountsScreen'
 import AccountScreen from './screens/AccountScreen'
+import OrderScreen from './screens/OrderScreen'
 
 export default createStackNavigator({
   Accounts: {
@@ -18,5 +19,11 @@ export default createStackNavigator({
     navigationOptions: props => ({
       title: `Cta Cte - ${props.navigation.getParam('account').client.nick}`
     })
+  },
+  Order: {
+    screen: OrderScreen,
+    navigationOptions: {
+      title: 'Orden de Compra'
+    }
   }
 })

@@ -75,7 +75,6 @@ export default class Order extends Component {
 
   getSubtotal = () => {
     const { items, previousBalance } = this.props.order
-    console.log('client', this.props.client)
     const { accountId, currentBalance } = this.props.client
     let subtotal = items.reduce((acc, x) => acc + this.subtotal(x), 0)
 
@@ -127,7 +126,6 @@ export default class Order extends Component {
     const { order, client, createAccount } = this.props
     const { previousBalance, items, deliveredAt } = order
     const { id, nick, accountId, currentBalance } = client
-    console.log('currentBalance', currentBalance, accountId)
     return (
       <View style={{ flex: 1 }}>
         <OrderTitle title={this.getNick()} nro={this.getNumber()} />

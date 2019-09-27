@@ -13,22 +13,22 @@ export default class Accounts extends React.PureComponent {
   }
 
   gotoDetails = account => () => {
-    this.props.navigation.navigate('Account', {
-      account
-    })
+    const { navigation, setClient } = this.props
+    setClient(account.client)
+    navigation.navigate('Account', { account })
   }
 
   filter = text => item =>
     item.client.email.toLowerCase().includes(text.toLowerCase()) ||
     item.client.nick.toLowerCase().includes(text.toLowerCase())
 
-  renderItem = ({ item }) => (
+  renderItem = ({ item: account }) => (
     <ListItem
-      title={item.client.nick}
-      subtitle={item.client.email}
-      rightTitle={`$ ${item.currentBalance.toFixed(2)}`}
+      title={account.client.nick}
+      subtitle={account.client.email}
+      rightTitle={`$ ${account.currentBalance.toFixed(2)}`}
       rightTitleStyle={{
-        color: item.currentBalance > 0 ? myColors.green : myColors.danger
+        color: account.currentBalance >= 0 ? myColors.green : myColors.danger
       }}
       bottomDivider
       leftIcon={
@@ -36,7 +36,7 @@ export default class Accounts extends React.PureComponent {
       }
       subtitleStyle={{ fontSize: 12 }}
       containerStyle={{ paddingVertical: 15 }}
-      onPress={this.gotoDetails(item)}
+      onPress={this.gotoDetails(account)}
     />
   )
 

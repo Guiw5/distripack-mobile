@@ -40,7 +40,7 @@ const setOrder = (state, action) => ({
   data: action.order
 })
 
-const initOrder = (state, action) => ({
+const init = (state, action) => ({
   ...initialState,
   data: {
     ...initialState.data,
@@ -53,8 +53,6 @@ const setDeliveryDate = (state, action) => ({
   data: { ...state.data, deliveryDate: action.deliveryDate },
   isUpdated: !!state.data.createdAt
 })
-
-const fetchOrder = (state, action) => ({ ...state })
 
 const createOrderRequest = (state, action) => ({
   ...state,
@@ -93,6 +91,25 @@ const setPreviousBalance = (state, { previousBalance }) => ({
   data: { ...state.data, previousBalance: previousBalance }
 })
 
+const fetchOrderRequest = (state, action) => ({
+  ...state,
+  loading: true,
+  error: null
+})
+
+const fetchOrderSuccess = (state, action) => ({
+  ...state,
+  data: action.order,
+  loading: false,
+  error: null
+})
+
+const fetchOrderError = (state, action) => ({
+  ...state,
+  loading: false,
+  error: action.error
+})
+
 const initialState = {
   data: {
     id: null,
@@ -111,11 +128,10 @@ const initialState = {
 }
 
 const order = createReducer((state = initialState), {
-  ['FETCH_ORDER']: fetchOrder,
   ['ADD_ITEM']: addToOrder,
   ['UPDATE_ITEM']: updateItem,
   ['SET_ORDER']: setOrder,
-  ['INIT_ORDER']: initOrder,
+  ['INIT']: init,
   ['SET_DELIVERY_DATE']: setDeliveryDate,
   ['SET_PREVIOUS_BALANCE']: setPreviousBalance,
   ['REMOVE_ITEMS']: removeItems,
@@ -124,7 +140,10 @@ const order = createReducer((state = initialState), {
   ['CREATE_ORDER_ERROR']: createOrderError,
   ['MODIFY_ORDER_REQUEST']: modifyOrderRequest,
   ['MODIFY_ORDER_SUCCESS']: modifyOrderSuccess,
-  ['MODIFY_ORDER_ERROR']: modifyOrderError
+  ['MODIFY_ORDER_ERROR']: modifyOrderError,
+  ['FETCH_ORDER_REQUEST']: fetchOrderRequest,
+  ['FETCH_ORDER_SUCCESS']: fetchOrderSuccess,
+  ['FETCH_ORDER_ERROR']: fetchOrderError
 })
 
 export default order

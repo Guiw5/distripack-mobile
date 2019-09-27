@@ -138,7 +138,7 @@ class ProductsPerformance extends PureComponent {
             onRefresh={this.onRefresh}
             // windowSize={91}
             showsVerticalScrollIndicator
-            onEndReachedThreshold={5}
+            onEndReachedThreshold={3}
             maxToRenderPerBatch={8}
             updateCellsBatchingPeriod={8}
             ListFooterComponent={<FooterList />}

@@ -19,6 +19,12 @@ export class TransactionsTab extends PureComponent {
     getTransactions()
   }
 
+  onTransactionPress = async t => {
+    const { loadOrder, navigation } = this.props
+    await loadOrder(t.orderId)
+    navigation.navigate('Order')
+  }
+
   render() {
     const { account, transactions, loading, getTransactions } = this.props
     return (
@@ -36,7 +42,10 @@ export class TransactionsTab extends PureComponent {
           col4={'Crédito'}
           col5={'Saldo'}
         />
-        <TransactionsRows transactions={transactions} />
+        <TransactionsRows
+          transactions={transactions}
+          onPress={this.onTransactionPress}
+        />
         <TransactionsFooter
           label={`Saldo Actual: $ ${account.currentBalance}`}
         />

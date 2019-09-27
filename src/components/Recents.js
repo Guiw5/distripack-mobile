@@ -19,59 +19,58 @@ export default class Recents extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     //check if was printing and the status was OK
-    if (this.props.printStatus)
-      PrintAlert(nextProps.printStatus, this.props.clearState)
+    //check if was printing and the status was OK
+    if (
+      this.props.printing &&
+      !nextProps.printing &&
+      nextProps.results &&
+      nextProps.results !== this.props.results
+    )
+      PrintAlert(nextProps.results, this.props.clearState)
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    // if (nextProps.clients.length > 0 && this.props.clients.length === 0)
-    //   return true
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   if (this.props.printing !== nextProps.printing) return true
 
-    if (this.props.printing !== nextProps.printing) return true
+  //   if (nextProps.results && nextProps.results === this.props.results)
+  //     return false
 
-    if (this.state !== nextState) return true
+  //   console.log('nextState', nextState)
 
-    //new ones
-    if (nextProps.orders.length > 0 && this.props.orders.length === 0)
-      return true
+  //   //new ones
+  //   if (nextProps.orders.length > 0 && this.props.orders.length === 0)
+  //     return true
 
-    //updated ones
-    if (nextProps.orders.length > 0 && this.props.orders.length > 0) {
-      if (nextProps.orders.length !== this.props.orders.length) return true
+  //   //updated ones
+  //   if (nextProps.orders.length > 0 && this.props.orders.length > 0) {
+  //     if (nextProps.orders.length !== this.props.orders.length) return true
 
-      let hasItemUpdates = this.props.orders.some(o => {
-        let nextOrder = nextProps.orders.find(n => n.id === o.id)
-        return (
-          o.deliveryDate !== nextOrder.deliveryDate ||
-          o.items.length !== nextOrder.items.length ||
-          o.items.some(item => {
-            let nextItem = nextOrder.items.find(n => n.id === item.id)
-            if (!nextItem) return true
-            return (
-              nextItem.price !== item.price ||
-              nextItem.quantity !== item.quantity
-            )
-          })
-        )
-      })
-      if (hasItemUpdates) return true
-    }
+  //     let hasItemUpdates = this.props.orders.some(o => {
+  //       let nextOrder = nextProps.orders.find(n => n.id === o.id)
+  //       return (
+  //         o.deliveryDate !== nextOrder.deliveryDate ||
+  //         o.items.length !== nextOrder.items.length ||
+  //         o.items.some(item => {
+  //           let nextItem = nextOrder.items.find(n => n.id === item.id)
+  //           if (!nextItem) return true
+  //           return (
+  //             nextItem.price !== item.price ||
+  //             nextItem.quantity !== item.quantity
+  //           )
+  //         })
+  //       )
+  //     })
+  //     if (hasItemUpdates) return true
+  //   }
 
-    return false
-  }
+  //   return false
+  // }
 
   loadData = () => {
     if (!this.props.loadingOrders && this.props.orders.length === 0)
       this.props.loadOrders()
 
-    // if (!this.props.loadingClients && this.props.clients.length === 0)
-    //   await this.props.loadClients()
-
-    if (
-      !this.props.printing &&
-      // this.props.clients.length > 0 &&
-      this.props.orders.length > 0
-    )
+    if (!this.props.printing && this.props.orders.length > 0)
       this.props.getStatus()
   }
 
@@ -82,7 +81,7 @@ export default class Recents extends React.Component {
 
   onPress = item => () => {
     const { client, ...order } = item
-    this.props.setOrder(order)
+    this.props.initOrder(client, order)
     this.props.navigation.navigate('Order')
   }
 
@@ -176,7 +175,11 @@ export default class Recents extends React.Component {
 
   printOrders = async () => {
     let orders = this.getOrdersToPrint()
+    // try {
     await this.props.printOrders(orders)
+    // } catch (error) {
+    //   console.log(error)
+    // }
     this.setState({ items: {}, all: false })
   }
 

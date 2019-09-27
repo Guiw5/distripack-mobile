@@ -5,7 +5,7 @@ import Recents from '../components/Recents'
 
 const mapStateToProps = state => ({
   orders: selectors.getOrdersCreatedWithClients(state),
-  printStatus: selectors.getPrintJobState(state),
+  results: selectors.getPrintJobState(state),
   printing: selectors.getPrintLoading(state),
   loadingOrders: selectors.getOrdersLoading(state)
 })
@@ -14,7 +14,7 @@ const mapDispatchToProps = dispatch => ({
   getStatus: () => dispatch(actions.status()),
   printOrders: orders => dispatch(actions.print(orders)),
   deleteOrders: orders => dispatch(actions.deleteOrders(orders)),
-  setOrder: order => dispatch(actions.setOrder(order)),
+  initOrder: (client, order) => dispatch(actions.initOrder(client, order)),
   loadOrders: () => dispatch(actions.fetchOrdersCreated()),
   clearState: () => dispatch(actions.clearState())
 })

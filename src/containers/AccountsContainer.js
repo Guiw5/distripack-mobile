@@ -9,7 +9,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  loadAccounts: () => dispatch(actions.fetchAccounts())
+  loadAccounts: () => dispatch(actions.fetchAccounts()),
+  setClient: client => dispatch(actions.setClient(client))
 })
 
 export default connect(

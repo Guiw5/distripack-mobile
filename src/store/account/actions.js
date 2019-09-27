@@ -56,9 +56,7 @@ export const fetchAccount = clientId => async dispatch => {
 export const createAccount = ({ clientId, amount }) => async dispatch => {
   try {
     dispatch(createAccountRequest())
-    console.log(clientId, amount)
     const { data } = await http.post(`/accounts/${clientId}`, amount)
-    console.log('data', data)
     dispatch(createAccountSuccess(data))
     dispatch(updateClient(data.client))
   } catch (error) {

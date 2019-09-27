@@ -12,8 +12,8 @@ export default createBottomTabNavigator(
     Details: DetailsContainer
   },
   {
-    navigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ horizontal, tintColor }) => {
+    defaultNavigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused, horizontal, tintColor }) => {
         const { routeName } = navigation.state
         let iconName
         let type

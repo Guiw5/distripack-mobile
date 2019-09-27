@@ -169,9 +169,14 @@ ePOSBuilder.prototype.buildOrder = function(order) {
   let subtotal = 0
   order.items.forEach(item => {
     this.buildItemLine(item)
-    subtotal = subtotal + item.price * item.quantity
+    subtotal += item.price * item.quantity
   })
-  this.buildOrderFooter(subtotal)
+
+  const previousBalance = Number(getPreviousBalance(order))
+  if (previousBalance !== 0) this.buildPreviousBalance(previousBalance)
+
+  const total = subtotal + previousBalance
+  this.buildOrderFooter(total)
   return this
 }
 
@@ -199,6 +204,7 @@ ePOSBuilder.prototype.buildOrderHeader = function(
   this.addFeed()
   return this
 }
+
 ePOSBuilder.prototype.buildItemLine = function(item) {
   this.addTextAlign(this.ALIGN_LEFT)
   this.addText(`${item.quantity}`.padStart(4) + '  ')
@@ -208,13 +214,19 @@ ePOSBuilder.prototype.buildItemLine = function(item) {
   this.addText(importe.toFixed(2).padStart(9))
   return this
 }
-ePOSBuilder.prototype.buildOrderFooter = function(subtotal) {
+
+ePOSBuilder.prototype.buildPreviousBalance = function(previousBalance) {
+  this.addTextAlign(this.ALIGN_RIGHT)
+  this.addText(`Saldo Anterior  $${previousBalance.toFixed(2)}  `)
+  return this
+}
+
+ePOSBuilder.prototype.buildOrderFooter = function(total) {
   this.addFeed()
   this.addTextAlign(this.ALIGN_RIGHT)
   this.addText('-'.repeat(16))
   this.addFeed()
-  this.addText(' '.repeat(30))
-  this.addText('Total  $' + subtotal.toFixed(2))
+  this.addText('Total  $' + total.toFixed(2))
   this.addFeed()
   this.addFeed()
   this.addTextAlign(this.ALIGN_CENTER)
@@ -607,6 +619,12 @@ ePOSBuilder.prototype.toString = function() {
 }
 ePOSBuilder.prototype.clean = function() {
   this.message = ''
+}
+
+function getPreviousBalance(order) {
+  return order.previousBalance !== null
+    ? order.previousBalance
+    : order.client.currentBalance
 }
 
 function toHexBinary(s) {

@@ -11,8 +11,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  setOrder: order => dispatch(actions.setOrder(order)),
-  initOrder: clientId => dispatch(actions.initOrder(clientId))
+  init: clientId => dispatch(actions.init(clientId)),
+  setOrder: order => dispatch(actions.setOrder(order))
 })
 
 export default connect(
