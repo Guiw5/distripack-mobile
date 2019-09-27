@@ -8,10 +8,10 @@ export class DetailsTab extends PureComponent {
     super(props)
   }
 
-  componentDidMount() {
-    let { client, getClient } = this.props
+  async componentDidMount() {
+    let { client, getFullClient } = this.props
     //is a full client?
-    if (!client.hasOwnProperty('fantasyName')) getClient(client.id)
+    if (!client.hasOwnProperty('fantasyName')) await getFullClient(client.id)
   }
 
   handleWhatsapp = phone => async () => {

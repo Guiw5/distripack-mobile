@@ -201,9 +201,10 @@ export default class Order extends Component {
   }
 
   print = () => {
+    let orderClient = { ...this.props.order, ...this.props.client }
     if (this.props.order.state.toLowerCase() === 'created')
-      this.props.print(this.props.order)
-    else this.props.reprint(this.props.order)
+      this.props.print(orderClient)
+    else this.props.print(orderClient)
   }
 
   renderFooter = deliveredAt => {

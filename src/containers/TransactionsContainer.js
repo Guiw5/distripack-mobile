@@ -5,6 +5,7 @@ import { TransactionsTab } from '../components/TransactionsTab'
 
 const mapStateToProps = (state, ownProps) => ({
   account: ownProps.navigation.getParam('account'),
+  client: selectors.getClient(state),
   transactions: selectors.getTransactions(state),
   loading: selectors.getTransactionsLoading(state)
 })
@@ -16,7 +17,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     getAccount: () => dispatch(actions.fetchAccount(id)),
     getTransactions: () => dispatch(actions.fetchTransactions(id)),
-    loadOrder: orderId => dispatch(actions.loadOrder(orderId))
+    loadOrder: orderId => dispatch(actions.loadOrder(orderId)),
+    getFullClient: () => dispatch(actions.fetchClient(id))
   }
 }
 

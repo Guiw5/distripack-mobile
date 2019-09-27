@@ -13,10 +13,10 @@ export class TransactionsTab extends PureComponent {
     super(props)
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { account, getAccount, getTransactions } = this.props
     if (!account) getAccount()
-    getTransactions()
+    await getTransactions()
   }
 
   onTransactionPress = async t => {
